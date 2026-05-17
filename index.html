@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vessel Games | Catálogo Oficial Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #8a2be2; 
+            --bg-color: #07070a;
+            --card-bg: #12121a;
+            --text-light: #ffffff;
+            --text-dim: #a0a0b0;
+            --accent: #00ffcc; /* Cyan Gamer */
+            --token: #ff007f; /* Magenta para Tokens */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-color); color: var(--text-light); overflow-x: hidden; }
+
+        /* --- NAVEGACIÓN --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(7, 7, 10, 0.95); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        /* LOGO GAMING NEÓN & GLITCH */
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; color: #fff; text-transform: uppercase; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--primary), 0 0 40px var(--primary); animation: cyberGlitch 4s infinite; cursor: pointer; }
+        .logo span { color: var(--accent); text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent); }
+
+        @keyframes cyberGlitch {
+            0%, 90%, 94%, 96%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--primary), 0 0 40px var(--primary); transform: translateX(0) skewX(0); }
+            92% { text-shadow: 4px 0 0 #00ffcc, -4px 0 0 #ff00c8; transform: translateX(-3px) skewX(-15deg); }
+            95% { text-shadow: -4px 0 0 #00ffcc, 4px 0 0 #ff00c8; transform: translateX(3px) skewX(15deg); }
+        }
+
+        .menu { display: flex; gap: 15px; }
+        .menu a { color: var(--text-light); text-decoration: none; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; transition: color 0.3s; }
+        .menu a:hover { color: var(--primary); }
+
+        /* --- PORTADA HERO --- */
+        .hero {
+            background-image: radial-gradient(circle at center, rgba(7,7,10,0.2) 0%, rgba(7,7,10,1) 80%), url('https://i.imgur.com/VjjdVsd.jpg'); 
+            background-size: cover; background-position: center top; background-attachment: fixed; 
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 10%; position: relative;
+        }
+        .hero-content { max-width: 650px; z-index: 2; margin-top: 60px; }
+        .badge { background: rgba(138, 43, 226, 0.2); color: #d4a5ff; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: inline-block; margin-bottom: 20px; border: 1px solid var(--primary); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .hero h1 { font-size: 3.8rem; font-weight: 900; line-height: 1.05; margin-bottom: 25px; text-transform: uppercase; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .hero h1 span { color: var(--primary); }
+        .hero p { color: var(--text-dim); font-size: 1.15rem; margin-bottom: 30px; line-height: 1.6; max-width: 500px; }
+        
+        .hero-actions { display: flex; flex-direction: column; gap: 15px; margin-bottom: 10px; }
+        .btn { background-color: var(--primary); color: white; padding: 15px 35px; border-radius: 30px; font-size: 0.95rem; font-weight: 700; text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4); text-transform: uppercase; letter-spacing: 1px; width: fit-content; }
+        .btn:hover { background-color: #9d4edd; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(138, 43, 226, 0.6); }
+        
+        .contact-links { display: flex; gap: 15px; flex-wrap: wrap; }
+        .btn-contact { padding: 12px 25px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; text-decoration: none; color: white; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-wa { background: rgba(37, 211, 102, 0.1); border: 1px solid #25D366; color: #25D366; box-shadow: 0 0 10px rgba(37, 211, 102, 0.2); }
+        .btn-wa:hover { background: #25D366; color: white; box-shadow: 0 0 20px rgba(37, 211, 102, 0.6); transform: translateY(-3px); }
+        .btn-tg { background: rgba(0, 136, 204, 0.1); border: 1px solid #0088cc; color: #0088cc; box-shadow: 0 0 10px rgba(0, 136, 204, 0.2); }
+        .btn-tg:hover { background: #0088cc; color: white; box-shadow: 0 0 20px rgba(0, 136, 204, 0.6); transform: translateY(-3px); }
+
+        /* --- CAROUSEL GAMING TOP SERVICIOS --- */
+        .mini-carousel-container { margin-top: 50px; width: 100%; overflow: hidden; position: relative; }
+        .mini-carousel-track { display: flex; gap: 15px; width: max-content; animation: scrollMini 45s linear infinite; } 
+        .mini-card { background: linear-gradient(135deg, rgba(20, 20, 30, 0.9) 0%, rgba(10, 10, 15, 0.9) 100%); border: 1px solid; border-image: linear-gradient(45deg, var(--primary), var(--accent)) 1; clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%); padding: 12px 30px; display: flex; align-items: center; gap: 12px; font-size: 0.8rem; font-weight: 700; color: #fff; white-space: nowrap; backdrop-filter: blur(5px); transition: transform 0.3s; }
+        .mini-card:hover { transform: scale(1.05); }
+        .mini-card span.c-accent { color: var(--accent); font-weight: 900; text-shadow: 0 0 5px var(--accent); }
+        .mini-card span.c-primary { color: #d4a5ff; font-weight: 900; text-shadow: 0 0 5px var(--primary); }
+        @keyframes scrollMini { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- SECCIONES DE CONTENIDO --- */
+        .section-title { text-align: center; margin: 80px 0 40px 0; font-size: 2.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; position: relative; padding-top: 40px; font-family: 'Orbitron', sans-serif; }
+        .section-title::after { content: ''; display: block; width: 60px; height: 4px; background-color: var(--primary); margin: 15px auto 0 auto; border-radius: 2px; }
+        .gaming-title { color: var(--accent); }
+        .gaming-title::after { background-color: var(--accent); }
+
+        .services-section { padding: 0 5% 40px 5%; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1400px; margin: 0 auto; align-items: start; }
+        
+        .service-card { background-color: var(--card-bg); border-radius: 18px; overflow: hidden; text-decoration: none; color: white; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.2); height: 100%; cursor: pointer; }
+        .service-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 35px rgba(138, 43, 226, 0.4); border-color: var(--primary); }
+        .service-card:active { transform: scale(0.96); box-shadow: 0 5px 15px rgba(138, 43, 226, 0.6); border-color: #d4a5ff; }
+        .gaming-card:hover { box-shadow: 0 15px 35px rgba(0, 255, 204, 0.3); border-color: var(--accent); }
+        .gaming-card:active { box-shadow: 0 5px 15px rgba(0, 255, 204, 0.5); border-color: #ffffff; }
+
+        .img-container { position: relative; width: 100%; height: 190px; background-color: #1a1a26; overflow: hidden; flex-shrink: 0; }
+        .service-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s, transform 0.5s ease; }
+        .service-card:hover .service-img { opacity: 1; transform: scale(1.08); }
+
+        .service-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .service-info h3 { font-size: 1.2rem; margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .options-list { list-style: none; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; line-height: 1.7; flex-grow: 1; }
+        .options-list li { display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding: 5px 0; pointer-events: none; }
+        .options-list li span:last-child { color: #fff; font-weight: 700; }
+
+        .price-container { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); pointer-events: none; }
+        .price-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; }
+        .price { font-weight: 900; color: #ffffff; font-size: 1.5rem; }
+        .gaming-card .price { color: var(--accent); }
+
+        /* --- BOTÓN FLOTANTE CARRITO --- */
+        .cart-float-btn {
+            position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px;
+            background: linear-gradient(135deg, var(--primary), #d4a5ff);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5); cursor: pointer;
+            z-index: 900; transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .cart-float-btn:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 15px 40px rgba(138, 43, 226, 0.7); }
+        .cart-float-btn svg { width: 28px; height: 28px; fill: white; }
+        .cart-badge {
+            position: absolute; top: 0; right: 0; background: var(--token); color: white;
+            font-size: 0.8rem; font-weight: 900; width: 24px; height: 24px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; border: 2px solid var(--bg-color);
+        }
+
+        /* --- PANEL LATERAL CARRITO --- */
+        .cart-sidebar {
+            position: fixed; top: 0; right: -400px; width: 100%; max-width: 380px; height: 100%;
+            background: rgba(12, 12, 18, 0.98); backdrop-filter: blur(15px);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.8); z-index: 1001;
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+            display: flex; flex-direction: column; border-left: 1px solid rgba(138,43,226,0.3);
+        }
+        .cart-sidebar.active { right: 0; }
+        .cart-header { padding: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #fff; }
+        .close-cart { cursor: pointer; font-size: 1.5rem; color: var(--text-dim); transition: 0.3s; }
+        .close-cart:hover { color: var(--token); transform: rotate(90deg); }
+        
+        .cart-items { padding: 25px; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .cart-item-info h4 { font-size: 0.95rem; margin-bottom: 5px; color: #fff; }
+        .cart-item-info p { font-size: 0.8rem; color: var(--accent); font-weight: 700; }
+        .remove-item { color: #ff4d4d; cursor: pointer; font-weight: 900; font-size: 1.2rem; padding: 0 5px; }
+        .empty-cart-msg { text-align: center; color: var(--text-dim); margin-top: 50px; font-style: italic; }
+
+        .cart-footer { padding: 25px; background: #07070a; border-top: 1px solid rgba(255,255,255,0.05); }
+        .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 1.2rem; font-weight: 900; color: #fff; }
+        .cart-total span:last-child { color: var(--primary); font-size: 1.5rem; }
+        .cart-input { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #2d2d3d; border-radius: 8px; color: white; font-size: 0.9rem; margin-bottom: 15px; outline: none; }
+        .cart-input:focus { border-color: var(--primary); }
+        .btn-checkout { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 1rem; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-checkout:hover { background: #9d4edd; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4); }
+
+        /* --- MODAL DE COMPRA --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box { background: linear-gradient(145deg, #12121a 0%, #0a0a0f 100%); border: 1px solid rgba(138, 43, 226, 0.5); border-radius: 20px; padding: 30px; width: 90%; max-width: 400px; box-shadow: 0 0 50px rgba(138, 43, 226, 0.2); transform: scale(0.9); transition: transform 0.3s; position: relative; }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
+        .modal-close:hover { color: #fff; }
+        .modal-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .modal-icon { width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 15px rgba(138,43,226,0.5); }
+        .modal-title { font-size: 1.2rem; font-weight: 900; }
+        
+        .modal-body label { display: block; color: var(--text-light); font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; }
+        .modal-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-size: 1.2rem; }
+        .modal-price-row .m-total { font-weight: 900; color: #d4a5ff; font-size: 1.5rem; }
+        
+        .modal-buttons { display: flex; flex-direction: column; gap: 10px; }
+        .btn-modal-cart { width: 100%; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 10px; cursor: pointer; font-weight: 900; transition: 0.3s; text-transform: uppercase; }
+        .btn-modal-cart:hover { background: rgba(0,255,204,0.1); box-shadow: 0 0 15px rgba(0,255,204,0.3); }
+        .btn-modal-buy { width: 100%; padding: 12px; background: var(--primary); border: none; color: #fff; border-radius: 10px; cursor: pointer; font-weight: 900; transition: 0.3s; box-shadow: 0 0 15px rgba(138,43,226,0.4); text-transform: uppercase; }
+        .btn-modal-buy:hover { background: #9d4edd; transform: translateY(-2px); }
+
+        /* --- VESSEL REWARDS (SISTEMA DE REFERIDOS) --- */
+        #recompensas { background: linear-gradient(180deg, #07070a 0%, #12051f 100%); padding: 80px 5%; margin-top: 60px; border-top: 1px solid var(--primary); position: relative; overflow: hidden; }
+        .rewards-title { font-family: 'Orbitron', sans-serif; text-align: center; font-size: 2.5rem; font-weight: 900; color: #fff; margin-bottom: 20px; text-transform: uppercase; text-shadow: 0 0 20px var(--token); }
+        .rewards-subtitle { text-align: center; color: var(--text-dim); max-width: 700px; margin: 0 auto 50px auto; font-size: 1.1rem; line-height: 1.6; }
+        
+        .steps-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 60px; }
+        .step-box { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,0,127,0.3); border-radius: 16px; padding: 25px; width: 280px; text-align: center; position: relative; }
+        .step-num { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--token); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; color: #fff; border: 3px solid #12051f; box-shadow: 0 0 15px var(--token); }
+        .step-box h4 { margin: 15px 0 10px 0; color: #fff; font-size: 1.1rem; }
+        .step-box p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; }
+
+        .token-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; max-width: 1000px; margin: 0 auto 50px auto; }
+        .token-card { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; text-align: center; transition: 0.3s; }
+        .token-card:hover { border-color: var(--token); background: rgba(255,0,127,0.05); transform: translateY(-5px); }
+        .t-name { font-weight: 900; color: #fff; font-size: 0.9rem; margin-bottom: 8px; text-transform: uppercase; }
+        .t-cost { color: var(--token); font-weight: 900; font-size: 1.2rem; text-shadow: 0 0 10px rgba(255,0,127,0.4); }
+        
+        .rewards-cta { text-align: center; }
+        .btn-token { background: var(--token); box-shadow: 0 0 20px rgba(255,0,127,0.5); }
+        .btn-token:hover { background: #ff3399; box-shadow: 0 0 30px rgba(255,0,127,0.8); transform: scale(1.05); }
+
+        /* --- FOOTER --- */
+        footer { text-align: center; padding: 50px; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.05); background-color: #050508; }
+
+        /* --- RESPONSIVO --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.3rem; }
+            .hero { background-attachment: scroll; } 
+            nav { padding: 15px 20px; }
+            .menu { display: none; } 
+            .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .img-container { height: 130px; }
+            .service-info { padding: 12px; }
+            .service-info h3 { font-size: 0.9rem; margin-bottom: 5px; }
+            .options-list li { font-size: 0.7rem; padding: 2px 0; }
+            .price { font-size: 1.1rem; }
+            .section-title { font-size: 1.8rem; }
+            .logo { font-size: 1.4rem; }
+            .contact-links { justify-content: center; }
+            .cart-sidebar { width: 85%; right: -85%; }
+        }
+        @media (max-width: 480px) {
+            .hero-content { padding-top: 40px; }
+            .hero h1 { font-size: 2rem; }
+            .services-grid { grid-template-columns: 1fr; gap: 15px; }
+            .btn { width: 100%; }
+            .contact-links { flex-direction: column; width: 100%; }
+            .btn-contact { justify-content: center; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cart-float-btn" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <div class="cart-badge" id="cartBadge">0</div>
+    </div>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>🛒 MI CARRITO</h2>
+            <div class="close-cart" onclick="toggleCart()">✕</div>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <div class="empty-cart-msg">Tu carrito está vacío. <br>¡Agrega servicios del catálogo!</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>TOTAL EST:</span>
+                <span id="cartTotalPrice">$0 MXN</span>
+            </div>
+            <input type="text" id="cartNameInput" class="cart-input" placeholder="Ingresa tu nombre aquí...">
+            <button class="btn-checkout" onclick="checkoutCart()">CONFIRMAR PEDIDO</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-box">
+            <div class="modal-close" onclick="closeModal()">✕</div>
+            <div class="modal-header">
+                <div class="modal-icon">🕹️</div>
+                <div class="modal-title" id="modalTitle">Nombre del Servicio</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-price-row">
+                    <span>Precio estimado:</span>
+                    <span class="m-total" id="modalPrice">$0.00</span>
+                </div>
+                <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom: 20px; text-align:center;">Para juegos y recargas de varias cantidades, confirmaremos el monto exacto en WhatsApp.</p>
+                <div class="modal-buttons">
+                    <button class="btn-modal-cart" onclick="addToCartFromModal()">🛒 AÑADIR AL CARRITO</button>
+                    <button class="btn-modal-buy" onclick="buyNowFromModal()">⚡ COMPRAR AHORA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo">VESSEL<span>GAMES</span></div>
+        <div class="menu">
+            <a href="#perfiles">Streaming</a>
+            <a href="#gaming">Gaming</a>
+            <a href="#recompensas">Recompensas</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-content">
+            <div class="badge">PROVEDOR OFICIAL B2B</div>
+            <h1>TU MUNDO DE <span>ENTRETENIMIENTO</span></h1>
+            <p>Consigue tus perfiles de streaming, licencias y monedas de juego al costo más bajo y con entrega inmediata.</p>
+            
+            <div class="hero-actions">
+                <a href="#gaming" class="btn">🛒 Ver Catálogo</a>
+                
+                <div class="contact-links">
+                    <a href="https://wa.me/526611078412?text=Hola,%20tengo%20una%20duda%20sobre%20sus%20servicios." target="_blank" class="btn-contact btn-wa">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        WhatsApp
+                    </a>
+                    <a href="https://t.me/VESSEL666999" target="_blank" class="btn-contact btn-tg">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.598.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>
+                        Telegram
+                    </a>
+                </div>
+            </div>
+
+            <div class="mini-carousel-container">
+                <div class="mini-carousel-track">
+                    <div class="mini-card"><div>📺 NETFLIX <span class="c-primary">$90</span></div></div>
+                    <div class="mini-card"><div>🤖 CHATGPT PLUS <span class="c-accent">$145</span></div></div>
+                    <div class="mini-card"><div>📺 PRIME VIDEO <span class="c-primary">$50</span></div></div>
+                    <div class="mini-card"><div>🍿 MAX <span class="c-primary">$50</span></div></div>
+                    <div class="mini-card"><div>🎨 CANVA PRO <span class="c-accent">$60</span></div></div>
+                    <div class="mini-card"><div>☁️ ADOBE CC <span class="c-accent">$375</span></div></div>
+                    <div class="mini-card"><div>🛡️ NORD VPN <span class="c-primary">$100</span></div></div>
+                    <div class="mini-card"><div>🎧 SPOTIFY <span class="c-primary">$80</span></div></div>
+                    <div class="mini-card"><div>🍎 APPLE TV <span class="c-primary">$85</span></div></div>
+                    <div class="mini-card"><div>💎 FREE FIRE <span class="c-accent">Desde $195</span></div></div>
+                    <div class="mini-card"><div>🔫 CODPOINTS <span class="c-accent">Desde $200</span></div></div>
+                    <div class="mini-card"><div>📺 NETFLIX <span class="c-primary">$90</span></div></div>
+                    <div class="mini-card"><div>🤖 CHATGPT PLUS <span class="c-accent">$145</span></div></div>
+                    <div class="mini-card"><div>📺 PRIME VIDEO <span class="c-primary">$50</span></div></div>
+                    <div class="mini-card"><div>🍿 MAX <span class="c-primary">$50</span></div></div>
+                    <div class="mini-card"><div>🎨 CANVA PRO <span class="c-accent">$60</span></div></div>
+                    <div class="mini-card"><div>☁️ ADOBE CC <span class="c-accent">$375</span></div></div>
+                    <div class="mini-card"><div>🛡️ NORD VPN <span class="c-primary">$100</span></div></div>
+                    <div class="mini-card"><div>🎧 SPOTIFY <span class="c-primary">$80</span></div></div>
+                    <div class="mini-card"><div>🍎 APPLE TV <span class="c-primary">$85</span></div></div>
+                    <div class="mini-card"><div>💎 FREE FIRE <span class="c-accent">Desde $195</span></div></div>
+                    <div class="mini-card"><div>🔫 CODPOINTS <span class="c-accent">Desde $200</span></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="gaming" class="section-title gaming-title">Gaming & Monedas</h2>
+    <div class="services-section">
+        <div class="services-grid">
+            
+            <a href="#" class="service-card gaming-card" data-title="Diamantes Free Fire" data-price="195" data-display="Desde $195">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1599839619722-39751411ea63?w=800&q=80" alt="Free Fire Diamantes" class="service-img"></div>
+                <div class="service-info">
+                    <h3>Diamantes Free Fire</h3>
+                    <ul class="options-list">
+                        <li><span>1,085 Diamantes</span> <span>$195</span></li>
+                        <li><span>2,315 Diamantes</span> <span>$395</span></li>
+                        <li><span>3,080 Diamantes</span> <span>$525</span></li>
+                        <li><span>3,564 Diamantes</span> <span>$600</span></li>
+                        <li><span>4,136 Diamantes</span> <span>$685</span></li>
+                        <li><span>4,796 Diamantes</span> <span>$750</span></li>
+                        <li><span>5,137 Diamantes</span> <span>$865</span></li>
+                        <li><span>5,368 Diamantes</span> <span>$885</span></li>
+                        <li><span>12,320 Diamantes</span> <span>$1,665</span></li>
+                    </ul>
+                    <div class="price-container"><span class="price-label">Desde</span><div class="price">$195 MXN</div></div>
+                </div>
+            </a>
+
+            <a href="#" class="service-card gaming-card" data-title="Codpoints (Warzone/Mobile)" data-price="200" data-display="Desde $200">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1605901309584-818e25960b8f?w=800&q=80" alt="Codpoints" class="service-img"></div>
+                <div class="service-info">
+                    <h3>Codpoints</h3>
+                    <ul class="options-list">
+                        <li><span>2,400 CP</span> <span>$200</span></li>
+                        <li><span>4,800 CP</span> <span>$395</span></li>
+                        <li><span>7,200 CP</span> <span>$590</span></li>
+                        <li><span>9,600 CP</span> <span>$785</span></li>
+                        <li><span>12,000 CP</span> <span>$975</span></li>
+                    </ul>
+                    <div class="price-container"><span class="price-label">Desde</span><div class="price">$200 MXN</div></div>
+                </div>
+            </a>
+
+            <a href="#" class="service-card gaming-card" data-title="Juegos de Xbox & Game Pass" data-price="290" data-display="Desde $290">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=800&q=80" alt="Xbox Juegos" class="service-img"></div>
+                <div class="service-info">
+                    <h3>Juegos de Xbox</h3>
+                    <ul class="options-list">
+                        <li><span>Game Pass Ultimate (1 Mes)</span> <span>$290</span></li>
+                        <li><span>Cualquier título digital</span> <span>Cotizar</span></li>
+                    </ul>
+                    <div class="price-container"><span class="price-label">Desde</span><div class="price">$290 MXN</div></div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <h2 id="perfiles" class="section-title">Pases por Perfil (Streaming)</h2>
+    <div class="services-section">
+        <div class="services-grid">
+            <a href="#" class="service-card" data-title="Perfil Netflix" data-price="90" data-display="Desde $90 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Netflix</h3><ul class="options-list"><li><span>1 Mes</span> <span>$90</span></li><li><span>2 Meses</span> <span>$170</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$90 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil Prime Video" data-price="50" data-display="Desde $50 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1586899028174-e7098604235b?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Prime Video</h3><ul class="options-list"><li><span>1 Mes</span> <span>$50</span></li><li><span>2 Meses</span> <span>$80</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$50 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil MAX" data-price="50" data-display="Desde $50 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>MAX</h3><ul class="options-list"><li><span>1 Mes</span> <span>$50</span></li><li><span>3 Meses</span> <span>$125</span></li><li><span>6 Meses</span> <span>$240</span></li><li><span>12 Meses</span> <span>$450</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$50 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil Disney+" data-price="50" data-display="Desde $50 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Disney+</h3><ul class="options-list"><li><span>1 Mes</span> <span>$50</span></li><li><span>3 Meses</span> <span>$135</span></li><li><span>6 Meses</span> <span>$260</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$50 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Crunchyroll Fijo" data-price="60" data-display="Desde $60 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Crunchyroll Fijo</h3><ul class="options-list"><li><span>1 Mes</span> <span>$60</span></li><li><span>3 Meses</span> <span>$150</span></li><li><span>6 Meses</span> <span>$275</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$60 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Crunchyroll Renovable" data-price="75" data-display="Desde $75 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Crunchyroll Renovable</h3><ul class="options-list"><li><span>1 Mes</span> <span>$75</span></li><li><span>3 Meses</span> <span>$170</span></li><li><span>6 Meses</span> <span>$315</span></li><li><span>12 Meses</span> <span>$590</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$75 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil Viki Rakuten" data-price="50" data-display="Desde $50 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1580477659142-b0241db8fb1f?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Viki Rakuten</h3><ul class="options-list"><li><span>1 Mes</span> <span>$50</span></li><li><span>3 Meses</span> <span>$90</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$50 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil Paramount" data-price="50" data-display="Desde $50 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1440407876336-62333a6f010f?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Paramount</h3><ul class="options-list"><li><span>1 Mes</span> <span>$50</span></li><li><span>3 Meses</span> <span>$115</span></li><li><span>6 Meses</span> <span>$200</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$50 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil VIX+" data-price="50" data-display="Desde $50 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1518672520633-8fc6b567b5e4?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>VIX+</h3><ul class="options-list"><li><span>1 Mes</span> <span>$50</span></li><li><span>3 Meses</span> <span>$115</span></li><li><span>6 Meses</span> <span>$200</span></li><li><span>12 Meses</span> <span>$350</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$50 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Perfil Gaia" data-price="35" data-display="Desde $35 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Gaia</h3><ul class="options-list"><li><span>3 Meses</span> <span>$85</span></li><li><span>6 Meses</span> <span>$140</span></li><li><span>12 Meses</span> <span>$235</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$35 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Universal+ Completa" data-price="100" data-display="$100 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Universal+</h3><ul class="options-list"><li><span>Cuenta Completa</span> <span>1 Mes</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$100 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Apple TV + MLS" data-price="85" data-display="$85 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Apple TV + MLS</h3><ul class="options-list"><li><span>Paquete Fútbol</span> <span>1 Mes</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$85 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Telelatino" data-price="120" data-display="$120 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1593784991095-a205029471b6?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Telelatino</h3><ul class="options-list"><li><span>Standard</span> <span>1 Mes</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$120 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Fox One" data-price="105" data-display="$105 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1560169897-bb00d8990b08?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Fox One</h3><ul class="options-list"><li><span>Cuenta Completa</span> <span>1 Mes</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$105 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="NBA Pass" data-price="40" data-display="Desde $40 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>NBA Pass</h3><ul class="options-list"><li><span>1 Mes</span> <span>$40</span></li><li><span>2 Meses</span> <span>$70</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$40 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Porn-Hub" data-price="70" data-display="Desde $70 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1510832198440-a52376950479?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Porn-Hub</h3><ul class="options-list"><li><span>4 Meses</span> <span>$70</span></li><li><span>8 Meses</span> <span>$100</span></li><li><span>12 Meses</span> <span>$120</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$70 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Deezer Familia" data-price="100" data-display="$100 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1520454972579-269a84490807?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Deezer Familia</h3><ul class="options-list"><li><span>Cuenta Nueva</span> <span>1 Mes</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$100 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Deezer Premium" data-price="55" data-display="$55 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Deezer Premium</h3><ul class="options-list"><li><span>Nueva o Renovación</span> <span>1 Mes</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$55 MXN</div></div></div>
+            </a>
+        </div>
+    </div>
+
+    <h2 id="cuentas" class="section-title">Cuentas Nuevas & Renovaciones</h2>
+    <div class="services-section">
+        <div class="services-grid">
+            <a href="#" class="service-card" data-title="Netflix (Cuenta Nueva)" data-price="245" data-display="$245 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Netflix Nueva</h3><div class="price-container"><span class="price-label">Completa</span><div class="price">$245 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="VIX (Cuenta Nueva)" data-price="90" data-display="$90 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1518672520633-8fc6b567b5e4?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>VIX Nueva</h3><div class="price-container"><span class="price-label">Completa</span><div class="price">$90 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Disney + ESPN (Nueva)" data-price="170" data-display="$170 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Disney + ESPN</h3><div class="price-container"><span class="price-label">Completa</span><div class="price">$170 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="MAX Platino (Nueva)" data-price="100" data-display="$100 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>MAX Platino</h3><div class="price-container"><span class="price-label">Completa</span><div class="price">$100 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Viki Rakuten (Nueva)" data-price="70" data-display="$70 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1580477659142-b0241db8fb1f?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Viki Rakuten</h3><div class="price-container"><span class="price-label">Nueva</span><div class="price">$70 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Spotify (Cuenta)" data-price="80" data-display="Desde $80 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Spotify</h3><ul class="options-list"><li><span>Cuenta Nueva</span> <span>1 Mes - $80</span></li><li><span>Cuenta Nueva</span> <span>3 Meses - $165</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$80 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Crunchyroll (Renovación)" data-price="130" data-display="Desde $130 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Crunchyroll (Completa)</h3><ul class="options-list"><li><span>Renovación</span> <span>1 Mes - $130</span></li><li><span>Renovación</span> <span>12 Meses - $1120</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$130 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="YouTube Premium" data-price="65" data-display="Desde $65 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>YouTube Premium</h3><ul class="options-list"><li><span>1 Mes</span> <span>Invitación - $65</span></li><li><span>3 Meses</span> <span>Cuenta Nueva - $160</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$65 MXN</div></div></div>
+            </a>
+        </div>
+    </div>
+
+    <h2 id="edicion" class="section-title">Edición & Software</h2>
+    <div class="services-section">
+        <div class="services-grid">
+            <a href="#" class="service-card" data-title="Google IA Pro" data-price="235" data-display="$235 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1684369176140-59f77f54fb4a?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Google IA Pro</h3><ul class="options-list"><li><span>Membresía Completa</span> <span>12 Meses</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$235 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="ChatGPT Plus" data-price="145" data-display="$145 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>ChatGPT Plus</h3><div class="price-container"><span class="price-label">Precio</span><div class="price">$145 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Canva Pro" data-price="60" data-display="Desde $60 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Canva Pro</h3><ul class="options-list"><li><span>1 Mes</span> <span>Invitación - $65</span></li><li><span>1 Mes (Promo)</span> <span>Invitación - $60</span></li></ul><div class="price-container"><span class="price-label">Desde</span><div class="price">$60 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="CapCut Pro" data-price="65" data-display="$65 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>CapCut Pro</h3><div class="price-container"><span class="price-label">Precio</span><div class="price">$65 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Adobe Creative Cloud" data-price="375" data-display="$375 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Adobe Creative Cloud</h3><div class="price-container"><span class="price-label">Renovación</span><div class="price">$375 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Duolingo Plus" data-price="55" data-display="$55 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Duolingo Plus</h3><div class="price-container"><span class="price-label">Precio</span><div class="price">$55 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Express VPN" data-price="65" data-display="$65 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Express VPN</h3><div class="price-container"><span class="price-label">Precio</span><div class="price">$65 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Tunnelbear VPN" data-price="40" data-display="$40 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Tunnelbear VPN</h3><div class="price-container"><span class="price-label">Precio</span><div class="price">$40 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Nord VPN" data-price="100" data-display="$100 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1614062848653-90d565860b37?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Nord VPN</h3><ul class="options-list"><li><span>Acceso Seguro</span> <span>3 Meses</span></li></ul><div class="price-container"><span class="price-label">Precio</span><div class="price">$100 MXN</div></div></div>
+            </a>
+            <a href="#" class="service-card" data-title="Elevenlabs Creator" data-price="225" data-display="$225 MXN">
+                <div class="img-container"><img src="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&q=80" class="service-img"></div>
+                <div class="service-info"><h3>Elevenlabs Creator</h3><div class="price-container"><span class="price-label">1 Mes</span><div class="price">$225 MXN</div></div></div>
+            </a>
+        </div>
+    </div>
+
+    <div id="recompensas">
+        <h2 class="rewards-title">🎁 Vessel Rewards</h2>
+        <p class="rewards-subtitle">Comparte nuestro catálogo con tus amigos. Por cada venta concretada que venga de tu recomendación, ganas <strong>1 Token</strong>. ¡Acumúlalos y canjéalos por tus servicios favoritos totalmente gratis!</p>
+        
+        <div class="steps-container">
+            <div class="step-box">
+                <div class="step-num">1</div>
+                <h4>Comparte</h4>
+                <p>Manda la página web a tus amigos o súbela a tus redes.</p>
+            </div>
+            <div class="step-box">
+                <div class="step-num">2</div>
+                <h4>Refiere</h4>
+                <p>Tu amigo compra e indica que viene de tu parte en WhatsApp.</p>
+            </div>
+            <div class="step-box">
+                <div class="step-num">3</div>
+                <h4>¡Gana Tokens!</h4>
+                <p>1 Venta = 1 Token. Acumula y pide tu servicio gratis.</p>
+            </div>
+        </div>
+
+        <h3 style="text-align:center; color:#fff; margin-bottom:20px; text-transform:uppercase;">Costo de Recompensas</h3>
+        <div class="token-grid">
+            <div class="token-card">
+                <div class="t-name">VIX+</div>
+                <div class="t-cost">5 TOKENS</div>
+            </div>
+            <div class="token-card">
+                <div class="t-name">MAX</div>
+                <div class="t-cost">7 TOKENS</div>
+            </div>
+            <div class="token-card">
+                <div class="t-name">Crunchyroll</div>
+                <div class="t-cost">7 TOKENS</div>
+            </div>
+            <div class="token-card">
+                <div class="t-name">Disney+</div>
+                <div class="t-cost">9 TOKENS</div>
+            </div>
+            <div class="token-card">
+                <div class="t-name">Prime Video</div>
+                <div class="t-cost">9 TOKENS</div>
+            </div>
+            <div class="token-card">
+                <div class="t-name">Netflix</div>
+                <div class="t-cost">10 TOKENS</div>
+            </div>
+        </div>
+
+        <div class="rewards-cta">
+            <a href="https://wa.me/526611078412?text=Hola,%20quiero%20empezar%20a%20referir%20amigos%20para%20ganar%20Vessel%20Tokens!" target="_blank" class="btn btn-token">¡QUIERO PARTICIPAR!</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Vessel Games Oficial | Envíos inmediatos vía WhatsApp.</p>
+        <p style="opacity: 0.5; font-size: 0.8rem;">Aceptamos Criptomonedas (LTC/USDT) o transferencia.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        let currentItem = null;
+
+        // Modal Logic
+        function openModal(title, rawPrice, displayPrice) {
+            currentItem = { title: title, price: parseInt(rawPrice), display: displayPrice };
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalPrice').innerText = displayPrice;
+            document.getElementById('purchaseModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('purchaseModal').classList.remove('active');
+        }
+
+        // Cart Logic
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('active');
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const badge = document.getElementById('cartBadge');
+            const totalEl = document.getElementById('cartTotalPrice');
+            
+            badge.innerText = cart.length;
+            
+            if(cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart-msg">Tu carrito está vacío. <br>¡Agrega servicios del catálogo!</div>';
+                totalEl.innerText = "$0 MXN";
+                return;
+            }
+
+            container.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <h4>${item.title}</h4>
+                            <p>${item.display}</p>
+                        </div>
+                        <div class="remove-item" onclick="removeFromCart(${index})">✕</div>
+                    </div>
+                `;
+            });
+            totalEl.innerText = "$" + total + " MXN";
+        }
+
+        function addToCartFromModal() {
+            if(currentItem) {
+                cart.push(currentItem);
+                updateCartUI();
+                closeModal();
+                // Animación visual rápida en el botón flotante
+                const btn = document.querySelector('.cart-float-btn');
+                btn.style.transform = 'scale(1.2)';
+                setTimeout(() => btn.style.transform = '', 200);
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function buyNowFromModal() {
+            // Flujo de 1 solo item (Ignora el carrito)
+            if(currentItem) {
+                const name = document.getElementById('buyerName').value.trim() || "(No especificado)";
+                let text = `Hola, quiero comprar: ${currentItem.title} (${currentItem.display}). Mi nombre es: ${name}`;
+                window.open(`https://wa.me/526611078412?text=${encodeURIComponent(text)}`, '_blank');
+                closeModal();
+            }
+        }
+
+        function checkoutCart() {
+            if(cart.length === 0) return alert("Tu carrito está vacío.");
+            
+            const name = document.getElementById('cartNameInput').value.trim() || "(No especificado)";
+            let text = `Hola, confirmo mi pedido en el Carrito:\n\n`;
+            let total = 0;
+            
+            cart.forEach(item => {
+                text += `▪️ ${item.title} (${item.display})\n`;
+                total += item.price;
+            });
+            
+            text += `\nTotal estimado: $${total} MXN\nNombre: ${name}`;
+            window.open(`https://wa.me/526611078412?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // Asignar eventos a las tarjetas
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const title = this.getAttribute('data-title');
+                const rawPrice = this.getAttribute('data-price');
+                const display = this.getAttribute('data-display');
+                
+                if(title && rawPrice) {
+                    openModal(title, rawPrice, display);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
