@@ -13110,5 +13110,147 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+
+<!-- =========================================================
+     V66: Ocultar barra superior cuando hay servicio/modal abierto
+     Mantiene la barra fija en navegación normal y la quita al abrir
+     producto, carrito, métodos de pago o Xbox Retro.
+     ========================================================= -->
+<style id="vg-hide-header-when-service-open-v66">
+  .topbar{
+    transition:opacity .24s ease, transform .24s ease, visibility .24s ease !important;
+    will-change:opacity, transform !important;
+  }
+
+  body.vg-service-active-v66 .topbar{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+    transform:translateY(-120%) !important;
+  }
+</style>
+
+<script id="vg-hide-header-when-service-open-v66">
+(function(){
+  'use strict';
+
+  var SERVICE_SELECTORS = ['#productModal', '#cartModal', '#paymentModal', '#retroModal'];
+
+  function isVisibleModal(el){
+    if(!el) return false;
+    if(el.classList && el.classList.contains('active')) return true;
+    if(el.getAttribute('aria-hidden') === 'false') return true;
+    var style = window.getComputedStyle ? window.getComputedStyle(el) : null;
+    if(!style) return false;
+    return style.display !== 'none' && style.visibility !== 'hidden' && parseFloat(style.opacity || '1') > 0 && (el.offsetWidth > 0 || el.offsetHeight > 0);
+  }
+
+  function serviceIsOpen(){
+    for(var i=0;i<SERVICE_SELECTORS.length;i++){
+      var el = document.querySelector(SERVICE_SELECTORS[i]);
+      if(isVisibleModal(el)) return true;
+    }
+    return false;
+  }
+
+  function forceHeaderHidden(topbar){
+    topbar.style.setProperty('display','none','important');
+    topbar.style.setProperty('opacity','0','important');
+    topbar.style.setProperty('visibility','hidden','important');
+    topbar.style.setProperty('pointer-events','none','important');
+    topbar.style.setProperty('transform','translateY(-120%)','important');
+  }
+
+  function forceHeaderVisible(topbar){
+    topbar.style.removeProperty('display');
+    topbar.style.setProperty('position','fixed','important');
+    topbar.style.setProperty('top','0','important');
+    topbar.style.setProperty('left','0','important');
+    topbar.style.setProperty('right','0','important');
+    topbar.style.setProperty('width','100%','important');
+    topbar.style.setProperty('z-index','16000','important');
+    topbar.style.setProperty('opacity','1','important');
+    topbar.style.setProperty('visibility','visible','important');
+    topbar.style.setProperty('pointer-events','auto','important');
+    topbar.style.setProperty('transform','translateY(0)','important');
+  }
+
+  function applyHeaderMode(){
+    var topbar = document.querySelector('.topbar');
+    if(!topbar) return;
+    var open = serviceIsOpen();
+    document.body.classList.toggle('vg-service-active-v66', open);
+    if(open) forceHeaderHidden(topbar);
+    else forceHeaderVisible(topbar);
+  }
+
+  function updateRepeated(){
+    applyHeaderMode();
+    window.requestAnimationFrame(applyHeaderMode);
+    setTimeout(applyHeaderMode, 60);
+    setTimeout(applyHeaderMode, 180);
+    setTimeout(applyHeaderMode, 420);
+  }
+
+  function observeModal(el){
+    if(!el || el.__vgHeaderHideV66) return;
+    el.__vgHeaderHideV66 = true;
+    new MutationObserver(updateRepeated).observe(el, {
+      attributes:true,
+      attributeFilter:['class','style','aria-hidden']
+    });
+  }
+
+  function installObservers(){
+    SERVICE_SELECTORS.forEach(function(sel){ observeModal(document.querySelector(sel)); });
+    var topbar = document.querySelector('.topbar');
+    if(topbar && !topbar.__vgHeaderProtectV66){
+      topbar.__vgHeaderProtectV66 = true;
+      new MutationObserver(function(){
+        if(serviceIsOpen()) window.requestAnimationFrame(applyHeaderMode);
+      }).observe(topbar,{attributes:true, attributeFilter:['style','class']});
+    }
+  }
+
+  function wrap(name){
+    var fn = window[name];
+    if(typeof fn !== 'function' || fn.__vgHeaderV66) return;
+    var wrapped = function(){
+      var result = fn.apply(this, arguments);
+      updateRepeated();
+      return result;
+    };
+    wrapped.__vgHeaderV66 = true;
+    window[name] = wrapped;
+  }
+
+  function wrapKnownFunctions(){
+    [
+      'openModal','closeModal','openCart','closeCart','openPaymentModal','closePaymentModal',
+      'openRetroModal','closeRetroModal','buySelectedNow','buyRetroNow','openPaymentForCart',
+      'addSelectedToCart','addRetroToCart'
+    ].forEach(wrap);
+  }
+
+  function boot(){
+    installObservers();
+    wrapKnownFunctions();
+    updateRepeated();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+
+  window.addEventListener('load', boot);
+  window.addEventListener('resize', updateRepeated);
+  document.addEventListener('click', function(){ setTimeout(boot, 30); }, true);
+  document.addEventListener('keydown', function(){ setTimeout(updateRepeated, 30); }, true);
+
+  setTimeout(boot, 300);
+  setTimeout(boot, 1000);
+})();
+</script>
+
 </body>
 </html>
