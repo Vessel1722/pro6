@@ -5784,10 +5784,10 @@ window.WHATSAPP_NUMBER = "526611078412";
         🎮 XCOM Enemy Unknown $175`;
     const classicRetroGames = new Set(["Armed and Dangerous", "Black", "BLiNX: The Time Sweeper", "BloodRayne 2", "Breakdown", "Chicken Little", "Conker: Live and Reloaded", "Crimson Skies: High Road to Revenge", "DEAD OR ALIVE 1 Ultimate", "DEAD OR ALIVE 2 Ultimate", "DEAD OR ALIVE 3", "Destroy All Humans!", "Full Spectrum Warrior", "Fuzion Frenzy", "Gladius", "Gunvalkyrie", "Hunter: The Reckoning", "Indiana Jones And The Emperor's Tomb", "Jade Empire", "Manhunt", "Max Payne", "Max Payne 2: The Fall of Max Payne", "Mercenaries: Playground Of Destruction", "MX Unleashed", "Oddworld: Munch's Oddysee", "Otogi: Myth of Demons", "Otogi 2: Immortal Warriors", "Panzer Dragoon Orta", "Psychonauts", "Red Dead Revolver", "Red faction II", "Secret Weapons Over Normandy", "Sid Meier's Pirates!", "Sid Meier's Civilization Revolution", "STAR WARS Battlefront", "Star Wars Battlefront II", "Star Wars Jedi Knight II: Jedi Outcast", "Star Wars Episode III: Revenge Of The Sith", "Star Wars Jedi Starfighter", "STAR WARS Starfighter Special Edition", "Star Wars Jedi Knight: Jedi Academy", "Star Wars KOTOR II", "Star Wars Republic Commando", "Star Wars: The Clone Wars", "STAR WARS™ - Knights of the Old Republic™", "SSX 3", "TimeSplitters Future Perfect", "TimeSplitters 2", "The Elder Scrolls III: Morrowind", "Tom Clancy's Splinter Cell® Chaos Theory", "Thrillville"]);
     let selectedRetroGames = [];
-    function cleanRetroName(name) { return String(name||'').replace(/[🎮🕹�]/g, '').replace(/\s+/g, ' ').trim(); }
+    function cleanRetroName(name) { return String(name||'').replace(/[🎮🕹 ]/g, '').replace(/\s+/g, ' ').trim(); }
     const RETRO_GAMES = retroGamesRaw.split(/\n/).map((line, idx) => {
       const cleanedLine = line.trim();
-      const match = cleanedLine.match(/^[🎮🕹�]?\s*(.*?)\s+\$(\d+(?:\.\d+)?)\s*$/);
+      const match = cleanedLine.match(/^[🎮🕹 ]?\s*(.*?)\s+\$(\d+(?:\.\d+)?)\s*$/);
       if(!match) return null;
       const name = cleanRetroName(match[1]);
       const price = Number(match[2]);
