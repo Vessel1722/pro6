@@ -8066,14 +8066,34 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
       alert('No hay pedido activo. Selecciona primero un producto o una oferta.');
       return;
     }
+
+    const proofInput = $('#proofInput');
+    const hasProof = !!(proofInput && proofInput.files && proofInput.files[0]);
+    if(!hasProof){
+      if(proofInput){
+        proofInput.focus();
+        const box = proofInput.closest('.proof-box');
+        if(box){
+          box.classList.add('vg-proof-required');
+          setTimeout(()=>box.classList.remove('vg-proof-required'), 2400);
+        }
+      }
+      alert('Sube el comprobante para confirmar la compra antes de mandar el mensaje por WhatsApp.');
+      return;
+    }
+
     window.pendingPaymentOrder = data;
     const saved = await window.vgCreateSupabaseOrder(data.source || 'whatsapp-checkout');
     if(!saved) return;
+
+    const proofReady = !!(saved.proof?.url || saved.proof_url);
+    if(!proofReady){
+      alert('No se pudo guardar el comprobante en Supabase. Intenta subirlo otra vez antes de mandar WhatsApp.');
+      return;
+    }
+
     const lines = data.items.map((it,i)=>`${i+1}. ${it.title} - ${it.option || 'Opción'} - ${money(it.price)}`).join('\n');
-    const proofInput = $('#proofInput');
-    const proofText = proofInput && proofInput.files && proofInput.files[0]
-      ? 'Comprobante cargado en la web y adjunto también en este chat.'
-      : 'Adjunto comprobante en este chat para validar la compra.';
+    const proofText = 'Comprobante cargado en la web y registrado en el panel administrador.';
     const text = `Hola, envío mi comprobante de pago.\n\nPedido #${saved.id}\n\n${lines}\n\nTotal: ${money(data.total)}\n\n${proofText}`;
     window.open(`https://wa.me/${window.WHATSAPP_NUMBER || '526611078412'}?text=${encodeURIComponent(text)}`, '_blank');
     if(typeof window.vgAdminLoadOrders === 'function') setTimeout(()=>window.vgAdminLoadOrders(), 800);
@@ -8815,6 +8835,19 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
     const panel=modal ? modal.querySelector('.vg-admin-panel') : null;
     if(!modal || !panel) return;
 
+    /* IMPORTANTE:
+       El candado de scroll solo debe activarse cuando el panel admin está abierto.
+       Antes se activaba por tener sesión iniciada y por eso la página principal
+       quedaba sin poder bajar/subir para ver productos. */
+    const modalIsOpen = modal.classList.contains('active');
+    if(!modalIsOpen){
+      document.body.classList.remove('vg-admin-lock');
+      document.documentElement.style.removeProperty('overflow');
+      document.body.style.removeProperty('overflow');
+      panel.classList.remove('vg-admin-fullscreen-mode');
+      return;
+    }
+
     if(isAdminLogged()){
       syncSessionFlags();
       panel.classList.add('vg-admin-fullscreen-mode');
@@ -8905,6 +8938,128 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 
   setTimeout(function(){syncSessionFlags();installWrapper();forceAdminFullscreen();}, 300);
   setTimeout(function(){syncSessionFlags();installWrapper();forceAdminFullscreen();}, 1200);
+})();
+</script>
+
+
+
+<style id="vg-scroll-proof-required-fix-v59">
+  /* Scroll normal en la página: solo se bloquea mientras el panel admin está abierto */
+  html, body{
+    overflow-x:hidden !important;
+  }
+
+  body:not(.vg-admin-lock){
+    overflow-y:auto !important;
+    height:auto !important;
+    min-height:100% !important;
+  }
+
+  #vgAdminModal:not(.active){
+    pointer-events:none !important;
+  }
+
+  /* Mensaje visual cuando falta comprobante */
+  .proof-box.vg-proof-required,
+  .vg-proof-box.vg-proof-required{
+    border-color:#ff4d7d !important;
+    background:rgba(255,77,125,.10) !important;
+    box-shadow:0 0 0 3px rgba(255,77,125,.16), 0 18px 42px rgba(0,0,0,.24) !important;
+    animation:vgProofShake .22s ease-in-out 0s 2 !important;
+  }
+
+  .proof-box.vg-proof-required::after,
+  .vg-proof-box.vg-proof-required::after{
+    content:'Sube el comprobante para confirmar la compra.';
+    display:block;
+    margin-top:9px;
+    color:#ffd7df;
+    font-weight:950;
+    font-size:.88rem;
+  }
+
+  @keyframes vgProofShake{
+    0%,100%{transform:translateX(0)}
+    35%{transform:translateX(-4px)}
+    70%{transform:translateX(4px)}
+  }
+</style>
+
+<script id="vg-scroll-proof-required-fix-v59">
+(function(){
+  'use strict';
+
+  function adminIsOpen(){
+    const modal = document.getElementById('vgAdminModal');
+    return !!(modal && modal.classList.contains('active'));
+  }
+
+  function repairPageScroll(){
+    if(!adminIsOpen()){
+      document.body.classList.remove('vg-admin-lock');
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('height');
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('height');
+      document.body.style.removeProperty('position');
+      document.body.style.removeProperty('top');
+      document.body.style.removeProperty('width');
+    }
+  }
+
+  function requireProofFile(){
+    const input = document.getElementById('proofInput');
+    const hasProof = !!(input && input.files && input.files[0]);
+    if(!hasProof){
+      const box = input && (input.closest('.proof-box') || input.closest('.vg-proof-box'));
+      if(box){
+        box.classList.add('vg-proof-required');
+        setTimeout(function(){ box.classList.remove('vg-proof-required'); }, 2600);
+      }
+      if(input) input.focus();
+      alert('Sube el comprobante para confirmar la compra antes de mandar el mensaje por WhatsApp.');
+      return false;
+    }
+    return true;
+  }
+
+  /* Refuerzo final por si otra versión antigua vuelve a sobrescribir la función */
+  function patchWhatsappSend(){
+    if(typeof window.sendPaymentWhatsApp !== 'function' || window.sendPaymentWhatsApp.__proofRequiredV59) return;
+    const previous = window.sendPaymentWhatsApp;
+    const wrapped = async function(){
+      if(!requireProofFile()) return;
+      return previous.apply(this, arguments);
+    };
+    wrapped.__proofRequiredV59 = true;
+    window.sendPaymentWhatsApp = wrapped;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      repairPageScroll();
+      patchWhatsappSend();
+      setTimeout(repairPageScroll, 200);
+      setTimeout(repairPageScroll, 1300);
+    });
+  }else{
+    repairPageScroll();
+    patchWhatsappSend();
+  }
+
+  const modalWatch = setInterval(function(){
+    repairPageScroll();
+    patchWhatsappSend();
+  }, 500);
+  setTimeout(function(){ clearInterval(modalWatch); repairPageScroll(); patchWhatsappSend(); }, 6000);
+
+  const adminModal = document.getElementById('vgAdminModal');
+  if(adminModal){
+    new MutationObserver(repairPageScroll).observe(adminModal, {attributes:true, attributeFilter:['class']});
+  }
+
+  window.addEventListener('focus', repairPageScroll);
+  window.addEventListener('pageshow', repairPageScroll);
 })();
 </script>
 
