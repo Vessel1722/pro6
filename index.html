@@ -6,11 +6,11 @@
   <title>Vessel Games | Marketplace Digital Premium</title>
   <meta name="description" content="Catálogo digital de juegos, monedas, cuentas, streaming, software y servicios con atención rápida por WhatsApp." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.vesselgames.xyz/?v=20260531-2" />
+  <meta property="og:url" content="https://www.vesselgames.xyz/" />
   <meta property="og:title" content="Vessel Games | Marketplace Digital Premium" />
   <meta property="og:description" content="Compra juegos, monedas, cuentas, software y servicios digitales con atención rápida." />
-  <meta property="og:image" content="https://www.vesselgames.xyz/portada.png?v=20260531-2" />
-  <meta property="og:image:secure_url" content="https://www.vesselgames.xyz/portada.png?v=20260531-2" />
+  <meta property="og:image" content="https://www.vesselgames.xyz/portada.png?v=20260531-3" />
+  <meta property="og:image:secure_url" content="https://www.vesselgames.xyz/portada.png?v=20260531-3" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -18,8 +18,8 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Vessel Games | Marketplace Digital Premium" />
   <meta name="twitter:description" content="Compra juegos, monedas, cuentas, software y servicios digitales con atención rápida." />
-  <meta name="twitter:image" content="https://www.vesselgames.xyz/portada.png?v=20260531-2" />
-  <link rel="image_src" href="https://www.vesselgames.xyz/portada.png?v=20260531-2" />
+  <meta name="twitter:image" content="https://www.vesselgames.xyz/portada.png?v=20260531-3" />
+  <link rel="image_src" href="https://www.vesselgames.xyz/portada.png?v=20260531-3" />
   <link rel="preconnect" href="https://i.imgur.com" />
   <link rel="preload" as="video" href="https://i.imgur.com/9j4rD8c.mp4" type="video/mp4" fetchpriority="high" /><style>
     :root {
@@ -7699,6 +7699,159 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
     },200);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+  else boot();
+})();
+</script>
+
+
+
+<!-- FIX: conserva métodos de pago y hace que la oferta Free Fire abra la ventana de pago, no WhatsApp directo -->
+<script id="vg-fix-freefire-payment-restore-only">
+(function(){
+  'use strict';
+
+  const FF_PACKAGES = [
+    ['1,166',161],['2,398',325],['2,970',425],['3,564',492],['4,136',569],['4,796',631],['5,302',723],['5,368',733],['12,320',1477]
+  ];
+
+  function $(selector, root){ return (root || document).querySelector(selector); }
+  function money(value){
+    return '$' + Number(value || 0).toLocaleString('es-MX', {maximumFractionDigits:0}) + ' MXN';
+  }
+  function parseMoney(value){
+    if(typeof value === 'number') return value;
+    const text = String(value || '').replace(/MXN|USD|\$/gi, ' ').replace(/,/g, '');
+    const matches = text.match(/-?\d+(?:\.\d+)?/g);
+    return matches && matches.length ? Number(matches[matches.length - 1]) : 0;
+  }
+  function normalizeOrder(order){
+    order = order || window.pendingPaymentOrder || {};
+    const items = Array.isArray(order.items) ? order.items.map(function(item){
+      return {
+        title: String(item.title || item.name || 'Pedido'),
+        option: String(item.option || item.variant || 'Opción seleccionada'),
+        price: Number(parseMoney(item.price)),
+        image: item.image || ''
+      };
+    }) : [];
+    const total = Number(parseMoney(order.total)) || items.reduce(function(sum, item){ return sum + Number(item.price || 0); }, 0);
+    return {
+      source: order.source || 'whatsapp-checkout',
+      total: total,
+      items: items,
+      product_name: order.product_name || (items[0] && items[0].title) || 'Pedido',
+      product_option: order.product_option || (items[0] && items[0].option) || ''
+    };
+  }
+
+  function wrapPaymentModal(){
+    if(typeof window.openPaymentModal !== 'function') return false;
+    if(window.openPaymentModal.__vgFFPaymentRestore === true) return true;
+
+    const originalOpenPaymentModal = window.openPaymentModal;
+    window.openPaymentModal = function(order){
+      const normalized = normalizeOrder(order);
+      window.pendingPaymentOrder = normalized;
+      window.__vgSingleOrder = null;
+
+      const totalLabel = $('#payModalTotal');
+      if(totalLabel) totalLabel.textContent = money(normalized.total);
+
+      originalOpenPaymentModal(normalized);
+    };
+    window.openPaymentModal.__vgFFPaymentRestore = true;
+
+    window.cartData = function(){
+      return normalizeOrder(window.pendingPaymentOrder);
+    };
+
+    return true;
+  }
+
+  function selectedFreeFirePackage(root){
+    const activeOnly = $('#ffOnlyPackages .ff-only-package.active', root);
+    if(activeOnly){
+      const index = Number(activeOnly.dataset.i || 0);
+      return FF_PACKAGES[index] || FF_PACKAGES[0];
+    }
+
+    const activeOffer = $('#ffOfferPackages .ff-package.active', root);
+    if(activeOffer){
+      const index = Number(activeOffer.dataset.idx || 0);
+      return FF_PACKAGES[index] || FF_PACKAGES[0];
+    }
+
+    const selectedText = ($('#ffOnlySelected', root) || $('#ffOfferSelected', root) || {}).textContent || '1,166 diamantes';
+    const selectedPrice = ($('#ffOnlyPrice', root) || $('#ffOfferPrice', root) || {}).textContent || '$161 MXN';
+    const diamonds = (selectedText.match(/[\d,]+/) || ['1,166'])[0];
+    const price = parseMoney(selectedPrice) || 161;
+    return [diamonds, price];
+  }
+
+  function openFreeFirePayment(root){
+    if(!wrapPaymentModal()){
+      alert('La ventana de métodos de pago todavía no está lista. Intenta de nuevo en un momento.');
+      return;
+    }
+
+    const pack = selectedFreeFirePackage(root);
+    const image = ($('#offersShowcase .ff-only-media img') || $('#offersShowcase .offer-media img') || {}).src || 'https://i.imgur.com/8zUIcAF.jpg';
+    const order = {
+      source: 'free-fire-oferta',
+      total: Number(pack[1] || 0),
+      product_name: 'Oferta Diamantes Free Fire',
+      product_option: pack[0] + ' diamantes · Recarga vía ID directo de Garena',
+      items: [{
+        title: 'Oferta Diamantes Free Fire',
+        option: pack[0] + ' diamantes · Recarga vía ID directo de Garena',
+        price: Number(pack[1] || 0),
+        image: image
+      }]
+    };
+
+    window.openPaymentModal(order);
+  }
+
+  function replaceBuyButton(button, root){
+    if(!button || button.dataset.vgFFPaymentRestored === '1') return true;
+
+    const clone = button.cloneNode(true);
+    clone.dataset.vgFFPaymentRestored = '1';
+    clone.textContent = 'Comprar / ver métodos de pago';
+    button.replaceWith(clone);
+
+    clone.addEventListener('click', function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      openFreeFirePayment(root || document);
+    });
+    return true;
+  }
+
+  function bindFreeFireButtons(){
+    wrapPaymentModal();
+    const root = $('#offersShowcase') || document;
+    let bound = false;
+
+    const mainButton = $('#ffOnlyBuyBtn', root);
+    if(mainButton) bound = replaceBuyButton(mainButton, root) || bound;
+
+    const oldButton = $('#ffOfferBuyBtn', root);
+    if(oldButton) bound = replaceBuyButton(oldButton, root) || bound;
+
+    return bound;
+  }
+
+  function boot(){
+    let tries = 0;
+    const timer = setInterval(function(){
+      tries += 1;
+      const ready = bindFreeFireButtons();
+      if((ready && wrapPaymentModal()) || tries > 100) clearInterval(timer);
+    }, 120);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
 </script>
