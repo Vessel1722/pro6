@@ -7695,5 +7695,448 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+<!-- =========================================================
+     V56 FINAL: Free Fire usa métodos de pago + registro Supabase
+     + panel administrador más amplio y ordenado
+     ========================================================= -->
+<style id="vg-freefire-payment-admin-v56-css">
+  /* Ventana de métodos de pago un poco más cómoda */
+  #paymentModal{
+    z-index:22000 !important;
+  }
+  #paymentModal .cart-panel{
+    width:min(1080px, calc(100vw - 28px)) !important;
+    max-width:1080px !important;
+    max-height:min(92vh, 980px) !important;
+    overflow:auto !important;
+    border-radius:28px !important;
+    padding:26px !important;
+  }
+  #paymentModal .payment-grid{
+    grid-template-columns:repeat(2, minmax(280px, 1fr)) !important;
+    gap:14px !important;
+  }
+  #paymentModal .pay-card{
+    min-height:150px !important;
+  }
+  .vg-pay-summary{
+    margin:14px 0 16px !important;
+    padding:14px 16px !important;
+    border-radius:18px !important;
+    border:1px solid rgba(25,230,193,.22) !important;
+    background:linear-gradient(135deg, rgba(25,230,193,.075), rgba(139,92,246,.075)) !important;
+  }
+  .vg-pay-summary b{
+    display:block !important;
+    color:#fff !important;
+    margin-bottom:7px !important;
+    font-size:1rem !important;
+  }
+  .vg-pay-summary p{
+    margin:0 !important;
+    color:#b8c4dd !important;
+    line-height:1.45 !important;
+    font-size:.92rem !important;
+  }
+
+  /* Oferta Free Fire: botón comunica que abre métodos de pago */
+  #ffOnlyBuyBtn,
+  .ff-offer-btn[data-payment-patched="1"]{
+    background:linear-gradient(135deg,#21C66B 0%,#19E6C1 52%,#8B5CF6 100%) !important;
+    color:#05100e !important;
+    box-shadow:0 16px 34px rgba(0,0,0,.28),0 0 26px rgba(25,230,193,.14) !important;
+  }
+  .ff-payment-note{
+    margin-top:10px !important;
+    color:#cffff8 !important;
+    font-size:.84rem !important;
+    font-weight:850 !important;
+    line-height:1.35 !important;
+  }
+
+  /* Panel administrador: más grande, aireado y legible */
+  #vgAdminModal{
+    padding:10px !important;
+    background:rgba(0,0,0,.84) !important;
+  }
+  #vgAdminModal .vg-admin-panel{
+    width:min(98vw, 1920px) !important;
+    height:min(97vh, 1080px) !important;
+    max-height:97vh !important;
+    border-radius:30px !important;
+    grid-template-rows:auto auto minmax(0,1fr) !important;
+  }
+  #vgAdminModal .vg-admin-head{
+    padding:22px 26px !important;
+  }
+  #vgAdminModal .vg-admin-head h2{
+    font-size:2.25rem !important;
+    line-height:1 !important;
+  }
+  #vgAdminModal .vg-admin-head p{
+    font-size:.94rem !important;
+    line-height:1.4 !important;
+  }
+  #vgAdminModal .vg-admin-tabs{
+    padding:14px 24px !important;
+    gap:10px !important;
+  }
+  #vgAdminModal .vg-admin-tab{
+    padding:12px 18px !important;
+    font-size:.82rem !important;
+  }
+  #vgAdminModal .vg-admin-content{
+    padding:22px 24px 26px !important;
+  }
+  #vgAdminStats{
+    grid-template-columns:repeat(4, minmax(180px,1fr)) !important;
+    gap:14px !important;
+    margin-bottom:18px !important;
+  }
+  #vgAdminStats .vg-admin-stat{
+    padding:18px 20px !important;
+    border-radius:20px !important;
+  }
+  #vgAdminStats .vg-admin-stat b{
+    font-size:1.8rem !important;
+  }
+  #vgAdminOrders .vg-admin-tools{
+    grid-template-columns:minmax(280px,1fr) 190px auto !important;
+    gap:12px !important;
+    margin-bottom:18px !important;
+  }
+  #vgAdminOrders .vg-order-layout{
+    grid-template-columns:minmax(0,1.55fr) minmax(460px,.9fr) !important;
+    gap:22px !important;
+  }
+  #vgAdminOrdersList{
+    max-height:calc(97vh - 285px) !important;
+    padding-right:8px !important;
+  }
+  #vgOrderPreview{
+    max-height:calc(97vh - 285px) !important;
+    padding:22px !important;
+    border-radius:24px !important;
+  }
+  .vg-order-card{
+    grid-template-columns:170px minmax(280px,1.6fr) 125px 190px 165px 170px !important;
+    gap:16px !important;
+    padding:18px !important;
+    margin-bottom:14px !important;
+    border-radius:22px !important;
+  }
+  .vg-order-col h5{
+    margin-bottom:8px !important;
+  }
+  .vg-order-main-title{
+    font-size:1.08rem !important;
+  }
+  .vg-order-sub{
+    font-size:.9rem !important;
+  }
+  .vg-proof-preview-img{
+    max-height:650px !important;
+    border-radius:20px !important;
+  }
+  #vgAdminProductsList{
+    grid-template-columns:repeat(auto-fit,minmax(440px,1fr)) !important;
+    gap:18px !important;
+  }
+  .vg-product-admin-card,
+  .vg-admin-card{
+    padding:18px !important;
+    border-radius:22px !important;
+  }
+  .vg-product-admin-fields{
+    grid-template-columns:minmax(0,1fr) 160px 190px !important;
+    gap:12px !important;
+  }
+
+  @media(max-width:1280px){
+    #vgAdminOrders .vg-order-layout{grid-template-columns:1fr !important;}
+    #vgOrderPreview{position:relative !important;max-height:none !important;}
+    #vgAdminOrdersList{max-height:none !important;}
+    .vg-order-card{grid-template-columns:1fr 1fr 1fr !important;}
+  }
+  @media(max-width:820px){
+    #paymentModal .cart-panel{width:100vw !important;height:100vh !important;max-height:100vh !important;border-radius:0 !important;padding:18px !important;}
+    #paymentModal .payment-grid{grid-template-columns:1fr !important;}
+    #vgAdminModal{padding:0 !important;}
+    #vgAdminModal .vg-admin-panel{width:100vw !important;height:100vh !important;max-height:100vh !important;border-radius:0 !important;}
+    #vgAdminModal .vg-admin-head{padding:16px !important;}
+    #vgAdminModal .vg-admin-head h2{font-size:1.55rem !important;}
+    #vgAdminStats{grid-template-columns:1fr 1fr !important;}
+    #vgAdminOrders .vg-admin-tools{grid-template-columns:1fr !important;}
+    .vg-order-card{grid-template-columns:1fr !important;}
+    #vgAdminProductsList{grid-template-columns:1fr !important;}
+    .vg-product-admin-fields{grid-template-columns:1fr !important;}
+  }
+</style>
+
+<script id="vg-freefire-payment-admin-v56-script">
+(function(){
+  'use strict';
+
+  const FF_PACKAGES = [
+    ['1,166',161],['2,398',325],['2,970',425],['3,564',492],['4,136',569],['4,796',631],['5,302',723],['5,368',733],['12,320',1477]
+  ];
+  const CFG_KEY = 'vg_supabase_cfg_v1';
+  const ORDER_DEDUPE_MS = 15000;
+
+  function $(s,r=document){ return r.querySelector(s); }
+  function money(n){ return '$' + Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0}) + ' MXN'; }
+  function esc(s){ return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function parseMoney(v){
+    if(typeof v === 'number') return v;
+    const txt = String(v||'').replace(/MXN|USD|\$/gi,' ').replace(/,/g,'');
+    const m = txt.match(/-?\d+(?:\.\d+)?/g);
+    return m && m.length ? Number(m[m.length-1]) : 0;
+  }
+  function readCfg(){
+    try{
+      const c = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+      return {url:c.url || window.VG_SUPABASE_URL || '', anon:c.anon || window.VG_SUPABASE_ANON_KEY || ''};
+    }catch(e){
+      return {url:window.VG_SUPABASE_URL || '', anon:window.VG_SUPABASE_ANON_KEY || ''};
+    }
+  }
+  function getSB(){
+    const c = readCfg();
+    if(!window.supabase || !c.url || !c.anon) return null;
+    window.__vgSBFinal = window.__vgSBFinal || {client:null, sig:''};
+    const sig = c.url + '|' + c.anon.slice(0,12);
+    if(!window.__vgSBFinal.client || window.__vgSBFinal.sig !== sig){
+      window.__vgSBFinal.client = window.supabase.createClient(c.url, c.anon);
+      window.__vgSBFinal.sig = sig;
+    }
+    return window.__vgSBFinal.client;
+  }
+  function normalizeOrder(order){
+    order = order || window.pendingPaymentOrder || {};
+    const items = Array.isArray(order.items) ? order.items.map(it => ({
+      title: String(it.title || it.name || 'Pedido'),
+      option: String(it.option || it.variant || 'Opción seleccionada'),
+      price: Number(parseMoney(it.price)),
+      image: it.image || ''
+    })) : [];
+    const total = Number(parseMoney(order.total)) || items.reduce((s,it)=>s+Number(it.price||0),0);
+    return {
+      source: order.source || 'whatsapp-checkout',
+      total,
+      items,
+      product_name: order.product_name || (items[0] && items[0].title) || 'Pedido',
+      product_option: order.product_option || (items[0] && items[0].option) || ''
+    };
+  }
+  function orderKey(order){
+    const o = normalizeOrder(order);
+    return JSON.stringify({source:o.source,total:o.total,items:o.items.map(i=>[i.title,i.option,i.price])});
+  }
+  function upsertPaymentSummary(order){
+    const modal = $('#paymentModal .cart-panel');
+    if(!modal) return;
+    let box = $('#vgPaySummary');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'vgPaySummary';
+      box.className = 'vg-pay-summary';
+      const grid = $('#paymentModal .payment-grid');
+      if(grid) grid.parentNode.insertBefore(box, grid);
+      else modal.insertBefore(box, modal.children[2] || null);
+    }
+    const o = normalizeOrder(order);
+    const lines = o.items.map((it,i)=>`${i+1}. ${esc(it.title)} — ${esc(it.option)} — <strong>${money(it.price)}</strong>`).join('<br>');
+    box.innerHTML = `<b>Resumen del pedido</b><p>${lines || 'Pedido sin artículos.'}<br><br><strong>Total: ${money(o.total)}</strong></p>`;
+  }
+
+  const oldOpenPaymentModal = window.openPaymentModal;
+  window.openPaymentModal = function(order){
+    const normalized = normalizeOrder(order);
+    if(!normalized.items.length){
+      alert('No se encontró información del pedido. Selecciona un paquete antes de pagar.');
+      return;
+    }
+    window.pendingPaymentOrder = normalized;
+    window.__vgSingleOrder = null;
+    const total = $('#payModalTotal');
+    if(total) total.textContent = money(normalized.total);
+    upsertPaymentSummary(normalized);
+    const proof = $('#proofInput');
+    if(proof) proof.value = '';
+    const modal = $('#paymentModal');
+    if(modal) modal.classList.add('active');
+    else if(typeof oldOpenPaymentModal === 'function') oldOpenPaymentModal(normalized);
+  };
+
+  window.cartData = function(){
+    return normalizeOrder(window.pendingPaymentOrder);
+  };
+
+  async function uploadProof(client, orderId){
+    const input = $('#proofInput');
+    if(!input || !input.files || !input.files[0]) return null;
+    const file = input.files[0];
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'') || 'jpg';
+    const path = `${orderId}/${Date.now()}-${Math.random().toString(16).slice(2)}.${ext}`;
+    const uploaded = await client.storage.from('comprobantes').upload(path, file, {upsert:true, contentType:file.type || 'image/jpeg'});
+    if(uploaded.error){
+      console.warn('No se pudo subir el comprobante:', uploaded.error.message);
+      return null;
+    }
+    const pub = client.storage.from('comprobantes').getPublicUrl(path);
+    return {filename:file.name, path, url:pub.data.publicUrl, size:file.size, type:file.type};
+  }
+
+  window.vgCreateSupabaseOrder = async function(source){
+    const client = getSB();
+    if(!client){
+      alert('Supabase no está configurado. Revisa la pestaña Supabase del panel administrador.');
+      return null;
+    }
+    const data = normalizeOrder(window.pendingPaymentOrder);
+    if(!data.items.length){
+      alert('No hay pedido activo para registrar.');
+      return null;
+    }
+    data.source = source || data.source || 'whatsapp-checkout';
+
+    const key = orderKey(data);
+    if(window.__vgSingleOrder && window.__vgSingleOrder.key === key && Date.now() - window.__vgSingleOrder.time < ORDER_DEDUPE_MS){
+      return window.__vgSingleOrder.order || null;
+    }
+    window.__vgSingleOrder = {key, time:Date.now(), order:null};
+
+    const first = data.items[0] || {};
+    const payload = {
+      source:data.source,
+      status:'pendiente',
+      total:Number(data.total || 0),
+      items:data.items,
+      proof:null,
+      proof_url:'',
+      payment_method:'pendiente',
+      product_name:first.title || data.product_name || 'Pedido',
+      product_option:first.option || data.product_option || '',
+      client_name:'Cliente WhatsApp',
+      client_phone:'',
+      client_email:'',
+      customer_name:'Cliente WhatsApp',
+      customer_phone:'',
+      customer_email:'',
+      notes:'Pedido registrado desde métodos de pago de la web'
+    };
+
+    let result = await client.from('orders').insert(payload).select().single();
+    if(result.error){
+      result = await client.from('orders').insert({
+        source:payload.source,
+        status:payload.status,
+        total:payload.total,
+        items:payload.items,
+        product_name:payload.product_name,
+        product_option:payload.product_option,
+        customer_name:'Cliente WhatsApp',
+        customer_email:''
+      }).select().single();
+    }
+    if(result.error){
+      alert('Supabase no guardó el pedido: ' + result.error.message);
+      window.__vgSingleOrder = null;
+      return null;
+    }
+
+    let saved = result.data;
+    try{
+      const proof = await uploadProof(client, saved.id);
+      if(proof){
+        await client.from('orders').update({proof:proof, proof_url:proof.url}).eq('id', saved.id);
+        saved = {...saved, proof:proof, proof_url:proof.url};
+      }
+    }catch(e){
+      console.warn('Pedido creado, pero el comprobante no se pudo adjuntar:', e);
+    }
+    window.__vgSingleOrder.order = saved;
+    return saved;
+  };
+
+  window.sendPaymentWhatsApp = async function(){
+    const data = normalizeOrder(window.pendingPaymentOrder);
+    if(!data.items.length){
+      alert('No hay pedido activo. Selecciona primero un producto o una oferta.');
+      return;
+    }
+    window.pendingPaymentOrder = data;
+    const saved = await window.vgCreateSupabaseOrder(data.source || 'whatsapp-checkout');
+    if(!saved) return;
+    const lines = data.items.map((it,i)=>`${i+1}. ${it.title} - ${it.option || 'Opción'} - ${money(it.price)}`).join('\n');
+    const proofInput = $('#proofInput');
+    const proofText = proofInput && proofInput.files && proofInput.files[0]
+      ? 'Comprobante cargado en la web y adjunto también en este chat.'
+      : 'Adjunto comprobante en este chat para validar la compra.';
+    const text = `Hola, envío mi comprobante de pago.\n\nPedido #${saved.id}\n\n${lines}\n\nTotal: ${money(data.total)}\n\n${proofText}`;
+    window.open(`https://wa.me/${window.WHATSAPP_NUMBER || '526611078412'}?text=${encodeURIComponent(text)}`, '_blank');
+    if(typeof window.vgAdminLoadOrders === 'function') setTimeout(()=>window.vgAdminLoadOrders(), 800);
+  };
+
+  function currentFreeFirePackage(root){
+    const active = root.querySelector('.ff-only-package.active');
+    const idx = active ? Number(active.dataset.i || 0) : 0;
+    return FF_PACKAGES[idx] || FF_PACKAGES[0];
+  }
+  function bindFreeFireOffer(){
+    const root = $('#offersShowcase');
+    if(!root) return false;
+    const buy = root.querySelector('#ffOnlyBuyBtn');
+    if(!buy) return false;
+    if(buy.dataset.paymentPatched === '1') return true;
+
+    const clone = buy.cloneNode(true);
+    clone.dataset.paymentPatched = '1';
+    clone.textContent = 'Comprar / ver métodos de pago';
+    buy.replaceWith(clone);
+
+    const purchaseBox = root.querySelector('.ff-purchase-box');
+    if(purchaseBox && !root.querySelector('.ff-payment-note')){
+      const note = document.createElement('div');
+      note.className = 'ff-payment-note';
+      note.textContent = 'Al comprar se abre la ventana de métodos de pago y el comprobante queda registrado en Supabase.';
+      purchaseBox.insertAdjacentElement('afterend', note);
+    }
+
+    clone.addEventListener('click', function(){
+      const pack = currentFreeFirePackage(root);
+      const img = root.querySelector('.ff-only-media img, .offer-media img, img')?.src || 'https://i.imgur.com/8zUIcAF.jpg';
+      const order = {
+        source:'free-fire-oferta',
+        total:Number(pack[1]),
+        product_name:'Oferta Diamantes Free Fire',
+        product_option:`${pack[0]} diamantes · Recarga vía ID directo de Garena`,
+        items:[{
+          title:'Oferta Diamantes Free Fire',
+          option:`${pack[0]} diamantes · Recarga vía ID directo de Garena`,
+          price:Number(pack[1]),
+          image:img
+        }]
+      };
+      window.openPaymentModal(order);
+    });
+    return true;
+  }
+
+  function boot(){
+    let tries = 0;
+    const timer = setInterval(function(){
+      tries += 1;
+      const ok = bindFreeFireOffer();
+      if(ok || tries > 80) clearInterval(timer);
+    }, 150);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
 </body>
 </html>
