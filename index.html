@@ -5371,6 +5371,19 @@ window.WHATSAPP_NUMBER = "526611078412";
   }
 </style>
 
+
+
+<style id="vg-hide-public-copy-link-buttons-v71">
+  /* Oculta botones públicos de copiar link.
+     El link directo sigue funcionando en la barra del navegador al abrir cada producto. */
+  .vg-copy-url-mini,
+  #vgCopyProductLinkBtn,
+  #vgCopyRetroLinkBtn,
+  #vgDirectLinkNote{
+    display:none !important;
+  }
+</style>
+
 </head>
 <body>
   <header class="topbar">
@@ -14642,6 +14655,152 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   window.addEventListener('popstate', routeFromUrl);
   window.addEventListener('hashchange', routeFromUrl);
   document.addEventListener('click', function(){ setTimeout(function(){ patchOpeners(); enhanceCards(); }, 160); }, true);
+})();
+</script>
+
+
+
+<!-- VG UPDATE v72: limpiar URL al cerrar producto + ocultar aviso interno de recomendaciones -->
+<style id="vg-clean-product-url-hide-review-note-v72-css">
+  .vg-review-form-card > p,
+  .vg-review-form-note{
+    display:none !important;
+  }
+</style>
+<script id="vg-clean-product-url-hide-review-note-v72-script">
+(function(){
+  'use strict';
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function cleanBasePath(){ return location.origin + location.pathname; }
+  function isActive(id){ var el = document.getElementById(id); return !!(el && el.classList && el.classList.contains('active')); }
+  function anyProductWindowOpen(){ return isActive('productModal') || isActive('retroModal'); }
+  function slug(value){
+    return String(value || 'servicio')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'')
+      .slice(0,70) || 'servicio';
+  }
+  function getServices(){
+    try{ if(typeof SERVICES !== 'undefined' && Array.isArray(SERVICES)) return SERVICES; }catch(e){}
+    return Array.isArray(window.SERVICES) ? window.SERVICES : [];
+  }
+  function findProduct(id){
+    return getServices().find(function(p){ return String(p.id) === String(id); });
+  }
+  function replaceUrl(path){
+    try{ history.replaceState({vgClean:true}, '', path); }
+    catch(e){ try{ location.replace(path); }catch(_e){} }
+  }
+  function cleanHomeUrl(){
+    var target = location.pathname;
+    if((location.search || location.hash) && !anyProductWindowOpen()) replaceUrl(target);
+  }
+  function cleanProductUrl(product){
+    if(!product) return;
+    var next = location.pathname + '?producto=' + encodeURIComponent(product.id) + '&slug=' + encodeURIComponent(slug(product.title || product.displayTitle || 'servicio'));
+    if((location.pathname + location.search + location.hash) !== next) replaceUrl(next);
+  }
+  function cleanRetroUrl(){
+    var next = location.pathname + '?seccion=xbox-retro';
+    if((location.pathname + location.search + location.hash) !== next) replaceUrl(next);
+  }
+  function removeReviewApprovalTexts(){
+    var formNote = qs('.vg-review-form-note');
+    if(formNote) formNote.remove();
+    var cardText = qs('.vg-review-form-card > p');
+    if(cardText) cardText.remove();
+  }
+  function wrapFunctions(){
+    if(typeof window.openProduct === 'function' && !window.openProduct.__vgCleanUrlV72){
+      var previousOpenProduct = window.openProduct;
+      var openProductClean = function(id){
+        var product = findProduct(id);
+        var result = previousOpenProduct.apply(this, arguments);
+        if(product){
+          setTimeout(function(){ cleanProductUrl(product); }, 90);
+          setTimeout(function(){ cleanProductUrl(product); }, 260);
+          setTimeout(function(){ cleanProductUrl(product); }, 700);
+        }
+        return result;
+      };
+      openProductClean.__vgCleanUrlV72 = true;
+      window.openProduct = openProductClean;
+    }
+
+    if(typeof window.openRetroModal === 'function' && !window.openRetroModal.__vgCleanUrlV72){
+      var previousOpenRetro = window.openRetroModal;
+      var openRetroClean = function(){
+        var result = previousOpenRetro.apply(this, arguments);
+        setTimeout(cleanRetroUrl, 90);
+        setTimeout(cleanRetroUrl, 260);
+        setTimeout(cleanRetroUrl, 700);
+        return result;
+      };
+      openRetroClean.__vgCleanUrlV72 = true;
+      window.openRetroModal = openRetroClean;
+    }
+
+    if(typeof window.closeModal === 'function' && !window.closeModal.__vgCleanUrlV72){
+      var previousCloseModal = window.closeModal;
+      var closeModalClean = function(){
+        var result = previousCloseModal.apply(this, arguments);
+        setTimeout(cleanHomeUrl, 60);
+        setTimeout(cleanHomeUrl, 220);
+        return result;
+      };
+      closeModalClean.__vgCleanUrlV72 = true;
+      window.closeModal = closeModalClean;
+    }
+
+    if(typeof window.closeRetroModal === 'function' && !window.closeRetroModal.__vgCleanUrlV72){
+      var previousCloseRetro = window.closeRetroModal;
+      var closeRetroClean = function(){
+        var result = previousCloseRetro.apply(this, arguments);
+        setTimeout(cleanHomeUrl, 60);
+        setTimeout(cleanHomeUrl, 220);
+        return result;
+      };
+      closeRetroClean.__vgCleanUrlV72 = true;
+      window.closeRetroModal = closeRetroClean;
+    }
+
+    if(typeof window.showHome === 'function' && !window.showHome.__vgCleanUrlV72){
+      var previousShowHome = window.showHome;
+      var showHomeClean = function(){
+        var result = previousShowHome.apply(this, arguments);
+        setTimeout(cleanHomeUrl, 60);
+        return result;
+      };
+      showHomeClean.__vgCleanUrlV72 = true;
+      window.showHome = showHomeClean;
+    }
+
+    if(typeof window.showSection === 'function' && !window.showSection.__vgCleanUrlV72){
+      var previousShowSection = window.showSection;
+      var showSectionClean = function(){
+        var result = previousShowSection.apply(this, arguments);
+        setTimeout(function(){ if(!anyProductWindowOpen()) replaceUrl(location.pathname); }, 90);
+        setTimeout(function(){ if(!anyProductWindowOpen()) replaceUrl(location.pathname); }, 260);
+        return result;
+      };
+      showSectionClean.__vgCleanUrlV72 = true;
+      window.showSection = showSectionClean;
+    }
+  }
+
+  function boot(){
+    wrapFunctions();
+    removeReviewApprovalTexts();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  document.addEventListener('click', function(){ setTimeout(function(){ wrapFunctions(); removeReviewApprovalTexts(); }, 140); }, true);
 })();
 </script>
 
