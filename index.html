@@ -9,9 +9,13 @@
   <meta property="og:url" content="https://www.vesselgames.xyz/" />
   <meta property="og:title" content="Vessel Games | Marketplace Digital Premium" />
   <meta property="og:description" content="Compra juegos, monedas, cuentas, software y servicios digitales con atención rápida." />
-  <meta property="og:image" content="https://www.vesselgames.xyz/portada.png?v=20260531-5" />
+  <meta property="og:image" content="https://www.vesselgames.xyz/portada-facebook-v6.png" />
+  <meta property="og:image:secure_url" content="https://www.vesselgames.xyz/portada-facebook-v6.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://www.vesselgames.xyz/portada.png?v=20260531-5" />
+  <meta name="twitter:image" content="https://www.vesselgames.xyz/portada-facebook-v6.png" />
   <link rel="preconnect" href="https://i.imgur.com" />
   <link rel="preload" as="video" href="https://i.imgur.com/9j4rD8c.mp4" type="video/mp4" fetchpriority="high" /><style>
     :root {
@@ -7609,7 +7613,7 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
               </div>
               <div class="offer-inline-note">Si necesitas un paquete mayor, te lo cotizamos por privado. Atención directa y rápida.</div>
               <div class="offer-actions">
-                <button class="offer-btn" id="ffOfferBuyBtn">Comprar / ver métodos de pago</button>
+                <button class="offer-btn" id="ffOfferBuyBtn">Comprar esta oferta</button>
                 <button class="offer-btn alt" onclick="showSection && showSection('gaming')">Ver más juegos</button>
               </div>
             </div>
@@ -7670,23 +7674,8 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
     if(ffBuy){
       ffBuy.addEventListener('click',()=>{
         const pkg=FF_PACKAGES[selected];
-        const img=document.querySelector('.offer-freefire img')?.src || ffImage;
-        const order={
-          source:'free-fire-oferta',
-          total:Number(pkg[1]),
-          product_name:'Oferta Diamantes Free Fire',
-          product_option:`${pkg[0]} diamantes · Recarga vía ID directo de Garena`,
-          items:[{
-            title:'Oferta Diamantes Free Fire',
-            option:`${pkg[0]} diamantes · Recarga vía ID directo de Garena`,
-            price:Number(pkg[1]),
-            image:img
-          }]
-        };
-        pendingPaymentOrder=order;
-        if(typeof openPaymentModal==='function') openPaymentModal(order);
-        else if(typeof window.openPaymentModal==='function') window.openPaymentModal(order);
-        else alert('No se pudo abrir la ventana de métodos de pago.');
+        const msg=`Hola, quiero comprar la oferta de Free Fire: ${pkg[0]} diamantes por ${fmtMXN(pkg[1])}. Mi recarga sería vía ID de Garena.`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
       });
     }
 
@@ -7877,7 +7866,7 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
                 <div class="ff-total"><span>Total</span><b id="ffOnlyPrice">$161 MXN</b></div>
               </div>
               <div class="ff-only-actions">
-                <button class="ff-offer-btn" id="ffOnlyBuyBtn">Comprar / ver métodos de pago</button>
+                <button class="ff-offer-btn" id="ffOnlyBuyBtn">Comprar esta oferta</button>
                 <button class="ff-offer-btn alt" id="ffOnlyAskBtn">Pedir cantidad mayor</button>
               </div>
             </div>
@@ -7907,22 +7896,8 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
     const buy=root.querySelector('#ffOnlyBuyBtn');
     if(buy) buy.addEventListener('click',()=>{
       const p=FF_ONLY_PACKAGES[selected];
-      const img=root.querySelector('.ff-only-media img, .offer-media img, img')?.src || ffImage;
-      const order={
-        source:'free-fire-oferta',
-        total:Number(p[1]),
-        product_name:'Oferta Diamantes Free Fire',
-        product_option:`${p[0]} diamantes · Recarga vía ID directo de Garena`,
-        items:[{
-          title:'Oferta Diamantes Free Fire',
-          option:`${p[0]} diamantes · Recarga vía ID directo de Garena`,
-          price:Number(p[1]),
-          image:img
-        }]
-      };
-      window.pendingPaymentOrder=order;
-      if(typeof window.openPaymentModal==='function') window.openPaymentModal(order);
-      else alert('No se pudo abrir la ventana de métodos de pago.');
+      const msg=`Hola, quiero comprar la oferta de Free Fire: ${p[0]} diamantes por ${fmtMXN(p[1])}. La recarga sería vía ID directos de Garena.`;
+      window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');
     });
     const ask=root.querySelector('#ffOnlyAskBtn');
     if(ask) ask.addEventListener('click',()=>{
@@ -8348,14 +8323,14 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   };
 
   function currentFreeFirePackage(root){
-    const active = root.querySelector('.ff-only-package.active, .ff-package.active');
-    const idx = active ? Number(active.dataset.i || active.dataset.idx || 0) : 0;
+    const active = root.querySelector('.ff-only-package.active');
+    const idx = active ? Number(active.dataset.i || 0) : 0;
     return FF_PACKAGES[idx] || FF_PACKAGES[0];
   }
   function bindFreeFireOffer(){
     const root = $('#offersShowcase');
     if(!root) return false;
-    const buy = root.querySelector('#ffOnlyBuyBtn, #ffOfferBuyBtn');
+    const buy = root.querySelector('#ffOnlyBuyBtn');
     if(!buy) return false;
     if(buy.dataset.paymentPatched === '1') return true;
 
