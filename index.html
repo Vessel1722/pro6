@@ -12990,5 +12990,125 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+
+<style id="vg-hide-fixed-header-on-service-modal-v62">
+  /* La barra superior se mantiene fija al navegar, pero se desvanece cuando hay una ventana de servicio abierta. */
+  .topbar{
+    transition:opacity .24s ease, transform .24s ease, visibility .24s ease !important;
+    will-change:opacity, transform !important;
+  }
+
+  body.vg-service-window-open-v62 .topbar{
+    opacity:0 !important;
+    visibility:hidden !important;
+    transform:translateY(-110%) !important;
+    pointer-events:none !important;
+  }
+</style>
+
+<script id="vg-hide-fixed-header-on-service-modal-v62">
+(function(){
+  'use strict';
+
+  const SERVICE_MODAL_IDS = ['productModal','cartModal','paymentModal','retroModal'];
+
+  function setImportant(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function anyServiceWindowOpen(){
+    return SERVICE_MODAL_IDS.some(function(id){
+      const el = document.getElementById(id);
+      return !!(el && el.classList.contains('active'));
+    });
+  }
+
+  function applyHeaderState(){
+    const topbar = document.querySelector('.topbar');
+    const shouldHide = anyServiceWindowOpen();
+    document.body.classList.toggle('vg-service-window-open-v62', shouldHide);
+
+    if(!topbar) return;
+
+    if(shouldHide){
+      setImportant(topbar,'opacity','0');
+      setImportant(topbar,'visibility','hidden');
+      setImportant(topbar,'pointer-events','none');
+      setImportant(topbar,'transform','translateY(-110%)');
+    }else{
+      setImportant(topbar,'position','fixed');
+      setImportant(topbar,'top','0');
+      setImportant(topbar,'left','0');
+      setImportant(topbar,'right','0');
+      setImportant(topbar,'width','100%');
+      setImportant(topbar,'z-index','16000');
+      setImportant(topbar,'opacity','1');
+      setImportant(topbar,'visibility','visible');
+      setImportant(topbar,'pointer-events','auto');
+      setImportant(topbar,'transform','translateY(0)');
+    }
+  }
+
+  function installObservers(){
+    SERVICE_MODAL_IDS.forEach(function(id){
+      const el = document.getElementById(id);
+      if(!el || el.__vgHeaderHideObserverV62) return;
+      el.__vgHeaderHideObserverV62 = true;
+      new MutationObserver(function(){
+        requestAnimationFrame(applyHeaderState);
+      }).observe(el,{attributes:true,attributeFilter:['class']});
+    });
+  }
+
+  function wrapModalFunctions(){
+    [
+      'closeModal','closeCart','closePaymentModal','closeRetroModal',
+      'openCart','openPaymentModal','openRetroModal','buySelectedNow','buyRetroNow','openPaymentForCart'
+    ].forEach(function(name){
+      const fn = window[name];
+      if(typeof fn !== 'function' || fn.__vgHeaderHideWrappedV62) return;
+      const wrapped = function(){
+        const result = fn.apply(this, arguments);
+        requestAnimationFrame(applyHeaderState);
+        setTimeout(applyHeaderState, 80);
+        setTimeout(applyHeaderState, 240);
+        return result;
+      };
+      wrapped.__vgHeaderHideWrappedV62 = true;
+      window[name] = wrapped;
+    });
+  }
+
+  function boot(){
+    installObservers();
+    wrapModalFunctions();
+    applyHeaderState();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot);
+  }else{
+    boot();
+  }
+
+  window.addEventListener('load', function(){
+    boot();
+    setTimeout(boot, 300);
+  });
+
+  window.addEventListener('resize', function(){
+    setTimeout(applyHeaderState, 80);
+  });
+
+  document.addEventListener('click', function(){
+    setTimeout(function(){ wrapModalFunctions(); applyHeaderState(); }, 80);
+  }, true);
+
+  setTimeout(boot, 400);
+  setTimeout(boot, 1200);
+})();
+</script>
+
 </body>
 </html>
