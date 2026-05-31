@@ -13013,5 +13013,459 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+<style id="vg-stock-links-v68">
+  /* ===== v68: stock agotado + enlaces directos por servicio ===== */
+  .vg-soldout-card{
+    position:relative!important;
+    opacity:.68!important;
+    filter:saturate(.70)!important;
+  }
+  .vg-soldout-card::after{
+    content:'AGOTADO'!important;
+    position:absolute!important;
+    top:12px!important;
+    right:12px!important;
+    z-index:8!important;
+    padding:8px 11px!important;
+    border-radius:999px!important;
+    background:linear-gradient(135deg,#ff4d6d,#8b5cf6)!important;
+    color:#fff!important;
+    font-size:.72rem!important;
+    font-weight:950!important;
+    letter-spacing:.08em!important;
+    box-shadow:0 14px 30px rgba(0,0,0,.32)!important;
+  }
+  .vg-soldout-card .detail-btn,
+  .vg-soldout-card .quick-add-btn,
+  .vg-soldout-card .ff-offer-btn,
+  .vg-soldout-card .offer-btn{
+    pointer-events:auto!important;
+    cursor:not-allowed!important;
+    background:rgba(255,77,109,.13)!important;
+    border-color:rgba(255,77,109,.30)!important;
+    color:#ffd7df!important;
+    box-shadow:none!important;
+  }
+  .vg-soldout-card .card-badge,
+  .vg-soldout-card .tag{
+    background:rgba(255,77,109,.10)!important;
+    border-color:rgba(255,77,109,.25)!important;
+    color:#ffe2e8!important;
+  }
+  .vg-unavailable-box{
+    margin:12px 0 14px!important;
+    padding:13px 14px!important;
+    border-radius:16px!important;
+    border:1px solid rgba(255,77,109,.30)!important;
+    background:rgba(255,77,109,.08)!important;
+    color:#ffe4ea!important;
+    font-weight:850!important;
+    line-height:1.45!important;
+  }
+  .vg-link-copy-btn{
+    border:1px solid rgba(25,230,193,.28)!important;
+    background:rgba(25,230,193,.075)!important;
+    color:#dffff9!important;
+    border-radius:16px!important;
+    padding:12px 15px!important;
+    font-weight:950!important;
+    cursor:pointer!important;
+  }
+  .vg-product-admin-state{
+    display:grid!important;
+    grid-template-columns:minmax(170px,220px) 1fr!important;
+    gap:10px!important;
+    margin-top:10px!important;
+    padding:10px!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.03)!important;
+  }
+  .vg-product-admin-state small{
+    display:block!important;
+    color:#a7acba!important;
+    line-height:1.35!important;
+  }
+  .vg-status-chip.soldout,
+  .vg-status-chip.hidden,
+  .vg-status-chip.active{
+    display:inline-flex!important;
+    width:max-content!important;
+    margin-top:6px!important;
+    padding:5px 8px!important;
+    border-radius:999px!important;
+    font-size:.70rem!important;
+    font-weight:950!important;
+  }
+  .vg-status-chip.soldout{border:1px solid rgba(255,77,109,.26)!important;background:rgba(255,77,109,.09)!important;color:#ffd7df!important;}
+  .vg-status-chip.hidden{border:1px solid rgba(255,180,92,.26)!important;background:rgba(255,180,92,.09)!important;color:#ffe5c7!important;}
+  .vg-status-chip.active{border:1px solid rgba(25,230,193,.26)!important;background:rgba(25,230,193,.09)!important;color:#d9fffa!important;}
+  @media(max-width:760px){
+    .vg-product-admin-state{grid-template-columns:1fr!important;}
+    .vg-link-copy-btn{width:100%!important;}
+  }
+</style>
+
+<script id="vg-stock-links-v68-script">
+(function(){
+  'use strict';
+
+  var routing = false;
+  var lastServiceHash = '';
+
+  function qs(s,r){ return (r||document).querySelector(s); }
+  function qsa(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+  function slug(s){ return String(s||'servicio').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,70) || 'servicio'; }
+  function getServices(){
+    try{ if(typeof SERVICES !== 'undefined' && Array.isArray(SERVICES)) return SERVICES; }catch(e){}
+    return Array.isArray(window.SERVICES) ? window.SERVICES : [];
+  }
+  function findProduct(id){ return getServices().find(function(p){ return String(p.id) === String(id); }); }
+  function normalizeText(v){ return String(v||'').toLowerCase(); }
+  function isSoldOutProduct(p){
+    if(!p) return false;
+    var text = [p.adminBadge, p.badge, p.adminStock, p.stock, p.status, p.availability].map(normalizeText).join(' ');
+    return /agotado|sold\s*out|sin\s*stock|no\s*disponible|\[soldout\]/i.test(text);
+  }
+  function isHiddenProduct(p){
+    if(!p) return false;
+    var text = [p.adminStock, p.stock, p.status, p.availability].map(normalizeText).join(' ');
+    return /\[hidden\]|oculto|hidden/i.test(text) || p.__hidden === true;
+  }
+  function notice(product){
+    var name = product && product.title ? product.title : 'este servicio';
+    if(typeof window.showToast === 'function') window.showToast('Servicio agotado', name + ' no está disponible por el momento.');
+    else alert(name + ' está agotado por el momento.');
+  }
+  function serviceHash(product){ return product ? '#servicio/' + encodeURIComponent(product.id) + '/' + slug(product.title || product.displayTitle || 'servicio') : '#servicio'; }
+  function retroHash(){ return '#xbox-retro'; }
+  function setHash(hash){
+    if(routing || !hash) return;
+    if(location.hash === hash) return;
+    try{ history.pushState({vg:true}, '', hash); }catch(e){ location.hash = hash; }
+  }
+  function clearHash(prefixes){
+    var h = location.hash || '';
+    if(!prefixes.some(function(p){ return h.indexOf(p) === 0; })) return;
+    try{ history.pushState({vg:true}, '', location.pathname + location.search); }catch(e){ location.hash = ''; }
+  }
+  function copyLink(hash){
+    var url = location.origin + location.pathname + location.search + (hash || location.hash || '');
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){
+        if(typeof window.showToast === 'function') window.showToast('Link copiado', 'Ya puedes compartir este servicio.');
+        else alert('Link copiado: ' + url);
+      }).catch(function(){ prompt('Copia este link:', url); });
+    }else{
+      prompt('Copia este link:', url);
+    }
+  }
+  window.vgCopyCurrentProductLink = function(){ copyLink(location.hash); };
+  window.vgCopyProductLinkById = function(id){ var p=findProduct(id); copyLink(serviceHash(p)); };
+  window.vgCopyRetroLink = function(){ copyLink(retroHash()); };
+  window.vgSoldOutNotice = function(id){ notice(findProduct(id)); };
+
+  function markSoldOutCards(){
+    getServices().forEach(function(p){
+      if(isHiddenProduct(p)){
+        qsa('[onclick*="openProduct(' + p.id + ')"]').forEach(function(el){
+          var card = el.closest('.card,.service-carousel-card,.search-result-item,article');
+          if(card) card.remove();
+        });
+        return;
+      }
+      var sold = isSoldOutProduct(p);
+      qsa('[onclick*="openProduct(' + p.id + ')"]').forEach(function(el){
+        var card = el.closest('.card,.service-carousel-card,.search-result-item,article') || el;
+        if(!card) return;
+        card.classList.toggle('vg-soldout-card', sold);
+        if(!sold) return;
+        var b = card.querySelector('.card-badge');
+        if(b){ b.textContent = 'Agotado'; b.className = 'card-badge hot'; }
+        var detail = card.querySelector('.detail-btn');
+        if(detail){ detail.textContent = 'Agotado'; detail.setAttribute('onclick','vgSoldOutNotice(' + JSON.stringify(p.id) + ')'); }
+        var quick = card.querySelector('.quick-add-btn');
+        if(quick){ quick.setAttribute('onclick','vgSoldOutNotice(' + JSON.stringify(p.id) + ')'); quick.title = 'Servicio agotado'; }
+        if(card.matches('.service-carousel-card,.search-result-item')){
+          card.setAttribute('onclick','vgSoldOutNotice(' + JSON.stringify(p.id) + ')');
+        }
+      });
+    });
+  }
+
+  function addCopyButtonToProductModal(product){
+    var actions = qs('#productModal .modal-actions');
+    if(!actions || !product) return;
+    var btn = qs('#vgCopyProductLinkBtn', actions);
+    if(!btn){
+      btn = document.createElement('button');
+      btn.id = 'vgCopyProductLinkBtn';
+      btn.type = 'button';
+      btn.className = 'vg-link-copy-btn';
+      btn.textContent = 'Copiar link';
+      actions.appendChild(btn);
+    }
+    btn.onclick = function(){ window.vgCopyProductLinkById(product.id); };
+  }
+
+  function showUnavailableModal(product){
+    var modal = qs('#productModal');
+    var modalImage = qs('#modalImage');
+    var modalImageBox = qs('#modalImageBox');
+    var modalTitle = qs('#modalTitle');
+    var modalCat = qs('#modalCat');
+    var modalDesc = qs('#modalDesc');
+    var modalOptions = qs('#modalOptions');
+    if(!modal || !product){ notice(product); return; }
+    if(modalImage) modalImage.src = product.image || 'portada.png';
+    if(modalImageBox) modalImageBox.style.backgroundImage = "url('" + (product.image || 'portada.png') + "')";
+    if(modalTitle) modalTitle.textContent = product.title || 'Servicio';
+    if(modalCat) modalCat.textContent = 'Agotado';
+    if(modalDesc) modalDesc.textContent = product.description || 'Servicio digital no disponible temporalmente.';
+    if(modalOptions) modalOptions.innerHTML = '<div class="vg-unavailable-box">Este servicio está agotado temporalmente. No se puede comprar desde la web hasta que el administrador lo active otra vez.</div>';
+    qsa('#productModal .modal-actions .primary').forEach(function(b){
+      b.disabled = true;
+      b.style.opacity = '.55';
+      b.style.cursor = 'not-allowed';
+    });
+    addCopyButtonToProductModal(product);
+    modal.classList.add('active');
+  }
+
+  function restoreProductActions(){
+    qsa('#productModal .modal-actions .primary').forEach(function(b){
+      b.disabled = false;
+      b.style.opacity = '';
+      b.style.cursor = '';
+    });
+  }
+
+  function patchPublicFunctions(){
+    if(window.__vgStockLinksPatchedV68) return;
+    window.__vgStockLinksPatchedV68 = true;
+
+    var oldRender = window.renderProducts;
+    if(typeof oldRender === 'function'){
+      window.renderProducts = function(){
+        var out = oldRender.apply(this, arguments);
+        setTimeout(markSoldOutCards, 0);
+        return out;
+      };
+    }
+
+    var oldOpen = window.openProduct;
+    if(typeof oldOpen === 'function'){
+      window.openProduct = function(id){
+        var product = findProduct(id);
+        if(product && isHiddenProduct(product)) return;
+        if(product && isSoldOutProduct(product)){
+          setHash(serviceHash(product));
+          showUnavailableModal(product);
+          return;
+        }
+        restoreProductActions();
+        if(product) setHash(serviceHash(product));
+        var out = oldOpen.apply(this, arguments);
+        setTimeout(function(){ addCopyButtonToProductModal(product); }, 60);
+        return out;
+      };
+    }
+
+    var oldQuick = window.quickAddFirstOption;
+    if(typeof oldQuick === 'function'){
+      window.quickAddFirstOption = function(id){
+        var product = findProduct(id);
+        if(isSoldOutProduct(product)){ notice(product); return; }
+        return oldQuick.apply(this, arguments);
+      };
+    }
+
+    var oldBuy = window.buySelectedNow;
+    if(typeof oldBuy === 'function'){
+      window.buySelectedNow = function(){
+        var title = (qs('#modalTitle') && qs('#modalTitle').textContent) || '';
+        var product = getServices().find(function(p){ return p.title === title; });
+        if(isSoldOutProduct(product)){ notice(product); return; }
+        return oldBuy.apply(this, arguments);
+      };
+    }
+
+    var oldAdd = window.addSelectedToCart;
+    if(typeof oldAdd === 'function'){
+      window.addSelectedToCart = function(){
+        var title = (qs('#modalTitle') && qs('#modalTitle').textContent) || '';
+        var product = getServices().find(function(p){ return p.title === title; });
+        if(isSoldOutProduct(product)){ notice(product); return; }
+        return oldAdd.apply(this, arguments);
+      };
+    }
+
+    var oldRetro = window.openRetroModal;
+    if(typeof oldRetro === 'function'){
+      window.openRetroModal = function(){
+        setHash(retroHash());
+        var out = oldRetro.apply(this, arguments);
+        setTimeout(addRetroCopyButton, 80);
+        return out;
+      };
+    }
+
+    var oldClose = window.closeModal;
+    if(typeof oldClose === 'function'){
+      window.closeModal = function(){
+        restoreProductActions();
+        var out = oldClose.apply(this, arguments);
+        clearHash(['#servicio/']);
+        return out;
+      };
+    }
+
+    var oldCloseRetro = window.closeRetroModal;
+    if(typeof oldCloseRetro === 'function'){
+      window.closeRetroModal = function(){
+        var out = oldCloseRetro.apply(this, arguments);
+        clearHash(['#xbox-retro','#retro']);
+        return out;
+      };
+    }
+
+    var oldSection = window.showSection;
+    if(typeof oldSection === 'function'){
+      window.showSection = function(cat){
+        if(!routing) setHash('#catalogo/' + encodeURIComponent(cat || 'all'));
+        return oldSection.apply(this, arguments);
+      };
+    }
+  }
+
+  function addRetroCopyButton(){
+    var head = qs('#retroModal .retro-head > div');
+    if(!head || qs('#vgCopyRetroLinkBtn')) return;
+    var btn = document.createElement('button');
+    btn.id = 'vgCopyRetroLinkBtn';
+    btn.type = 'button';
+    btn.className = 'vg-link-copy-btn';
+    btn.textContent = 'Copiar link de Xbox Retro';
+    btn.style.marginTop = '10px';
+    btn.onclick = window.vgCopyRetroLink;
+    head.appendChild(btn);
+  }
+
+  function routeFromHash(){
+    var h = decodeURIComponent(location.hash || '');
+    if(!h) return;
+    routing = true;
+    try{
+      var m = h.match(/^#servicio\/(\d+)/);
+      if(m && typeof window.openProduct === 'function'){
+        window.openProduct(Number(m[1]));
+        return;
+      }
+      if((h === '#xbox-retro' || h === '#retro') && typeof window.openRetroModal === 'function'){
+        window.openRetroModal();
+        return;
+      }
+      var c = h.match(/^#catalogo\/([^\/]+)/);
+      if(c && typeof window.showSection === 'function'){
+        window.showSection(c[1]);
+        return;
+      }
+    }finally{
+      setTimeout(function(){ routing = false; }, 80);
+    }
+  }
+
+  function enhanceAdminProducts(){
+    var list = qs('#vgAdminProductsList');
+    if(!list) return;
+    qsa('[data-pid]', list).forEach(function(card){
+      if(card.querySelector('.vg-product-admin-state')) return;
+      var id = card.getAttribute('data-pid');
+      var product = findProduct(id);
+      var current = isHiddenProduct(product) ? 'hidden' : isSoldOutProduct(product) ? 'soldout' : 'active';
+      var row = document.createElement('div');
+      row.className = 'vg-product-admin-state';
+      row.innerHTML = '<select class="vg-admin-select" data-vg-availability="'+esc(id)+'">' +
+        '<option value="active" '+(current==='active'?'selected':'')+'>Activo / disponible</option>' +
+        '<option value="soldout" '+(current==='soldout'?'selected':'')+'>Agotado visible</option>' +
+        '<option value="hidden" '+(current==='hidden'?'selected':'')+'>Oculto del catálogo</option>' +
+        '</select>' +
+        '<small><b>Estado de venta:</b> si eliges “Agotado visible”, el cliente verá el servicio marcado como agotado y no podrá comprarlo. Si eliges “Oculto”, desaparece del catálogo.</small>';
+      var target = card.querySelector('.vg-product-admin-fields,.vg-admin-tools') || card;
+      target.insertAdjacentElement('afterend', row);
+      var statusChip = card.querySelector('.vg-status-chip');
+      if(statusChip){
+        statusChip.classList.remove('active','soldout','hidden');
+        statusChip.classList.add(current);
+        statusChip.textContent = 'Estado: ' + (current==='hidden' ? 'Oculto' : current==='soldout' ? 'Agotado' : 'Activo');
+      }
+      row.querySelector('select').addEventListener('change', function(){ window.vgAdminSetProductAvailability(id, this.value); });
+    });
+  }
+
+  window.vgAdminSetProductAvailability = async function(id, status){
+    var card = document.querySelector('[data-pid="' + CSS.escape(String(id)) + '"]');
+    if(card){
+      var badge = card.querySelector('[data-field="badge"]');
+      if(badge){
+        if(status === 'soldout') badge.value = 'Agotado';
+        if(status === 'active') badge.value = 'Disponible';
+      }
+      var stock = card.querySelector('[data-field="stock"]');
+      if(stock){
+        stock.value = String(stock.value || '').replace(/\[(?:HIDDEN|SOLDOUT)\]/ig,'').trim();
+      }
+    }
+    if(status === 'soldout' && typeof window.vgAdminMarkSoldOut === 'function') return window.vgAdminMarkSoldOut(id);
+    if(status === 'hidden' && typeof window.vgAdminHideProduct === 'function') return window.vgAdminHideProduct(id);
+    if(typeof window.vgAdminActivateProduct === 'function') return window.vgAdminActivateProduct(id);
+  };
+
+  function patchAdminRender(){
+    if(window.__vgAdminAvailabilityPatchedV68) return;
+    if(typeof window.vgAdminRenderProducts !== 'function') return;
+    window.__vgAdminAvailabilityPatchedV68 = true;
+    var old = window.vgAdminRenderProducts;
+    window.vgAdminRenderProducts = function(){
+      var out = old.apply(this, arguments);
+      setTimeout(enhanceAdminProducts, 0);
+      return out;
+    };
+    var oldActivate = window.vgAdminActivateProduct;
+    if(typeof oldActivate === 'function'){
+      window.vgAdminActivateProduct = function(id){
+        var card = document.querySelector('[data-pid="' + CSS.escape(String(id)) + '"]');
+        if(card){
+          var badge = card.querySelector('[data-field="badge"]');
+          var stock = card.querySelector('[data-field="stock"]');
+          if(badge && (!badge.value || badge.value === 'Agotado')) badge.value = 'Disponible';
+          if(stock) stock.value = String(stock.value || '').replace(/\[(?:HIDDEN|SOLDOUT)\]/ig,'').trim();
+        }
+        return oldActivate.apply(this, arguments);
+      };
+    }
+  }
+
+  function boot(){
+    patchPublicFunctions();
+    patchAdminRender();
+    markSoldOutCards();
+    enhanceAdminProducts();
+    routeFromHash();
+    setTimeout(markSoldOutCards, 700);
+    setTimeout(markSoldOutCards, 1800);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  window.addEventListener('popstate', routeFromHash);
+  window.addEventListener('hashchange', routeFromHash);
+  document.addEventListener('click', function(){ setTimeout(function(){ markSoldOutCards(); enhanceAdminProducts(); }, 160); }, true);
+})();
+</script>
+
 </body>
 </html>
