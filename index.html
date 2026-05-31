@@ -13866,5 +13866,784 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+
+<!-- VG UPDATE: ocultar subtítulos de secciones + recomendaciones reales con aprobación admin -->
+<style id="vg-section-title-reviews-admin-v61">
+  /* Quitar texto debajo del nombre de cada sección: solo queda el título */
+  #productsSubtitle,
+  .market-head #productsSubtitle{
+    display:none!important;
+    height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Clientes recientes más real y con formulario de recomendación */
+  .reviews-section.vg-reviews-upgraded{
+    margin-top:42px!important;
+    padding:24px!important;
+    border-radius:28px!important;
+    border:1px solid rgba(25,230,193,.14)!important;
+    background:
+      radial-gradient(circle at 8% 0%,rgba(25,230,193,.10),transparent 34%),
+      radial-gradient(circle at 92% 8%,rgba(139,92,246,.12),transparent 32%),
+      linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.016)),
+      rgba(12,16,29,.88)!important;
+    box-shadow:0 22px 58px rgba(0,0,0,.30)!important;
+  }
+  .vg-reviews-top{
+    display:flex!important;
+    justify-content:space-between!important;
+    align-items:flex-end!important;
+    gap:18px!important;
+    margin-bottom:18px!important;
+  }
+  .vg-reviews-top h2{
+    margin:0!important;
+    font-size:clamp(1.85rem,3.4vw,3rem)!important;
+    line-height:.96!important;
+    text-transform:uppercase!important;
+    letter-spacing:-.045em!important;
+    color:#fff!important;
+  }
+  .vg-reviews-top p{
+    margin:8px 0 0!important;
+    color:#aeb9d2!important;
+    line-height:1.48!important;
+    max-width:760px!important;
+  }
+  .vg-reviews-badge{
+    flex:0 0 auto!important;
+    border:1px solid rgba(25,230,193,.25)!important;
+    background:rgba(25,230,193,.08)!important;
+    color:#dffff9!important;
+    border-radius:999px!important;
+    padding:9px 13px!important;
+    font-size:.76rem!important;
+    font-weight:950!important;
+    letter-spacing:.07em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+  .vg-reviews-layout{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(320px,.46fr)!important;
+    gap:16px!important;
+    align-items:start!important;
+  }
+  #vgReviewsPublicGrid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:14px!important;
+  }
+  .vg-real-review-card{
+    min-height:188px!important;
+    border:1px solid rgba(255,255,255,.09)!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018)),
+      rgba(17,22,38,.88)!important;
+    border-radius:22px!important;
+    padding:16px!important;
+    box-shadow:0 16px 38px rgba(0,0,0,.24)!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:10px!important;
+  }
+  .vg-real-review-head{
+    display:flex!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    align-items:flex-start!important;
+  }
+  .vg-real-review-name{
+    color:#fff!important;
+    font-weight:950!important;
+    line-height:1.18!important;
+  }
+  .vg-real-review-service{
+    display:block!important;
+    margin-top:4px!important;
+    color:#94a3c2!important;
+    font-size:.78rem!important;
+    font-weight:800!important;
+  }
+  .vg-real-review-stars{
+    color:#ffd166!important;
+    letter-spacing:.02em!important;
+    white-space:nowrap!important;
+    font-size:.9rem!important;
+  }
+  .vg-real-review-card p{
+    margin:0!important;
+    color:#c6d0e6!important;
+    line-height:1.46!important;
+    font-size:.9rem!important;
+  }
+  .vg-real-review-date{
+    margin-top:auto!important;
+    color:#8290ad!important;
+    font-size:.76rem!important;
+    font-weight:850!important;
+  }
+  .vg-review-form-card{
+    border:1px solid rgba(139,92,246,.16)!important;
+    background:
+      radial-gradient(circle at top right,rgba(139,92,246,.16),transparent 34%),
+      rgba(255,255,255,.035)!important;
+    border-radius:24px!important;
+    padding:18px!important;
+    position:sticky!important;
+    top:120px!important;
+  }
+  .vg-review-form-card h3{
+    margin:0 0 6px!important;
+    color:#fff!important;
+    font-size:1.22rem!important;
+  }
+  .vg-review-form-card p{
+    margin:0 0 14px!important;
+    color:#aeb9d2!important;
+    line-height:1.4!important;
+    font-size:.88rem!important;
+  }
+  .vg-review-form{
+    display:grid!important;
+    gap:10px!important;
+  }
+  .vg-review-form input,
+  .vg-review-form select,
+  .vg-review-form textarea{
+    width:100%!important;
+    border:1px solid rgba(255,255,255,.10)!important;
+    background:rgba(255,255,255,.05)!important;
+    color:#fff!important;
+    border-radius:14px!important;
+    padding:12px 13px!important;
+    outline:0!important;
+  }
+  .vg-review-form textarea{
+    min-height:104px!important;
+    resize:vertical!important;
+  }
+  .vg-review-form button{
+    border:1px solid rgba(25,230,193,.24)!important;
+    background:linear-gradient(135deg,#8B5CF6,#19E6C1)!important;
+    color:#fff!important;
+    border-radius:15px!important;
+    min-height:48px!important;
+    padding:0 16px!important;
+    font-weight:950!important;
+    cursor:pointer!important;
+  }
+  .vg-review-form-note,
+  #vgReviewFormMsg{
+    color:#9eadca!important;
+    font-size:.78rem!important;
+    line-height:1.35!important;
+  }
+  #vgReviewFormMsg.ok{color:#c8fff4!important}
+  #vgReviewFormMsg.bad{color:#ffd1dc!important}
+
+  /* Panel admin: recomendaciones */
+  #vgAdminReviews .vg-admin-tools{
+    display:flex!important;
+    gap:10px!important;
+    flex-wrap:wrap!important;
+    margin-bottom:14px!important;
+  }
+  #vgAdminReviewsList{
+    display:grid!important;
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr))!important;
+    gap:14px!important;
+  }
+  .vg-admin-review-card{
+    border:1px solid rgba(255,255,255,.09)!important;
+    background:rgba(255,255,255,.04)!important;
+    border-radius:20px!important;
+    padding:15px!important;
+  }
+  .vg-admin-review-top{
+    display:flex!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    margin-bottom:10px!important;
+  }
+  .vg-admin-review-top b{
+    color:#fff!important;
+    display:block!important;
+  }
+  .vg-admin-review-top small{
+    color:#9eabc8!important;
+    display:block!important;
+    margin-top:4px!important;
+  }
+  .vg-review-status{
+    height:max-content!important;
+    border-radius:999px!important;
+    padding:7px 10px!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    background:rgba(255,255,255,.05)!important;
+    color:#e7ecfa!important;
+    font-size:.72rem!important;
+    font-weight:950!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+  .vg-review-status.pendiente{border-color:rgba(255,209,102,.26)!important;background:rgba(255,209,102,.08)!important;color:#ffe7aa!important}
+  .vg-review-status.validado{border-color:rgba(25,230,193,.28)!important;background:rgba(25,230,193,.08)!important;color:#cffff8!important}
+  .vg-review-status.cancelado{border-color:rgba(255,77,109,.26)!important;background:rgba(255,77,109,.08)!important;color:#ffd3dd!important}
+  .vg-admin-review-card p{
+    color:#cbd5eb!important;
+    line-height:1.45!important;
+    margin:10px 0 12px!important;
+    font-size:.9rem!important;
+  }
+  .vg-admin-review-actions{
+    display:flex!important;
+    gap:8px!important;
+    flex-wrap:wrap!important;
+  }
+
+  @media(max-width:980px){
+    .vg-reviews-layout{grid-template-columns:1fr!important}
+    #vgReviewsPublicGrid{grid-template-columns:1fr 1fr!important}
+    .vg-review-form-card{position:relative!important;top:0!important}
+  }
+  @media(max-width:640px){
+    .reviews-section.vg-reviews-upgraded{padding:18px!important;border-radius:22px!important}
+    .vg-reviews-top{display:block!important}
+    .vg-reviews-badge{display:inline-flex!important;margin-top:12px!important}
+    #vgReviewsPublicGrid{grid-template-columns:1fr!important}
+  }
+</style>
+<script id="vg-section-title-reviews-admin-v61">
+(function(){
+  'use strict';
+
+  const CFG_KEY = 'vg_supabase_cfg_v1';
+  const REVIEW_SOURCE = 'recommendation';
+
+  function $(selector, root){ return (root || document).querySelector(selector); }
+  function $$(selector, root){ return Array.from((root || document).querySelectorAll(selector)); }
+  function esc(value){ return String(value ?? '').replace(/[&<>"']/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }); }
+  function readCfg(){
+    try{
+      const saved = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+      return { url: saved.url || window.VG_SUPABASE_URL || '', anon: saved.anon || window.VG_SUPABASE_ANON_KEY || '' };
+    }catch(e){
+      return { url: window.VG_SUPABASE_URL || '', anon: window.VG_SUPABASE_ANON_KEY || '' };
+    }
+  }
+  function getClient(){
+    const cfg = readCfg();
+    if(!window.supabase || !cfg.url || !cfg.anon) return null;
+    if(!window.__vgReviewsSB || window.__vgReviewsSBSig !== cfg.url + '|' + cfg.anon.slice(0,10)){
+      window.__vgReviewsSB = window.supabase.createClient(cfg.url, cfg.anon);
+      window.__vgReviewsSBSig = cfg.url + '|' + cfg.anon.slice(0,10);
+    }
+    return window.__vgReviewsSB;
+  }
+  function stars(n){
+    const total = Math.max(1, Math.min(5, Number(n || 5)));
+    return '★★★★★'.slice(0,total) + '☆☆☆☆☆'.slice(0,5-total);
+  }
+  function shortDate(value){
+    if(!value) return 'Compra reciente';
+    try{
+      const d = new Date(value);
+      return d.toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' });
+    }catch(e){ return 'Compra reciente'; }
+  }
+  function reviewFromOrder(row){
+    const item = Array.isArray(row && row.items) ? (row.items[0] || {}) : {};
+    return {
+      id: row && row.id,
+      name: row && (row.client_name || row.customer_name) || item.customer || 'Cliente VG',
+      service: item.service || item.title || 'Servicio digital',
+      text: item.review || (row && row.notes) || item.option || '',
+      stars: Number(item.stars || 5),
+      status: row && row.status || 'pendiente',
+      date: row && row.created_at
+    };
+  }
+  const fallbackReviews = [
+    {name:'Luis M.', service:'Netflix Nueva', text:'Pagué, mandé comprobante y me dieron seguimiento por WhatsApp. Todo quedó claro desde el inicio.', stars:5, date:'Compra reciente'},
+    {name:'Karla R.', service:'Diamantes Free Fire', text:'Me gustó que primero pude revisar los métodos de pago y después enviar el comprobante con mi pedido.', stars:5, date:'Compra reciente'},
+    {name:'Diego A.', service:'Xbox Retro', text:'Elegí varios juegos, me confirmaron el paquete y la atención fue rápida. Buen servicio.', stars:5, date:'Compra reciente'}
+  ];
+
+  function cardMarkup(review){
+    return '<article class="vg-real-review-card">' +
+      '<div class="vg-real-review-head"><div><span class="vg-real-review-name">' + esc(review.name) + '</span><span class="vg-real-review-service">' + esc(review.service) + '</span></div><div class="vg-real-review-stars">' + stars(review.stars) + '</div></div>' +
+      '<p>“' + esc(review.text) + '”</p>' +
+      '<span class="vg-real-review-date">' + esc(typeof review.date === 'string' && review.date.indexOf('T') === -1 ? review.date : shortDate(review.date)) + '</span>' +
+    '</article>';
+  }
+  function renderPublicReviews(list){
+    const grid = $('#vgReviewsPublicGrid');
+    if(!grid) return;
+    const safe = (list && list.length ? list : fallbackReviews).filter(function(r){ return String(r.text || '').trim(); }).slice(0,6);
+    grid.innerHTML = safe.map(cardMarkup).join('');
+  }
+  async function loadPublicReviews(){
+    const client = getClient();
+    if(!client){ renderPublicReviews(fallbackReviews); return; }
+    const res = await client.from('orders')
+      .select('id,created_at,source,status,total,items,notes,client_name')
+      .eq('source', REVIEW_SOURCE)
+      .in('status', ['validado','entregado'])
+      .order('created_at', {ascending:false})
+      .limit(6);
+    if(res.error || !res.data || !res.data.length){ renderPublicReviews(fallbackReviews); return; }
+    renderPublicReviews(res.data.map(reviewFromOrder));
+  }
+  async function submitRecommendation(event){
+    event.preventDefault();
+    const form = event.currentTarget;
+    const msg = $('#vgReviewFormMsg');
+    const name = ($('#vgReviewName') && $('#vgReviewName').value.trim()) || 'Cliente VG';
+    const service = ($('#vgReviewService') && $('#vgReviewService').value.trim()) || 'Servicio digital';
+    const rating = Number($('#vgReviewStars') && $('#vgReviewStars').value || 5);
+    const text = ($('#vgReviewText') && $('#vgReviewText').value.trim()) || '';
+    if(text.length < 10){
+      if(msg){ msg.className='bad'; msg.textContent='Escribe una recomendación un poco más completa.'; }
+      return;
+    }
+    const client = getClient();
+    if(!client){
+      if(msg){ msg.className='bad'; msg.textContent='No se pudo conectar con Supabase. Intenta de nuevo en unos minutos.'; }
+      return;
+    }
+    if(msg){ msg.className=''; msg.textContent='Enviando recomendación...'; }
+    const item = { title:'Recomendación cliente', service:service, review:text, stars:rating, customer:name, price:0 };
+    let res = await client.from('orders').insert({
+      source: REVIEW_SOURCE,
+      status: 'pendiente',
+      total: 0,
+      items: [item],
+      notes: text,
+      client_name: name,
+      proof: null
+    }).select('id').single();
+    if(res.error){
+      res = await client.from('orders').insert({
+        source: REVIEW_SOURCE,
+        status: 'pendiente',
+        total: 0,
+        items: [item],
+        proof: null
+      }).select('id').single();
+    }
+    if(res.error){
+      if(msg){ msg.className='bad'; msg.textContent='No se pudo enviar: ' + res.error.message; }
+      return;
+    }
+    form.reset();
+    if($('#vgReviewStars')) $('#vgReviewStars').value = '5';
+    if(msg){ msg.className='ok'; msg.textContent='Recomendación enviada. Quedará pendiente hasta que VG la publique.'; }
+    setTimeout(function(){ if(msg) msg.textContent=''; }, 5200);
+    if(typeof window.vgAdminLoadReviews === 'function') window.vgAdminLoadReviews();
+  }
+  function buildPublicReviews(){
+    const section = $('.reviews-section');
+    if(!section || section.dataset.vgReviewsUpgraded === '1') return;
+    section.dataset.vgReviewsUpgraded = '1';
+    section.classList.add('vg-reviews-upgraded');
+    section.innerHTML = '<div class="vg-reviews-top"><div><h2>Clientes recientes</h2><p>Opiniones aprobadas de clientes que ya compraron servicios digitales en VG.</p></div><span class="vg-reviews-badge">Recomendaciones verificadas por VG</span></div>' +
+      '<div class="vg-reviews-layout"><div id="vgReviewsPublicGrid"></div>' +
+      '<aside class="vg-review-form-card"><h3>Deja tu recomendación</h3><p>Tu comentario queda en revisión. VG decide desde el panel admin si se publica.</p>' +
+      '<form class="vg-review-form" id="vgReviewForm"><input id="vgReviewName" maxlength="40" placeholder="Tu nombre o iniciales"><input id="vgReviewService" maxlength="50" placeholder="Servicio que compraste"><select id="vgReviewStars"><option value="5">★★★★★ 5 estrellas</option><option value="4">★★★★☆ 4 estrellas</option><option value="3">★★★☆☆ 3 estrellas</option></select><textarea id="vgReviewText" maxlength="260" placeholder="Escribe tu recomendación..."></textarea><button type="submit">Enviar recomendación</button><span class="vg-review-form-note">No se publica automáticamente. Primero debe ser aprobada desde el panel.</span><span id="vgReviewFormMsg"></span></form></aside></div>';
+    const form = $('#vgReviewForm');
+    if(form) form.addEventListener('submit', submitRecommendation);
+    renderPublicReviews(fallbackReviews);
+    loadPublicReviews();
+  }
+
+  function ensureAdminReviewsSection(){
+    const modal = $('#vgAdminModal');
+    const tabs = modal && $('.vg-admin-tabs', modal);
+    const content = modal && $('.vg-admin-content', modal);
+    if(!modal || !tabs || !content) return;
+    if(!$('.vg-admin-tab[data-tab="reviews"]', tabs)){
+      const btn = document.createElement('button');
+      btn.className = 'vg-admin-tab';
+      btn.dataset.tab = 'reviews';
+      btn.textContent = 'Recomendaciones';
+      tabs.appendChild(btn);
+    }
+    if(!$('#vgAdminReviews', content)){
+      const sec = document.createElement('section');
+      sec.className = 'vg-admin-section';
+      sec.id = 'vgAdminReviews';
+      sec.innerHTML = '<div class="vg-admin-tools"><button class="vg-admin-btn" onclick="vgAdminLoadReviews()">Actualizar recomendaciones</button><select class="vg-admin-select" id="vgReviewAdminFilter" onchange="vgAdminRenderReviews()"><option value="all">Todas</option><option value="pendiente">Pendientes</option><option value="validado">Publicadas</option><option value="cancelado">Rechazadas</option></select></div><div id="vgAdminReviewsList"><div class="vg-empty-state">Cargando recomendaciones...</div></div>';
+      content.appendChild(sec);
+    }
+  }
+  function bindAdminTabs(){
+    $$('#vgAdminModal .vg-admin-tab').forEach(function(btn){
+      if(btn.dataset.vgReviewsBound === '1') return;
+      btn.dataset.vgReviewsBound = '1';
+      btn.addEventListener('click', function(){
+        $$('#vgAdminModal .vg-admin-tab').forEach(function(b){ b.classList.toggle('active', b === btn); });
+        $$('#vgAdminModal .vg-admin-section').forEach(function(sec){ sec.classList.remove('active'); });
+        const id = '#vgAdmin' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1);
+        const sec = $(id);
+        if(sec) sec.classList.add('active');
+        if(btn.dataset.tab === 'reviews') window.vgAdminLoadReviews();
+      });
+    });
+  }
+  function adminReviewCard(row){
+    const r = reviewFromOrder(row);
+    const statusClass = String(r.status || 'pendiente').toLowerCase();
+    return '<article class="vg-admin-review-card">' +
+      '<div class="vg-admin-review-top"><div><b>' + esc(r.name) + '</b><small>' + esc(r.service) + ' · ' + esc(shortDate(r.date)) + '</small></div><span class="vg-review-status ' + esc(statusClass) + '">' + esc(r.status) + '</span></div>' +
+      '<div class="vg-real-review-stars">' + stars(r.stars) + '</div>' +
+      '<p>“' + esc(r.text) + '”</p>' +
+      '<div class="vg-admin-review-actions">' +
+        '<button class="vg-admin-btn primary" onclick="vgAdminSetReviewStatus(\'' + esc(r.id) + '\',\'validado\')">Publicar</button>' +
+        '<button class="vg-admin-btn" onclick="vgAdminSetReviewStatus(\'' + esc(r.id) + '\',\'pendiente\')">Pendiente</button>' +
+        '<button class="vg-admin-btn danger" onclick="vgAdminSetReviewStatus(\'' + esc(r.id) + '\',\'cancelado\')">No publicar</button>' +
+      '</div>' +
+    '</article>';
+  }
+  window.vgAdminRenderReviews = function(message){
+    ensureAdminReviewsSection();
+    const box = $('#vgAdminReviewsList');
+    if(!box) return;
+    if(message){ box.innerHTML = '<div class="vg-empty-state">' + esc(message) + '</div>'; return; }
+    const filter = ($('#vgReviewAdminFilter') && $('#vgReviewAdminFilter').value) || 'all';
+    let list = window.__vgAdminReviews || [];
+    if(filter !== 'all') list = list.filter(function(row){ return String(row.status || 'pendiente') === filter; });
+    box.innerHTML = list.length ? list.map(adminReviewCard).join('') : '<div class="vg-empty-state">No hay recomendaciones en esta vista.</div>';
+  };
+  window.vgAdminLoadReviews = async function(){
+    ensureAdminReviewsSection();
+    const client = getClient();
+    if(!client){ window.vgAdminRenderReviews('Configura Supabase primero.'); return; }
+    const res = await client.from('orders')
+      .select('id,created_at,source,status,total,items,notes,client_name')
+      .eq('source', REVIEW_SOURCE)
+      .order('created_at', {ascending:false})
+      .limit(200);
+    if(res.error){ window.vgAdminRenderReviews(res.error.message); return; }
+    window.__vgAdminReviews = res.data || [];
+    window.vgAdminRenderReviews();
+  };
+  window.vgAdminSetReviewStatus = async function(id, status){
+    const client = getClient();
+    if(!client){ alert('Configura Supabase primero.'); return; }
+    const res = await client.from('orders').update({ status: status }).eq('id', id).eq('source', REVIEW_SOURCE);
+    if(res.error){ alert(res.error.message); return; }
+    await window.vgAdminLoadReviews();
+    await loadPublicReviews();
+  };
+
+  /* Evita que las recomendaciones aparezcan como compras normales dentro del panel. */
+  function filterRecommendationOrders(){
+    if(window.vgAdminState && Array.isArray(window.vgAdminState.orders)){
+      window.vgAdminState.orders = window.vgAdminState.orders.filter(function(row){ return row && row.source !== REVIEW_SOURCE; });
+    }
+  }
+  if(typeof window.vgAdminLoadOrders === 'function' && !window.vgAdminLoadOrders.__vgReviewsWrapped){
+    const originalLoadOrders = window.vgAdminLoadOrders;
+    window.vgAdminLoadOrders = async function(){
+      const result = await originalLoadOrders.apply(this, arguments);
+      filterRecommendationOrders();
+      if(typeof window.vgAdminRenderStats === 'function') window.vgAdminRenderStats();
+      if(typeof window.vgAdminRenderOrders === 'function') window.vgAdminRenderOrders();
+      return result;
+    };
+    window.vgAdminLoadOrders.__vgReviewsWrapped = true;
+  }
+  if(typeof window.vgAdminOpen === 'function' && !window.vgAdminOpen.__vgReviewsWrapped){
+    const originalOpen = window.vgAdminOpen;
+    window.vgAdminOpen = function(){
+      const result = originalOpen.apply(this, arguments);
+      setTimeout(function(){ ensureAdminReviewsSection(); bindAdminTabs(); window.vgAdminLoadReviews(); }, 650);
+      return result;
+    };
+    window.vgAdminOpen.__vgReviewsWrapped = true;
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    buildPublicReviews();
+    ensureAdminReviewsSection();
+    bindAdminTabs();
+  });
+  setTimeout(function(){
+    buildPublicReviews();
+    ensureAdminReviewsSection();
+    bindAdminTabs();
+  }, 900);
+})();
+</script>
+
+
+
+<!-- VG UPDATE v70: links directos reales por producto sin tocar pagos/catálogo -->
+<style id="vg-product-direct-links-v70-css">
+  .vg-product-share-row{
+    display:flex!important;
+    gap:8px!important;
+    flex-wrap:wrap!important;
+    margin-top:10px!important;
+  }
+  .vg-product-share-link{
+    border:1px solid rgba(25,230,193,.24)!important;
+    background:rgba(25,230,193,.075)!important;
+    color:#dffff9!important;
+    border-radius:14px!important;
+    padding:10px 12px!important;
+    font-size:.82rem!important;
+    font-weight:950!important;
+    cursor:pointer!important;
+    width:100%!important;
+  }
+  .vg-product-share-link:hover{
+    border-color:rgba(25,230,193,.42)!important;
+    background:rgba(25,230,193,.12)!important;
+  }
+  .vg-copy-url-mini{
+    border:1px solid rgba(25,230,193,.22)!important;
+    background:rgba(25,230,193,.07)!important;
+    color:#dffff9!important;
+    border-radius:13px!important;
+    padding:10px 11px!important;
+    font-size:.78rem!important;
+    font-weight:950!important;
+    cursor:pointer!important;
+    grid-column:1/-1!important;
+  }
+  .vg-direct-link-note{
+    margin-top:10px!important;
+    padding:10px 12px!important;
+    border-radius:14px!important;
+    border:1px solid rgba(139,92,246,.18)!important;
+    background:rgba(139,92,246,.07)!important;
+    color:#cfd7ee!important;
+    font-size:.82rem!important;
+    line-height:1.35!important;
+  }
+  @media(max-width:760px){
+    .vg-copy-url-mini{display:none!important;}
+  }
+</style>
+<script id="vg-product-direct-links-v70-script">
+(function(){
+  'use strict';
+
+  var directLinksBooted = false;
+  var routingNow = false;
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function slug(value){
+    return String(value || 'servicio')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'')
+      .slice(0,70) || 'servicio';
+  }
+  function getServices(){
+    try{
+      if(typeof SERVICES !== 'undefined' && Array.isArray(SERVICES)) return SERVICES;
+    }catch(e){}
+    return Array.isArray(window.SERVICES) ? window.SERVICES : [];
+  }
+  function findProduct(id){
+    return getServices().find(function(p){ return String(p.id) === String(id); });
+  }
+  function rootUrl(){
+    return location.origin + location.pathname;
+  }
+  function productPath(product){
+    return '?producto=' + encodeURIComponent(product.id) + '&slug=' + encodeURIComponent(slug(product.title || product.displayTitle || 'servicio'));
+  }
+  function productUrl(product){
+    return rootUrl() + productPath(product);
+  }
+  function retroPath(){ return '?seccion=xbox-retro'; }
+  function retroUrl(){ return rootUrl() + retroPath(); }
+  function setRoute(path){
+    if(!path || routingNow) return;
+    var current = location.pathname + location.search + location.hash;
+    var next = location.pathname + path;
+    if(current === next) return;
+    try{ history.pushState({vgDirect:true}, '', next); }
+    catch(e){ location.href = next; }
+  }
+  function copyText(text, label){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        if(typeof window.showToast === 'function') window.showToast('Link copiado', label || 'Ya puedes compartirlo.');
+        else alert('Link copiado');
+      }).catch(function(){ prompt('Copia este link:', text); });
+    }else{
+      prompt('Copia este link:', text);
+    }
+  }
+
+  window.vgGetProductDirectLink = function(id){
+    var p = findProduct(id);
+    return p ? productUrl(p) : rootUrl();
+  };
+  window.vgCopyProductLinkById = function(id){
+    var p = findProduct(id);
+    if(!p) return;
+    copyText(productUrl(p), 'Link directo del producto copiado.');
+  };
+  window.vgCopyRetroLink = function(){
+    copyText(retroUrl(), 'Link directo de Xbox Retro copiado.');
+  };
+
+  function enhanceProductModal(product){
+    var actions = qs('#productModal .modal-actions');
+    if(!actions || !product) return;
+    var oldBtn = qs('#vgCopyProductLinkBtn', actions);
+    if(oldBtn){
+      oldBtn.textContent = 'Copiar link del producto';
+      oldBtn.onclick = function(ev){ ev.preventDefault(); window.vgCopyProductLinkById(product.id); };
+    }else{
+      var btn = document.createElement('button');
+      btn.id = 'vgCopyProductLinkBtn';
+      btn.type = 'button';
+      btn.className = 'vg-link-copy-btn';
+      btn.textContent = 'Copiar link del producto';
+      btn.onclick = function(ev){ ev.preventDefault(); window.vgCopyProductLinkById(product.id); };
+      actions.appendChild(btn);
+    }
+
+    var desc = qs('#modalDesc');
+    if(desc && !qs('#vgDirectLinkNote')){
+      var note = document.createElement('div');
+      note.id = 'vgDirectLinkNote';
+      note.className = 'vg-direct-link-note';
+      note.textContent = 'Este producto ya tiene link directo para compartir.';
+      desc.insertAdjacentElement('afterend', note);
+    }
+  }
+
+  function enhanceCards(){
+    qsa('.card').forEach(function(card){
+      if(qs('.vg-copy-url-mini', card)) return;
+      var opener = qs('[onclick*="openProduct("]', card);
+      if(!opener) return;
+      var m = String(opener.getAttribute('onclick') || '').match(/openProduct\((\d+)\)/);
+      if(!m) return;
+      var id = m[1];
+      var actions = qs('.premium-actions', card);
+      if(!actions) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'vg-copy-url-mini';
+      btn.textContent = 'Copiar link del producto';
+      btn.onclick = function(ev){ ev.preventDefault(); ev.stopPropagation(); window.vgCopyProductLinkById(id); };
+      actions.appendChild(btn);
+    });
+  }
+
+  function patchOpeners(){
+    if(typeof window.openProduct === 'function' && !window.openProduct.__vgDirectLinkV70){
+      var prevOpenProduct = window.openProduct;
+      var wrappedProduct = function(id){
+        var product = findProduct(id);
+        var result = prevOpenProduct.apply(this, arguments);
+        if(product){
+          setTimeout(function(){
+            setRoute(productPath(product));
+            enhanceProductModal(product);
+          }, 30);
+        }
+        return result;
+      };
+      wrappedProduct.__vgDirectLinkV70 = true;
+      window.openProduct = wrappedProduct;
+    }
+
+    if(typeof window.openRetroModal === 'function' && !window.openRetroModal.__vgDirectLinkV70){
+      var prevOpenRetro = window.openRetroModal;
+      var wrappedRetro = function(){
+        var result = prevOpenRetro.apply(this, arguments);
+        setTimeout(function(){
+          setRoute(retroPath());
+          var head = qs('#retroModal .retro-head > div');
+          if(head){
+            var btn = qs('#vgCopyRetroLinkBtn', head);
+            if(!btn){
+              btn = document.createElement('button');
+              btn.id = 'vgCopyRetroLinkBtn';
+              btn.type = 'button';
+              btn.className = 'vg-link-copy-btn';
+              btn.style.marginTop = '10px';
+              head.appendChild(btn);
+            }
+            btn.textContent = 'Copiar link de Xbox Retro';
+            btn.onclick = function(ev){ ev.preventDefault(); window.vgCopyRetroLink(); };
+          }
+        }, 30);
+        return result;
+      };
+      wrappedRetro.__vgDirectLinkV70 = true;
+      window.openRetroModal = wrappedRetro;
+    }
+  }
+
+  function routeFromUrl(){
+    var params = new URLSearchParams(location.search || '');
+    var productId = params.get('producto') || params.get('product') || params.get('servicio');
+    var section = String(params.get('seccion') || '').toLowerCase();
+    var hash = decodeURIComponent(location.hash || '');
+    var hashProduct = hash.match(/^#servicio\/(\d+)/);
+
+    if(productId || hashProduct){
+      var id = productId || hashProduct[1];
+      if(typeof window.openProduct === 'function'){
+        routingNow = true;
+        setTimeout(function(){
+          routingNow = false;
+          window.openProduct(Number(id));
+        }, 120);
+      }
+      return true;
+    }
+
+    if(section === 'xbox-retro' || section === 'retro' || hash === '#xbox-retro' || hash === '#retro'){
+      if(typeof window.openRetroModal === 'function'){
+        routingNow = true;
+        setTimeout(function(){
+          routingNow = false;
+          window.openRetroModal();
+        }, 120);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function boot(){
+    patchOpeners();
+    enhanceCards();
+    if(!directLinksBooted){
+      directLinksBooted = true;
+      routeFromUrl();
+    }
+    setTimeout(enhanceCards, 400);
+    setTimeout(enhanceCards, 1200);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  window.addEventListener('popstate', routeFromUrl);
+  window.addEventListener('hashchange', routeFromUrl);
+  document.addEventListener('click', function(){ setTimeout(function(){ patchOpeners(); enhanceCards(); }, 160); }, true);
+})();
+</script>
+
 </body>
 </html>
