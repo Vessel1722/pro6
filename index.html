@@ -5147,6 +5147,226 @@ window.VG_ADMIN_PASSWORD = "Vessel2026!";
 window.WHATSAPP_NUMBER = "526611078412";
 </script>
 
+
+
+<style id="vg-admin-fullscreen-private-only-v60">
+  /* Admin VG: pantalla completa estable, sin tocar catálogo, pagos, Supabase ni compras */
+  #vgAdminModal.vg-admin-modal{
+    position:fixed!important;
+    inset:0!important;
+    width:100vw!important;
+    height:100vh!important;
+    height:100dvh!important;
+    padding:0!important;
+    margin:0!important;
+    z-index:20000!important;
+    align-items:stretch!important;
+    justify-content:stretch!important;
+    background:rgba(2,4,10,.88)!important;
+    overflow:hidden!important;
+  }
+
+  #vgAdminModal.vg-admin-modal.active{
+    display:flex!important;
+  }
+
+  #vgAdminModal .vg-admin-panel{
+    position:relative!important;
+    width:100vw!important;
+    height:100vh!important;
+    height:100dvh!important;
+    max-width:none!important;
+    max-height:none!important;
+    min-width:0!important;
+    min-height:0!important;
+    border-radius:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:auto auto minmax(0,1fr)!important;
+    background:
+      radial-gradient(circle at 8% 12%,rgba(25,230,193,.16),transparent 34%),
+      radial-gradient(circle at 88% 8%,rgba(139,92,246,.18),transparent 32%),
+      linear-gradient(135deg,#07101c 0%,#080a14 46%,#10112a 100%)!important;
+    box-shadow:none!important;
+    isolation:isolate!important;
+  }
+
+  #vgAdminModal .vg-admin-panel::before{
+    content:""!important;
+    position:absolute!important;
+    inset:-30%!important;
+    z-index:0!important;
+    pointer-events:none!important;
+    background:
+      linear-gradient(115deg,transparent 0 42%,rgba(25,230,193,.12) 47%,transparent 52% 100%),
+      linear-gradient(245deg,transparent 0 38%,rgba(139,92,246,.13) 44%,transparent 49% 100%),
+      radial-gradient(circle at 20% 30%,rgba(25,230,193,.14),transparent 20%),
+      radial-gradient(circle at 80% 65%,rgba(139,92,246,.16),transparent 22%);
+    filter:blur(.2px);
+    opacity:.75;
+    animation:vgAdminGamingFlow 12s linear infinite;
+  }
+
+  #vgAdminModal .vg-admin-panel::after{
+    content:""!important;
+    position:absolute!important;
+    inset:0!important;
+    z-index:0!important;
+    pointer-events:none!important;
+    background:
+      linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:44px 44px;
+    mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.45));
+    opacity:.34;
+    animation:vgAdminGridMove 18s linear infinite;
+  }
+
+  @keyframes vgAdminGamingFlow{
+    0%{transform:translate3d(-2%,0,0) rotate(0deg)}
+    50%{transform:translate3d(2%,1%,0) rotate(1deg)}
+    100%{transform:translate3d(-2%,0,0) rotate(0deg)}
+  }
+
+  @keyframes vgAdminGridMove{
+    0%{background-position:0 0,0 0}
+    100%{background-position:88px 44px,44px 88px}
+  }
+
+  #vgAdminModal .vg-admin-head,
+  #vgAdminModal .vg-admin-tabs,
+  #vgAdminModal .vg-admin-content{
+    position:relative!important;
+    z-index:1!important;
+  }
+
+  #vgAdminModal .vg-admin-head{
+    min-height:92px!important;
+    padding:22px 34px!important;
+    border-bottom:1px solid rgba(255,255,255,.08)!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012))!important;
+    backdrop-filter:blur(14px)!important;
+  }
+
+  #vgAdminModal .vg-admin-head h2{
+    font-size:clamp(1.8rem,3vw,3.15rem)!important;
+    line-height:.98!important;
+    letter-spacing:-.045em!important;
+  }
+
+  #vgAdminModal .vg-admin-head p{
+    max-width:760px!important;
+    color:#c5d0e6!important;
+    font-size:1rem!important;
+  }
+
+  #vgAdminModal .vg-admin-x{
+    width:54px!important;
+    height:54px!important;
+    border-radius:18px!important;
+    background:rgba(255,255,255,.065)!important;
+    border:1px solid rgba(255,255,255,.13)!important;
+  }
+
+  #vgAdminModal .vg-admin-tabs{
+    padding:12px 34px!important;
+    background:rgba(5,8,16,.36)!important;
+    backdrop-filter:blur(12px)!important;
+  }
+
+  #vgAdminModal .vg-admin-content{
+    min-height:0!important;
+    height:100%!important;
+    overflow:auto!important;
+    padding:24px 34px 34px!important;
+  }
+
+  #vgAdminModal .vg-admin-login-card,
+  #vgAdminModal .vg-admin-private-card{
+    position:relative!important;
+    z-index:2!important;
+    width:min(560px,calc(100vw - 36px))!important;
+    max-width:560px!important;
+    margin:clamp(42px,10vh,96px) auto!important;
+    padding:30px!important;
+    border-radius:28px!important;
+    border:1px solid rgba(25,230,193,.18)!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.028)),
+      rgba(15,20,34,.88)!important;
+    box-shadow:0 26px 80px rgba(0,0,0,.46),0 0 42px rgba(25,230,193,.10)!important;
+    overflow:hidden!important;
+    backdrop-filter:blur(16px)!important;
+  }
+
+  #vgAdminModal .vg-admin-login-card::before{
+    content:""!important;
+    position:absolute!important;
+    inset:-2px!important;
+    z-index:-1!important;
+    background:linear-gradient(135deg,rgba(25,230,193,.28),rgba(139,92,246,.22),rgba(25,230,193,.10))!important;
+    opacity:.42!important;
+    filter:blur(24px)!important;
+    animation:vgAdminPulse 3.8s ease-in-out infinite!important;
+  }
+
+  @keyframes vgAdminPulse{
+    0%,100%{opacity:.30;transform:scale(.98)}
+    50%{opacity:.58;transform:scale(1.02)}
+  }
+
+  #vgAdminModal .vg-admin-private-badge{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    width:max-content!important;
+    margin-bottom:16px!important;
+    padding:8px 12px!important;
+    border-radius:999px!important;
+    border:1px solid rgba(25,230,193,.28)!important;
+    background:rgba(25,230,193,.08)!important;
+    color:#d9fffa!important;
+    font-size:.74rem!important;
+    font-weight:950!important;
+    text-transform:uppercase!important;
+    letter-spacing:.08em!important;
+  }
+
+  #vgAdminModal .vg-admin-login-card h3{
+    font-size:clamp(1.6rem,3vw,2.15rem)!important;
+    line-height:1.05!important;
+    margin-bottom:10px!important;
+  }
+
+  #vgAdminModal .vg-admin-login-card p{
+    color:#b9c5dc!important;
+    line-height:1.5!important;
+    margin-bottom:20px!important;
+  }
+
+  #vgAdminModal .vg-admin-login-card .vg-admin-input{
+    height:58px!important;
+    border-radius:18px!important;
+    margin-bottom:12px!important;
+  }
+
+  #vgAdminModal .vg-admin-login-card .vg-admin-btn.primary{
+    min-width:170px!important;
+    min-height:54px!important;
+    border-radius:18px!important;
+  }
+
+  @media(max-width:820px){
+    #vgAdminModal .vg-admin-head{padding:16px 16px!important;min-height:78px!important}
+    #vgAdminModal .vg-admin-head h2{font-size:1.8rem!important}
+    #vgAdminModal .vg-admin-head p{font-size:.88rem!important}
+    #vgAdminModal .vg-admin-tabs{padding:10px 14px!important}
+    #vgAdminModal .vg-admin-content{padding:16px 14px 24px!important}
+    #vgAdminModal .vg-admin-login-card{margin:36px auto!important;padding:22px!important;border-radius:24px!important}
+  }
+</style>
+
 </head>
 <body>
   <header class="topbar">
@@ -6552,7 +6772,7 @@ window.WHATSAPP_NUMBER = "526611078412";
 </script>
 <div class="vg-admin-modal" id="vgAdminModal">
   <div class="vg-admin-panel">
-    <div class="vg-admin-head"><div><h2>Panel administrador Supabase</h2><p>Historial real, comprobantes, edición de artículos, stock y precios.</p></div><button class="vg-admin-x" onclick="vgAdminClose()">×</button></div>
+    <div class="vg-admin-head"><div><h2>Panel administrador Supabase</h2><p>Solo administradores de VG · Acceso privado y protegido.</p></div><button class="vg-admin-x" onclick="vgAdminClose()">×</button></div>
     <div class="vg-admin-tabs">
       <button class="vg-admin-tab active" data-tab="orders">Compras</button>
       <button class="vg-admin-tab" data-tab="products">Artículos</button>
@@ -6868,7 +7088,7 @@ function cleanSource(source){ const s=String(source||'web'); const map={"whatsap
 
 /* Login */
 function isLogged(){return sessionStorage.getItem(ADMIN_SESSION_KEY)==='1';}
-function loginMarkup(){return `<div class="vg-admin-login-card"><h3>Acceso administrador</h3><p>Ingresa correo y contraseña.</p><input class="vg-admin-input" id="vgAdminEmail" type="email" placeholder="Correo administrador"><input class="vg-admin-input" id="vgAdminPassword" type="password" placeholder="Contraseña"><button class="vg-admin-btn primary" onclick="vgAdminLogin()">Entrar</button></div>`}
+function loginMarkup(){return `<div class="vg-admin-login-card vg-admin-private-card"><div class="vg-admin-private-badge">Admin VG</div><h3>Solo administradores de VG</h3><p>Acceso privado y protegido. Ingresa tus credenciales para continuar.</p><input class="vg-admin-input" id="vgAdminEmail" type="email" placeholder="Correo administrador"><input class="vg-admin-input" id="vgAdminPassword" type="password" placeholder="Contraseña"><button class="vg-admin-btn primary" onclick="vgAdminLogin()">Entrar</button></div>`}
 window.vgAdminLogin=function(){const e=($('#vgAdminEmail')?.value||'').trim().toLowerCase(),p=$('#vgAdminPassword')?.value||'';if(e===ADMIN_EMAIL&&p===ADMIN_PASSWORD){sessionStorage.setItem(ADMIN_SESSION_KEY,'1');location.reload();}else alert('Correo o contraseña incorrectos.')};
 window.vgAdminLogout=function(){sessionStorage.removeItem(ADMIN_SESSION_KEY);location.reload();};
 function ensureLogout(){if(!isLogged())return; if($('#vgAdminLogoutBtn'))return; const head=$('.vg-admin-head > div'); if(head){const b=document.createElement('button');b.id='vgAdminLogoutBtn';b.className='vg-admin-btn danger';b.textContent='Cerrar sesión';b.onclick=window.vgAdminLogout;head.appendChild(b);}}
@@ -12305,323 +12525,6 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
     #paymentModal .modal-actions .primary,#paymentModal .modal-actions .secondary{width:100% !important; min-height:46px !important; border-radius:14px !important; font-size:.86rem !important;}
   }
 </style>
-
-
-
-<!-- VG ADMIN FULLSCREEN PRIVATE PATCH v61: solo panel admin; no altera catálogo ni compras -->
-<style id="vg-admin-fullscreen-private-v61">
-  /* Panel admin SIEMPRE a pantalla completa: login y panel interno */
-  #vgAdminModal{
-    position:fixed !important;
-    inset:0 !important;
-    z-index:30000 !important;
-    padding:0 !important;
-    margin:0 !important;
-    align-items:stretch !important;
-    justify-content:stretch !important;
-    background:rgba(2,4,10,.94) !important;
-    overflow:hidden !important;
-  }
-  #vgAdminModal.active{display:flex !important;}
-  #vgAdminModal .vg-admin-panel,
-  #vgAdminModal .vg-admin-panel.vg-login-mode,
-  #vgAdminModal .vg-admin-panel.vg-admin-fullscreen-mode{
-    width:100vw !important;
-    height:100dvh !important;
-    max-width:none !important;
-    max-height:none !important;
-    min-width:100vw !important;
-    min-height:100dvh !important;
-    margin:0 !important;
-    border-radius:0 !important;
-    border:0 !important;
-    transform:none !important;
-    overflow:hidden !important;
-    display:grid !important;
-    grid-template-rows:auto auto minmax(0,1fr) !important;
-    background:
-      radial-gradient(circle at 7% 14%, rgba(25,230,193,.18), transparent 28%),
-      radial-gradient(circle at 92% 10%, rgba(139,92,246,.24), transparent 30%),
-      radial-gradient(circle at 50% 115%, rgba(25,230,193,.08), transparent 32%),
-      linear-gradient(135deg,#050713 0%,#091126 48%,#080713 100%) !important;
-    box-shadow:none !important;
-  }
-
-  /* Fondo gaming animado, liviano y sin scripts pesados */
-  #vgAdminModal .vg-admin-panel::before,
-  #vgAdminModal .vg-admin-panel::after{
-    content:"" !important;
-    position:absolute !important;
-    inset:0 !important;
-    pointer-events:none !important;
-    z-index:0 !important;
-  }
-  #vgAdminModal .vg-admin-panel::before{
-    background:
-      linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.020) 1px, transparent 1px),
-      radial-gradient(circle at 24% 28%, rgba(25,230,193,.12), transparent 26%),
-      radial-gradient(circle at 82% 68%, rgba(139,92,246,.13), transparent 28%) !important;
-    background-size:54px 54px,54px 54px,100% 100%,100% 100% !important;
-    opacity:.55 !important;
-    animation:vgAdminGridMove 18s linear infinite !important;
-  }
-  #vgAdminModal .vg-admin-panel::after{
-    background:
-      linear-gradient(115deg, transparent 0%, transparent 44%, rgba(25,230,193,.11) 49%, transparent 55%, transparent 100%),
-      linear-gradient(245deg, transparent 0%, transparent 49%, rgba(139,92,246,.12) 53%, transparent 58%, transparent 100%) !important;
-    transform:translateX(-24%) !important;
-    animation:vgAdminNeonSweep 7s ease-in-out infinite alternate !important;
-    opacity:.8 !important;
-  }
-  @keyframes vgAdminGridMove{to{background-position:54px 54px,54px 54px,0 0,0 0}}
-  @keyframes vgAdminNeonSweep{to{transform:translateX(24%)}}
-
-  #vgAdminModal .vg-admin-head,
-  #vgAdminModal .vg-admin-tabs,
-  #vgAdminModal .vg-admin-content{
-    position:relative !important;
-    z-index:2 !important;
-  }
-  #vgAdminModal .vg-admin-head{
-    min-height:96px !important;
-    padding:22px clamp(18px,3vw,42px) !important;
-    border-bottom:1px solid rgba(255,255,255,.09) !important;
-    background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.012)) !important;
-    backdrop-filter:blur(16px) !important;
-  }
-  #vgAdminModal .vg-admin-head h2{
-    margin:0 !important;
-    color:#fff !important;
-    font-size:clamp(1.9rem,3.6vw,3.25rem) !important;
-    line-height:.95 !important;
-    letter-spacing:-.045em !important;
-  }
-  #vgAdminModal .vg-admin-head p{
-    margin:9px 0 0 !important;
-    color:#c5d0e8 !important;
-    font-size:clamp(.92rem,1.2vw,1.05rem) !important;
-    max-width:850px !important;
-  }
-  #vgAdminModal .vg-admin-head p::before{
-    content:"Solo administradores de VG · Acceso privado y protegido." !important;
-  }
-  #vgAdminModal .vg-admin-head p{font-size:0 !important;}
-  #vgAdminModal .vg-admin-head p::before{font-size:clamp(.92rem,1.2vw,1.05rem) !important;}
-  #vgAdminModal .vg-admin-x{
-    width:54px !important;
-    height:54px !important;
-    border-radius:18px !important;
-    background:rgba(255,255,255,.07) !important;
-    border:1px solid rgba(255,255,255,.14) !important;
-    box-shadow:0 14px 34px rgba(0,0,0,.28) !important;
-  }
-
-  /* Login: también pantalla completa y con mensaje privado */
-  #vgAdminModal .vg-admin-panel.vg-login-mode{
-    grid-template-rows:auto minmax(0,1fr) !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-tabs{display:none !important;}
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-content{
-    display:grid !important;
-    grid-template-columns:minmax(320px,.82fr) minmax(360px,1fr) !important;
-    gap:clamp(24px,4vw,70px) !important;
-    align-items:center !important;
-    overflow:auto !important;
-    padding:clamp(22px,4vw,64px) !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-content::before{
-    content:"SOLO ADMINISTRADORES DE VG" !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    min-height:420px !important;
-    padding:42px !important;
-    border-radius:34px !important;
-    border:1px solid rgba(25,230,193,.18) !important;
-    background:
-      radial-gradient(circle at 50% 26%, rgba(25,230,193,.18), transparent 32%),
-      radial-gradient(circle at 80% 78%, rgba(139,92,246,.18), transparent 36%),
-      linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018)) !important;
-    color:#f8fbff !important;
-    font-size:clamp(2.1rem,4.6vw,5.2rem) !important;
-    line-height:.92 !important;
-    letter-spacing:-.06em !important;
-    text-align:center !important;
-    font-weight:1000 !important;
-    text-shadow:0 18px 44px rgba(0,0,0,.55),0 0 28px rgba(25,230,193,.16) !important;
-    box-shadow:0 28px 80px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.03) !important;
-    animation:vgAdminPulseCard 3.2s ease-in-out infinite !important;
-  }
-  @keyframes vgAdminPulseCard{50%{filter:drop-shadow(0 0 24px rgba(25,230,193,.16));transform:translateY(-2px)}}
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card{
-    width:min(560px,100%) !important;
-    max-width:560px !important;
-    margin:0 !important;
-    justify-self:center !important;
-    padding:38px 34px 32px !important;
-    border-radius:32px !important;
-    border:1px solid rgba(255,255,255,.12) !important;
-    background:
-      linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.028)),
-      rgba(9,13,26,.86) !important;
-    backdrop-filter:blur(18px) !important;
-    box-shadow:0 28px 76px rgba(0,0,0,.40),0 0 0 1px rgba(255,255,255,.03) inset !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card::before{
-    content:"Acceso privado" !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card h3{
-    font-size:clamp(1.85rem,2.5vw,2.45rem) !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card h3::before{
-    content:"Solo administradores de VG" !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card h3{font-size:0 !important;}
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card h3::before{font-size:clamp(1.85rem,2.5vw,2.45rem) !important;}
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card p{
-    font-size:0 !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-login-card p::before{
-    content:"Ingresa tus credenciales para consultar pedidos, comprobantes y seguimiento interno." !important;
-    color:#c3cde2 !important;
-    font-size:1rem !important;
-    line-height:1.55 !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-input{
-    height:60px !important;
-    border-radius:19px !important;
-    background:rgba(255,255,255,.055) !important;
-    border:1px solid rgba(255,255,255,.11) !important;
-  }
-  #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-btn.primary{
-    min-width:180px !important;
-    height:56px !important;
-    border-radius:18px !important;
-  }
-
-  /* Panel interno: más espacio real para trabajar */
-  #vgAdminModal .vg-admin-panel:not(.vg-login-mode) .vg-admin-tabs{
-    padding:12px clamp(18px,3vw,42px) !important;
-    background:rgba(255,255,255,.025) !important;
-  }
-  #vgAdminModal .vg-admin-panel:not(.vg-login-mode) .vg-admin-content{
-    overflow:auto !important;
-    padding:clamp(16px,2vw,30px) clamp(18px,3vw,42px) !important;
-  }
-  #vgAdminModal .vg-admin-panel:not(.vg-login-mode) #vgAdminOrders .vg-order-layout{
-    grid-template-columns:minmax(560px,1.25fr) minmax(420px,.75fr) !important;
-    gap:18px !important;
-  }
-  #vgAdminModal .vg-admin-panel:not(.vg-login-mode) #vgAdminOrdersList{
-    max-height:calc(100dvh - 300px) !important;
-    overflow:auto !important;
-  }
-  #vgAdminModal .vg-admin-panel:not(.vg-login-mode) #vgOrderPreview{
-    max-height:calc(100dvh - 300px) !important;
-    overflow:auto !important;
-  }
-
-  /* No mostrar en la cabecera que se editan artículos/precios */
-  #vgAdminModal .vg-admin-head p,
-  #vgAdminModal .vg-admin-login-card p{
-    user-select:none !important;
-  }
-
-  @media(max-width:980px){
-    #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-content{
-      grid-template-columns:1fr !important;
-      padding:18px !important;
-      gap:18px !important;
-    }
-    #vgAdminModal .vg-admin-panel.vg-login-mode .vg-admin-content::before{
-      min-height:180px !important;
-      padding:24px !important;
-      font-size:clamp(2rem,9vw,3.8rem) !important;
-    }
-    #vgAdminModal .vg-admin-head{
-      min-height:82px !important;
-      padding:18px 16px !important;
-    }
-    #vgAdminModal .vg-admin-head h2{font-size:1.7rem !important;}
-    #vgAdminModal .vg-admin-head p::before{font-size:.86rem !important;}
-    #vgAdminModal .vg-admin-panel:not(.vg-login-mode) #vgAdminOrders .vg-order-layout{
-      grid-template-columns:1fr !important;
-    }
-    #vgAdminModal .vg-admin-panel:not(.vg-login-mode) #vgAdminOrdersList,
-    #vgAdminModal .vg-admin-panel:not(.vg-login-mode) #vgOrderPreview{
-      max-height:none !important;
-    }
-  }
-</style>
-
-<script id="vg-admin-fullscreen-private-v61">
-(function(){
-  function qs(s,r){return (r||document).querySelector(s)}
-  function qsa(s,r){return Array.from((r||document).querySelectorAll(s))}
-  function adminIsLogged(){
-    try{
-      return sessionStorage.getItem('vg_admin_email_session_v52')==='1' || sessionStorage.getItem('vg_admin_ok')==='1';
-    }catch(e){return false}
-  }
-  function applyAdminPrivateView(){
-    var modal=qs('#vgAdminModal');
-    var panel=qs('#vgAdminModal .vg-admin-panel');
-    if(!modal||!panel) return;
-
-    panel.classList.add('vg-admin-fullscreen-mode');
-    panel.classList.toggle('vg-login-mode', !adminIsLogged());
-
-    var h2=qs('.vg-admin-head h2', panel);
-    if(h2) h2.textContent='Panel administrador VG';
-    var p=qs('.vg-admin-head p', panel);
-    if(p) p.textContent='Solo administradores de VG · Acceso privado y protegido.';
-
-    /* Evita que la cabecera anuncie funciones de edición antes de entrar */
-    qsa('.vg-admin-head p', panel).forEach(function(x){
-      x.setAttribute('data-private-label','Solo administradores de VG');
-    });
-
-    var loginTitle=qs('.vg-admin-login-card h3', panel);
-    if(loginTitle) loginTitle.textContent='Solo administradores de VG';
-    var loginText=qs('.vg-admin-login-card p', panel);
-    if(loginText) loginText.textContent='Ingresa tus credenciales para consultar pedidos, comprobantes y seguimiento interno.';
-  }
-
-  function wrapOpen(){
-    if(typeof window.vgAdminOpen==='function' && !window.vgAdminOpen.__vgPrivateFullV61){
-      var original=window.vgAdminOpen;
-      window.vgAdminOpen=function(){
-        var result=original.apply(this, arguments);
-        applyAdminPrivateView();
-        setTimeout(applyAdminPrivateView, 0);
-        setTimeout(applyAdminPrivateView, 100);
-        return result;
-      };
-      window.vgAdminOpen.__vgPrivateFullV61=true;
-    }
-    if(typeof window.vgAdminClose==='function' && !window.vgAdminClose.__vgPrivateFullV61){
-      var closeOriginal=window.vgAdminClose;
-      window.vgAdminClose=function(){
-        var result=closeOriginal.apply(this, arguments);
-        document.body.classList.remove('vg-admin-lock');
-        return result;
-      };
-      window.vgAdminClose.__vgPrivateFullV61=true;
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    wrapOpen();
-    applyAdminPrivateView();
-    var modal=qs('#vgAdminModal');
-    if(modal && 'MutationObserver' in window){
-      new MutationObserver(function(){applyAdminPrivateView();}).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
-    }
-  });
-  setTimeout(function(){wrapOpen();applyAdminPrivateView();},300);
-})();
-</script>
 
 </body>
 </html>
