@@ -12843,412 +12843,169 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   }
 </style>
 
-<script id="vg-header-fixed-admin-gaming-v61">
-(function(){
-  'use strict';
-
-  function setImportant(el, prop, value){
-    if(el) el.style.setProperty(prop, value, 'important');
-  }
-
-  function updateTopbarHeight(){
-    const topbar = document.querySelector('.topbar');
-    if(!topbar) return;
-    const h = Math.ceil(topbar.getBoundingClientRect().height || topbar.offsetHeight || 0);
-    if(h > 40){
-      document.documentElement.style.setProperty('--vg-fixed-topbar-height', h + 'px');
-    }
-  }
-
-  function keepTopbarFixed(){
-    const topbar = document.querySelector('.topbar');
-    if(!topbar) return;
-    setImportant(topbar,'position','fixed');
-    setImportant(topbar,'top','0');
-    setImportant(topbar,'left','0');
-    setImportant(topbar,'right','0');
-    setImportant(topbar,'width','100%');
-    setImportant(topbar,'z-index','16000');
-    setImportant(topbar,'transform','none');
-    setImportant(topbar,'opacity','1');
-    setImportant(topbar,'visibility','visible');
-    updateTopbarHeight();
-  }
-
-  function markAdminOpenState(){
-    const modal = document.getElementById('vgAdminModal');
-    const panel = modal ? modal.querySelector('.vg-admin-panel') : null;
-    if(!modal || !panel) return;
-
-    const active = modal.classList.contains('active');
-    if(!active){
-      document.body.classList.remove('vg-admin-modal-active-v61');
-      return;
-    }
-
-    document.body.classList.add('vg-admin-modal-active-v61');
-    panel.classList.add('vg-admin-fullscreen-v61');
-
-    setImportant(modal,'position','fixed');
-    setImportant(modal,'inset','0');
-    setImportant(modal,'width','100vw');
-    setImportant(modal,'height','100dvh');
-    setImportant(modal,'max-width','none');
-    setImportant(modal,'max-height','none');
-    setImportant(modal,'padding','0');
-    setImportant(modal,'margin','0');
-    setImportant(modal,'overflow','hidden');
-    setImportant(modal,'z-index','2147483000');
-
-    setImportant(panel,'position','fixed');
-    setImportant(panel,'inset','0');
-    setImportant(panel,'width','100vw');
-    setImportant(panel,'height','100dvh');
-    setImportant(panel,'max-width','none');
-    setImportant(panel,'max-height','none');
-    setImportant(panel,'min-width','0');
-    setImportant(panel,'min-height','0');
-    setImportant(panel,'margin','0');
-    setImportant(panel,'border-radius','0');
-    setImportant(panel,'border','0');
-    setImportant(panel,'overflow','hidden');
-    setImportant(panel,'display','grid');
-    setImportant(panel,'grid-template-rows', panel.classList.contains('vg-login-mode') ? 'auto minmax(0,1fr)' : 'auto auto minmax(0,1fr)');
-
-    const headTitle = panel.querySelector('.vg-admin-head h2');
-    const headText = panel.querySelector('.vg-admin-head p');
-    if(headTitle) headTitle.textContent = 'Panel administrador Supabase';
-    if(headText) headText.textContent = 'Solo administradores de VG · Acceso privado y protegido.';
-
-    const loginTitle = panel.querySelector('.vg-admin-login-card h3');
-    const loginText = panel.querySelector('.vg-admin-login-card p');
-    if(loginTitle) loginTitle.textContent = 'Solo administradores de VG';
-    if(loginText) loginText.textContent = 'Acceso privado y protegido. Ingresa tus credenciales para continuar.';
-  }
-
-  function installObservers(){
-    const topbar = document.querySelector('.topbar');
-    if(topbar && !topbar.__vgFixedObserverV61){
-      topbar.__vgFixedObserverV61 = true;
-      new MutationObserver(function(){
-        requestAnimationFrame(function(){ keepTopbarFixed(); updateTopbarHeight(); });
-      }).observe(topbar,{childList:true,subtree:true,attributes:true});
-    }
-
-    const modal = document.getElementById('vgAdminModal');
-    if(modal && !modal.__vgAdminFullscreenObserverV61){
-      modal.__vgAdminFullscreenObserverV61 = true;
-      new MutationObserver(function(){
-        requestAnimationFrame(markAdminOpenState);
-        setTimeout(markAdminOpenState,80);
-      }).observe(modal,{attributes:true,attributeFilter:['class'],childList:true,subtree:true});
-    }
-  }
-
-  function patchOpenAdmin(){
-    if(typeof window.vgAdminOpen === 'function' && !window.vgAdminOpen.__vgFullscreenV61){
-      const prev = window.vgAdminOpen;
-      const wrapped = function(){
-        const result = prev.apply(this, arguments);
-        setTimeout(markAdminOpenState,0);
-        setTimeout(markAdminOpenState,80);
-        setTimeout(markAdminOpenState,250);
-        return result;
-      };
-      wrapped.__vgFullscreenV61 = true;
-      window.vgAdminOpen = wrapped;
-    }
-  }
-
-  function boot(){
-    keepTopbarFixed();
-    updateTopbarHeight();
-    markAdminOpenState();
-    installObservers();
-    patchOpenAdmin();
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', boot);
-  }else{
-    boot();
-  }
-
-  window.addEventListener('resize', function(){
-    setTimeout(function(){ keepTopbarFixed(); updateTopbarHeight(); markAdminOpenState(); }, 60);
-  });
-
-  window.addEventListener('load', function(){
-    keepTopbarFixed();
-    updateTopbarHeight();
-    markAdminOpenState();
-    patchOpenAdmin();
-  });
-
-  setTimeout(boot, 250);
-  setTimeout(boot, 1000);
-})();
-</script>
-
-
-
-<style id="vg-hide-fixed-header-on-service-modal-v62">
-  /* La barra superior se mantiene fija al navegar, pero se desvanece cuando hay una ventana de servicio abierta. */
-  .topbar{
-    transition:opacity .24s ease, transform .24s ease, visibility .24s ease !important;
-    will-change:opacity, transform !important;
-  }
-
-  body.vg-service-window-open-v62 .topbar{
-    opacity:0 !important;
-    visibility:hidden !important;
-    transform:translateY(-110%) !important;
-    pointer-events:none !important;
-  }
-</style>
-
-<script id="vg-hide-fixed-header-on-service-modal-v62">
-(function(){
-  'use strict';
-
-  const SERVICE_MODAL_IDS = ['productModal','cartModal','paymentModal','retroModal'];
-
-  function setImportant(el, prop, value){
-    if(el) el.style.setProperty(prop, value, 'important');
-  }
-
-  function anyServiceWindowOpen(){
-    return SERVICE_MODAL_IDS.some(function(id){
-      const el = document.getElementById(id);
-      return !!(el && el.classList.contains('active'));
-    });
-  }
-
-  function applyHeaderState(){
-    const topbar = document.querySelector('.topbar');
-    const shouldHide = anyServiceWindowOpen();
-    document.body.classList.toggle('vg-service-window-open-v62', shouldHide);
-
-    if(!topbar) return;
-
-    if(shouldHide){
-      setImportant(topbar,'opacity','0');
-      setImportant(topbar,'visibility','hidden');
-      setImportant(topbar,'pointer-events','none');
-      setImportant(topbar,'transform','translateY(-110%)');
-    }else{
-      setImportant(topbar,'position','fixed');
-      setImportant(topbar,'top','0');
-      setImportant(topbar,'left','0');
-      setImportant(topbar,'right','0');
-      setImportant(topbar,'width','100%');
-      setImportant(topbar,'z-index','16000');
-      setImportant(topbar,'opacity','1');
-      setImportant(topbar,'visibility','visible');
-      setImportant(topbar,'pointer-events','auto');
-      setImportant(topbar,'transform','translateY(0)');
-    }
-  }
-
-  function installObservers(){
-    SERVICE_MODAL_IDS.forEach(function(id){
-      const el = document.getElementById(id);
-      if(!el || el.__vgHeaderHideObserverV62) return;
-      el.__vgHeaderHideObserverV62 = true;
-      new MutationObserver(function(){
-        requestAnimationFrame(applyHeaderState);
-      }).observe(el,{attributes:true,attributeFilter:['class']});
-    });
-  }
-
-  function wrapModalFunctions(){
-    [
-      'closeModal','closeCart','closePaymentModal','closeRetroModal',
-      'openCart','openPaymentModal','openRetroModal','buySelectedNow','buyRetroNow','openPaymentForCart'
-    ].forEach(function(name){
-      const fn = window[name];
-      if(typeof fn !== 'function' || fn.__vgHeaderHideWrappedV62) return;
-      const wrapped = function(){
-        const result = fn.apply(this, arguments);
-        requestAnimationFrame(applyHeaderState);
-        setTimeout(applyHeaderState, 80);
-        setTimeout(applyHeaderState, 240);
-        return result;
-      };
-      wrapped.__vgHeaderHideWrappedV62 = true;
-      window[name] = wrapped;
-    });
-  }
-
-  function boot(){
-    installObservers();
-    wrapModalFunctions();
-    applyHeaderState();
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', boot);
-  }else{
-    boot();
-  }
-
-  window.addEventListener('load', function(){
-    boot();
-    setTimeout(boot, 300);
-  });
-
-  window.addEventListener('resize', function(){
-    setTimeout(applyHeaderState, 80);
-  });
-
-  document.addEventListener('click', function(){
-    setTimeout(function(){ wrapModalFunctions(); applyHeaderState(); }, 80);
-  }, true);
-
-  setTimeout(boot, 400);
-  setTimeout(boot, 1200);
-})();
-</script>
-
-
-
 <!-- =========================================================
      V66: Ocultar barra superior cuando hay servicio/modal abierto
      Mantiene la barra fija en navegación normal y la quita al abrir
      producto, carrito, métodos de pago o Xbox Retro.
      ========================================================= -->
-<style id="vg-hide-header-when-service-open-v66">
+
+
+<!-- =========================================================
+     V67 FINAL ESTABLE: header fijo sin lag
+     - No usa observers sobre la barra superior.
+     - Solo detecta apertura/cierre de modales por clase active.
+     - Evita el bloqueo al cerrar con X.
+     ========================================================= -->
+<style id="vg-header-fast-modal-v67">
   .topbar{
-    transition:opacity .24s ease, transform .24s ease, visibility .24s ease !important;
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    z-index:16000 !important;
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+    transform:translate3d(0,0,0) !important;
+    transition:opacity .18s ease, transform .18s ease, visibility .18s ease !important;
     will-change:opacity, transform !important;
   }
 
-  body.vg-service-active-v66 .topbar{
+  body.vg-service-window-open-v67 .topbar{
     opacity:0 !important;
     visibility:hidden !important;
     pointer-events:none !important;
-    transform:translateY(-120%) !important;
+    transform:translate3d(0,-104%,0) !important;
+  }
+
+  body.vg-service-window-open-v67 #vgAdminCornerBtn,
+  body.vg-service-window-open-v67 .vg-admin-corner-btn{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+    transform:translateY(-10px) !important;
+  }
+
+  #productModal.active,
+  #cart.active,
+  #cartModal.active,
+  #paymentModal.active,
+  #retroModal.active{
+    z-index:21000 !important;
+  }
+
+  /* Login/admin full screen limpio, solo dentro de la ventana admin */
+  #vgAdminModal.active{
+    position:fixed !important;
+    inset:0 !important;
+    width:100vw !important;
+    height:100dvh !important;
+    max-width:none !important;
+    max-height:none !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow:hidden !important;
+    z-index:2147483000 !important;
+    background:rgba(1,3,10,.94) !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel{
+    position:fixed !important;
+    inset:0 !important;
+    width:100vw !important;
+    height:100dvh !important;
+    max-width:none !important;
+    max-height:none !important;
+    min-width:0 !important;
+    min-height:0 !important;
+    margin:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    overflow:hidden !important;
   }
 </style>
 
-<script id="vg-hide-header-when-service-open-v66">
+<script id="vg-header-fast-modal-v67">
 (function(){
   'use strict';
 
-  var SERVICE_SELECTORS = ['#productModal', '#cartModal', '#paymentModal', '#retroModal'];
+  var MODAL_IDS = ['productModal','cart','cartModal','paymentModal','retroModal'];
+  var lastOpen = null;
+  var raf = 0;
 
-  function isVisibleModal(el){
-    if(!el) return false;
-    if(el.classList && el.classList.contains('active')) return true;
-    if(el.getAttribute('aria-hidden') === 'false') return true;
-    var style = window.getComputedStyle ? window.getComputedStyle(el) : null;
-    if(!style) return false;
-    return style.display !== 'none' && style.visibility !== 'hidden' && parseFloat(style.opacity || '1') > 0 && (el.offsetWidth > 0 || el.offsetHeight > 0);
+  function $(id){ return document.getElementById(id); }
+
+  function isActive(el){
+    return !!(el && el.classList && el.classList.contains('active'));
   }
 
-  function serviceIsOpen(){
-    for(var i=0;i<SERVICE_SELECTORS.length;i++){
-      var el = document.querySelector(SERVICE_SELECTORS[i]);
-      if(isVisibleModal(el)) return true;
+  function hasServiceOpen(){
+    for(var i=0;i<MODAL_IDS.length;i++){
+      if(isActive($(MODAL_IDS[i]))) return true;
     }
     return false;
   }
 
-  function forceHeaderHidden(topbar){
-    topbar.style.setProperty('display','none','important');
-    topbar.style.setProperty('opacity','0','important');
-    topbar.style.setProperty('visibility','hidden','important');
-    topbar.style.setProperty('pointer-events','none','important');
-    topbar.style.setProperty('transform','translateY(-120%)','important');
-  }
-
-  function forceHeaderVisible(topbar){
-    topbar.style.removeProperty('display');
-    topbar.style.setProperty('position','fixed','important');
-    topbar.style.setProperty('top','0','important');
-    topbar.style.setProperty('left','0','important');
-    topbar.style.setProperty('right','0','important');
-    topbar.style.setProperty('width','100%','important');
-    topbar.style.setProperty('z-index','16000','important');
-    topbar.style.setProperty('opacity','1','important');
-    topbar.style.setProperty('visibility','visible','important');
-    topbar.style.setProperty('pointer-events','auto','important');
-    topbar.style.setProperty('transform','translateY(0)','important');
-  }
-
-  function applyHeaderMode(){
+  function updateTopbarHeight(){
     var topbar = document.querySelector('.topbar');
-    if(!topbar) return;
-    var open = serviceIsOpen();
-    document.body.classList.toggle('vg-service-active-v66', open);
-    if(open) forceHeaderHidden(topbar);
-    else forceHeaderVisible(topbar);
+    if(!topbar || document.body.classList.contains('vg-service-window-open-v67')) return;
+    var h = Math.ceil(topbar.getBoundingClientRect().height || topbar.offsetHeight || 0);
+    if(h > 40) document.documentElement.style.setProperty('--vg-fixed-topbar-height', h + 'px');
   }
 
-  function updateRepeated(){
-    applyHeaderMode();
-    window.requestAnimationFrame(applyHeaderMode);
-    setTimeout(applyHeaderMode, 60);
-    setTimeout(applyHeaderMode, 180);
-    setTimeout(applyHeaderMode, 420);
+  function syncHeader(){
+    raf = 0;
+    var open = hasServiceOpen();
+    if(open === lastOpen) return;
+    lastOpen = open;
+    document.body.classList.toggle('vg-service-window-open-v67', open);
+    if(!open) updateTopbarHeight();
   }
 
-  function observeModal(el){
-    if(!el || el.__vgHeaderHideV66) return;
-    el.__vgHeaderHideV66 = true;
-    new MutationObserver(updateRepeated).observe(el, {
-      attributes:true,
-      attributeFilter:['class','style','aria-hidden']
-    });
+  function scheduleSync(){
+    if(raf) return;
+    raf = requestAnimationFrame(syncHeader);
   }
 
-  function installObservers(){
-    SERVICE_SELECTORS.forEach(function(sel){ observeModal(document.querySelector(sel)); });
-    var topbar = document.querySelector('.topbar');
-    if(topbar && !topbar.__vgHeaderProtectV66){
-      topbar.__vgHeaderProtectV66 = true;
-      new MutationObserver(function(){
-        if(serviceIsOpen()) window.requestAnimationFrame(applyHeaderMode);
-      }).observe(topbar,{attributes:true, attributeFilter:['style','class']});
-    }
+  function markAdminText(){
+    var modal = $('vgAdminModal');
+    if(!modal) return;
+    var headText = modal.querySelector('.vg-admin-head p');
+    var loginTitle = modal.querySelector('.vg-admin-login-card h3');
+    var loginText = modal.querySelector('.vg-admin-login-card p');
+    if(headText) headText.textContent = 'Solo administradores de VG · Acceso privado y protegido.';
+    if(loginTitle) loginTitle.textContent = 'Solo administradores de VG';
+    if(loginText) loginText.textContent = 'Acceso privado y protegido. Ingresa tus credenciales para continuar.';
   }
 
-  function wrap(name){
-    var fn = window[name];
-    if(typeof fn !== 'function' || fn.__vgHeaderV66) return;
-    var wrapped = function(){
-      var result = fn.apply(this, arguments);
-      updateRepeated();
-      return result;
-    };
-    wrapped.__vgHeaderV66 = true;
-    window[name] = wrapped;
-  }
-
-  function wrapKnownFunctions(){
-    [
-      'openModal','closeModal','openCart','closeCart','openPaymentModal','closePaymentModal',
-      'openRetroModal','closeRetroModal','buySelectedNow','buyRetroNow','openPaymentForCart',
-      'addSelectedToCart','addRetroToCart'
-    ].forEach(wrap);
+  function observeModal(id){
+    var el = $(id);
+    if(!el || el.__vgFastHeaderV67) return;
+    el.__vgFastHeaderV67 = true;
+    new MutationObserver(scheduleSync).observe(el,{attributes:true, attributeFilter:['class']});
   }
 
   function boot(){
-    installObservers();
-    wrapKnownFunctions();
-    updateRepeated();
+    MODAL_IDS.forEach(observeModal);
+    var admin = $('vgAdminModal');
+    if(admin && !admin.__vgAdminTextV67){
+      admin.__vgAdminTextV67 = true;
+      new MutationObserver(markAdminText).observe(admin,{attributes:true, attributeFilter:['class']});
+    }
+    markAdminText();
+    updateTopbarHeight();
+    scheduleSync();
   }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
-  else boot();
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot, {once:true});
+  }else{
+    boot();
+  }
 
-  window.addEventListener('load', boot);
-  window.addEventListener('resize', updateRepeated);
-  document.addEventListener('click', function(){ setTimeout(boot, 30); }, true);
-  document.addEventListener('keydown', function(){ setTimeout(updateRepeated, 30); }, true);
-
-  setTimeout(boot, 300);
-  setTimeout(boot, 1000);
+  window.addEventListener('load', function(){ boot(); updateTopbarHeight(); }, {once:true});
+  window.addEventListener('resize', function(){ updateTopbarHeight(); scheduleSync(); });
 })();
 </script>
 
