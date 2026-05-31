@@ -8496,5 +8496,417 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   })();
 </script>
 
+
+<style id="vg-admin-panel-real-fix-v58">
+  /* =========================================================
+     FIX REAL PANEL ADMIN
+     El problema venía de la clase vg-login-mode, que seguía activa
+     y encogía el panel aunque ya estuvieras dentro del administrador.
+     Este bloque fuerza modo administrador completo únicamente cuando
+     la sesión está iniciada.
+     ========================================================= */
+
+  body.vg-admin-lock{
+    overflow:hidden !important;
+  }
+
+  #vgAdminModal.active{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:2147483000 !important;
+    display:block !important;
+    width:100vw !important;
+    height:100vh !important;
+    height:100dvh !important;
+    padding:0 !important;
+    margin:0 !important;
+    background:rgba(0,0,0,.94) !important;
+    overflow:hidden !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode.vg-login-mode{
+    position:fixed !important;
+    inset:0 !important;
+    left:0 !important;
+    right:0 !important;
+    top:0 !important;
+    bottom:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    height:100dvh !important;
+    max-width:none !important;
+    max-height:none !important;
+    min-width:0 !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    border-radius:0 !important;
+    border:0 !important;
+    transform:none !important;
+    display:grid !important;
+    grid-template-rows:auto auto minmax(0,1fr) !important;
+    overflow:hidden !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(25,230,193,.14), transparent 30%),
+      radial-gradient(circle at 100% 0%, rgba(139,92,246,.20), transparent 34%),
+      linear-gradient(180deg, rgba(10,15,30,.99), rgba(5,7,14,.995)) !important;
+    box-shadow:none !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-tabs,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode.vg-login-mode .vg-admin-tabs{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    overflow-x:auto !important;
+    gap:10px !important;
+    padding:12px 32px !important;
+    background:rgba(255,255,255,.025) !important;
+    border-bottom:1px solid rgba(255,255,255,.08) !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-head,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode.vg-login-mode .vg-admin-head{
+    position:relative !important;
+    min-height:104px !important;
+    padding:22px 96px 18px 34px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:18px !important;
+    background:linear-gradient(135deg, rgba(13,23,45,.95), rgba(21,15,48,.76)) !important;
+    border-bottom:1px solid rgba(255,255,255,.08) !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-head h2{
+    font-size:clamp(2rem, 3.2vw, 3.7rem) !important;
+    line-height:.95 !important;
+    margin:0 0 6px !important;
+    letter-spacing:-.055em !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-head p{
+    margin:0 !important;
+    color:#b8c4dd !important;
+    font-size:1rem !important;
+    line-height:1.38 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-x{
+    position:absolute !important;
+    top:22px !important;
+    right:26px !important;
+    width:56px !important;
+    height:56px !important;
+    border-radius:20px !important;
+    font-size:1.45rem !important;
+    z-index:10 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-content,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode.vg-login-mode .vg-admin-content{
+    display:block !important;
+    min-height:0 !important;
+    overflow:auto !important;
+    padding:24px 34px 34px !important;
+    isolation:auto !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-content::before,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-content::after{
+    display:none !important;
+    content:none !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminStats,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-stats{
+    display:grid !important;
+    grid-template-columns:repeat(4, minmax(190px,1fr)) !important;
+    gap:18px !important;
+    margin-bottom:22px !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-stat{
+    min-height:128px !important;
+    padding:24px !important;
+    border-radius:26px !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-stat b{
+    font-size:clamp(2rem, 2.5vw, 3rem) !important;
+    line-height:1.02 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrders .vg-admin-tools,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminProducts .vg-admin-tools{
+    display:grid !important;
+    grid-template-columns:minmax(360px,1fr) 240px 180px !important;
+    gap:14px !important;
+    align-items:center !important;
+    margin-bottom:20px !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrders .vg-admin-tools .vg-admin-input,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminProducts .vg-admin-tools .vg-admin-input{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrders .vg-admin-tools .vg-admin-btn.primary{
+    display:none !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrders .vg-order-layout{
+    display:grid !important;
+    grid-template-columns:minmax(620px, 1.18fr) minmax(440px, .82fr) !important;
+    gap:26px !important;
+    align-items:start !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrdersList{
+    min-width:0 !important;
+    max-height:calc(100dvh - 360px) !important;
+    overflow:auto !important;
+    padding-right:10px !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgOrderPreview{
+    position:sticky !important;
+    top:0 !important;
+    min-width:0 !important;
+    max-height:calc(100dvh - 360px) !important;
+    overflow:auto !important;
+    padding:26px !important;
+    border-radius:30px !important;
+    background:linear-gradient(180deg, rgba(17,23,50,.96), rgba(8,12,28,.98)) !important;
+    border:1px solid rgba(25,230,193,.16) !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-card{
+    display:grid !important;
+    grid-template-columns:155px minmax(0,1fr) 120px 150px !important;
+    gap:14px 18px !important;
+    align-items:start !important;
+    padding:18px !important;
+    margin-bottom:14px !important;
+    border-radius:24px !important;
+    overflow:hidden !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-card .vg-order-col:nth-child(5),
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-card .vg-order-col:nth-child(6){
+    grid-column:auto !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-main-title,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-sub{
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-col h5{
+    margin:0 0 8px !important;
+    font-size:.72rem !important;
+    letter-spacing:.10em !important;
+    text-transform:uppercase !important;
+    color:#aab6d3 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-status,
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-card .vg-admin-select{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-proof-preview-img{
+    width:100% !important;
+    max-height:calc(100dvh - 560px) !important;
+    min-height:260px !important;
+    object-fit:contain !important;
+    border-radius:22px !important;
+    background:#070b18 !important;
+  }
+
+  #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminProductsList{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fill, minmax(480px, 1fr)) !important;
+    gap:20px !important;
+  }
+
+  @media(max-width:1280px){
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrders .vg-order-layout{
+      grid-template-columns:1fr !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrdersList,
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgOrderPreview{
+      max-height:none !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgOrderPreview{
+      position:relative !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-card{
+      grid-template-columns:170px minmax(0,1fr) 130px !important;
+    }
+  }
+
+  @media(max-width:900px){
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-head{
+      min-height:88px !important;
+      padding:16px 74px 16px 16px !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-head h2{
+      font-size:1.55rem !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-head p{
+      font-size:.84rem !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-x{
+      top:16px !important;
+      right:16px !important;
+      width:44px !important;
+      height:44px !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-tabs{
+      padding:10px 14px !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-content{
+      padding:14px 14px 24px !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminStats,
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-admin-stats{
+      grid-template-columns:1fr 1fr !important;
+      gap:10px !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminOrders .vg-admin-tools,
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminProducts .vg-admin-tools{
+      grid-template-columns:1fr !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode .vg-order-card{
+      grid-template-columns:1fr !important;
+    }
+    #vgAdminModal.active .vg-admin-panel.vg-admin-fullscreen-mode #vgAdminProductsList{
+      grid-template-columns:1fr !important;
+    }
+  }
+</style>
+
+<script id="vg-admin-panel-real-fix-v58">
+(function(){
+  'use strict';
+
+  const EMAIL_SESSION='vg_admin_email_session_v52';
+  const LEGACY_SESSION='vg_admin_session';
+  const PIN_SESSION='vg_admin_ok';
+
+  function isAdminLogged(){
+    return sessionStorage.getItem(EMAIL_SESSION)==='1' || sessionStorage.getItem(PIN_SESSION)==='1';
+  }
+
+  function syncSessionFlags(){
+    if(isAdminLogged()) sessionStorage.setItem(LEGACY_SESSION,'1');
+  }
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function forceAdminFullscreen(){
+    const modal=document.getElementById('vgAdminModal');
+    const panel=modal ? modal.querySelector('.vg-admin-panel') : null;
+    if(!modal || !panel) return;
+
+    if(isAdminLogged()){
+      syncSessionFlags();
+      panel.classList.add('vg-admin-fullscreen-mode');
+      panel.classList.remove('vg-login-mode');
+      document.body.classList.add('vg-admin-lock');
+
+      setImportant(modal,'position','fixed');
+      setImportant(modal,'inset','0');
+      setImportant(modal,'z-index','2147483000');
+      setImportant(modal,'width','100vw');
+      setImportant(modal,'height','100dvh');
+      setImportant(modal,'padding','0');
+      setImportant(modal,'margin','0');
+      setImportant(modal,'overflow','hidden');
+      setImportant(modal,'align-items','stretch');
+      setImportant(modal,'justify-content','stretch');
+
+      setImportant(panel,'position','fixed');
+      setImportant(panel,'inset','0');
+      setImportant(panel,'width','100vw');
+      setImportant(panel,'height','100dvh');
+      setImportant(panel,'max-width','none');
+      setImportant(panel,'max-height','none');
+      setImportant(panel,'min-width','0');
+      setImportant(panel,'min-height','0');
+      setImportant(panel,'margin','0');
+      setImportant(panel,'border-radius','0');
+      setImportant(panel,'transform','none');
+      setImportant(panel,'display','grid');
+      setImportant(panel,'grid-template-rows','auto auto minmax(0,1fr)');
+      setImportant(panel,'overflow','hidden');
+
+      const tabs=panel.querySelector('.vg-admin-tabs');
+      if(tabs) setImportant(tabs,'display','flex');
+    }else{
+      panel.classList.remove('vg-admin-fullscreen-mode');
+    }
+  }
+
+  function unlockIfClosed(){
+    const modal=document.getElementById('vgAdminModal');
+    if(!modal || !modal.classList.contains('active')) document.body.classList.remove('vg-admin-lock');
+  }
+
+  function installWrapper(){
+    const originalOpen=window.vgAdminOpen;
+    if(typeof originalOpen==='function' && !originalOpen.__vgFullFix){
+      const wrapped=function(){
+        syncSessionFlags();
+        const result=originalOpen.apply(this, arguments);
+        setTimeout(forceAdminFullscreen, 0);
+        setTimeout(forceAdminFullscreen, 80);
+        setTimeout(forceAdminFullscreen, 250);
+        return result;
+      };
+      wrapped.__vgFullFix=true;
+      window.vgAdminOpen=wrapped;
+    }
+
+    const originalClose=window.vgAdminClose;
+    if(typeof originalClose==='function' && !originalClose.__vgFullFix){
+      const wrappedClose=function(){
+        const result=originalClose.apply(this, arguments);
+        document.body.classList.remove('vg-admin-lock');
+        return result;
+      };
+      wrappedClose.__vgFullFix=true;
+      window.vgAdminClose=wrappedClose;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    syncSessionFlags();
+    installWrapper();
+    forceAdminFullscreen();
+    const modal=document.getElementById('vgAdminModal');
+    if(modal){
+      new MutationObserver(function(){
+        if(modal.classList.contains('active')) forceAdminFullscreen();
+        else unlockIfClosed();
+      }).observe(modal,{attributes:true,attributeFilter:['class']});
+    }
+  });
+
+  window.addEventListener('resize', function(){
+    setTimeout(forceAdminFullscreen, 60);
+  });
+
+  setTimeout(function(){syncSessionFlags();installWrapper();forceAdminFullscreen();}, 300);
+  setTimeout(function(){syncSessionFlags();installWrapper();forceAdminFullscreen();}, 1200);
+})();
+</script>
+
 </body>
 </html>
