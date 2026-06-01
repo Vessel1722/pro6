@@ -15043,5 +15043,298 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+
+<!-- VG PATCH: envío rápido de comprobante a WhatsApp sin esperar toda la subida -->
+<style id="vg-fast-proof-whatsapp-v74-style">
+  .vg-proof-fast-status{
+    margin-top:10px!important;
+    padding:10px 12px!important;
+    border-radius:14px!important;
+    border:1px solid rgba(25,230,193,.22)!important;
+    background:rgba(25,230,193,.065)!important;
+    color:#d9fffa!important;
+    font-size:.86rem!important;
+    line-height:1.35!important;
+    display:none;
+  }
+  .vg-proof-fast-status.active{display:block!important;}
+  .vg-proof-fast-status.warn{
+    border-color:rgba(255,180,92,.26)!important;
+    background:rgba(255,180,92,.07)!important;
+    color:#ffe8c5!important;
+  }
+  .vg-proof-fast-status.error{
+    border-color:rgba(255,77,109,.28)!important;
+    background:rgba(255,77,109,.08)!important;
+    color:#ffd9e1!important;
+  }
+  .vg-proof-fast-loading{
+    opacity:.82!important;
+    pointer-events:none!important;
+  }
+</style>
+<script id="vg-fast-proof-whatsapp-v74-script">
+(function(){
+  'use strict';
+
+  var CFG_KEY = 'vg_supabase_cfg_v1';
+  var WHATSAPP_FALLBACK = '526611078412';
+  var ORDER_DEDUPE_MS = 20000;
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function readCfg(){
+    try{
+      var cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+      return {url:cfg.url || window.VG_SUPABASE_URL || '', anon:cfg.anon || window.VG_SUPABASE_ANON_KEY || ''};
+    }catch(e){
+      return {url:window.VG_SUPABASE_URL || '', anon:window.VG_SUPABASE_ANON_KEY || ''};
+    }
+  }
+  function getClient(){
+    var cfg = readCfg();
+    if(!window.supabase || !cfg.url || !cfg.anon) return null;
+    window.__vgFastProofSB = window.__vgFastProofSB || {client:null, sig:''};
+    var sig = cfg.url + '|' + String(cfg.anon).slice(0,12);
+    if(!window.__vgFastProofSB.client || window.__vgFastProofSB.sig !== sig){
+      window.__vgFastProofSB.client = window.supabase.createClient(cfg.url, cfg.anon);
+      window.__vgFastProofSB.sig = sig;
+    }
+    return window.__vgFastProofSB.client;
+  }
+  function parseMoney(value){
+    if(typeof value === 'number') return value;
+    var txt = String(value || '').replace(/MXN|USD|\$/gi,' ').replace(/,/g,'');
+    var m = txt.match(/-?\d+(?:\.\d+)?/g);
+    return m && m.length ? Number(m[m.length - 1]) : 0;
+  }
+  function money(value){
+    var n = Number(value || 0);
+    if(!isFinite(n)) n = 0;
+    return '$' + n.toLocaleString('es-MX', {maximumFractionDigits:0}) + ' MXN';
+  }
+  function normalizeOrder(order){
+    if(typeof window.cartData === 'function'){
+      try{ order = window.cartData(); }catch(e){}
+    }
+    order = order || window.pendingPaymentOrder || {};
+    var items = Array.isArray(order.items) ? order.items.map(function(it){
+      return {
+        title:String(it.title || it.name || 'Pedido'),
+        option:String(it.option || it.variant || 'Opción seleccionada'),
+        price:parseMoney(it.price),
+        image:it.image || ''
+      };
+    }) : [];
+    var total = parseMoney(order.total);
+    if(!total) total = items.reduce(function(sum, it){ return sum + parseMoney(it.price); }, 0);
+    return {
+      source:order.source || 'whatsapp-checkout',
+      total:total,
+      items:items,
+      product_name:order.product_name || (items[0] && items[0].title) || 'Pedido',
+      product_option:order.product_option || (items[0] && items[0].option) || ''
+    };
+  }
+  function orderKey(order){
+    return JSON.stringify({source:order.source,total:order.total,items:order.items.map(function(i){return [i.title,i.option,i.price];})});
+  }
+  function proofStatus(text, type){
+    var box = qs('#paymentModal .proof-box');
+    if(!box) return;
+    var el = qs('#vgProofFastStatus');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'vgProofFastStatus';
+      el.className = 'vg-proof-fast-status';
+      box.appendChild(el);
+    }
+    el.className = 'vg-proof-fast-status active' + (type ? ' ' + type : '');
+    el.textContent = text || '';
+  }
+  function setButtonLoading(isLoading, text){
+    var btn = qs('#paymentModal .modal-actions .primary.whatsapp');
+    if(!btn) return;
+    if(isLoading){
+      btn.dataset.oldText = btn.textContent;
+      btn.textContent = text || 'Preparando WhatsApp...';
+      btn.classList.add('vg-proof-fast-loading');
+    }else{
+      btn.textContent = btn.dataset.oldText || 'Mandar comprobante por WhatsApp';
+      btn.classList.remove('vg-proof-fast-loading');
+    }
+  }
+  function openWaitWindow(){
+    var win = null;
+    try{
+      win = window.open('', '_blank');
+      if(win && win.document){
+        win.document.open();
+        win.document.write('<!doctype html><html><head><title>Preparando WhatsApp...</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;background:#070912;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;display:grid;place-items:center;min-height:100vh}.box{max-width:420px;padding:26px;text-align:center}.spin{width:42px;height:42px;border-radius:50%;border:4px solid rgba(255,255,255,.18);border-top-color:#19e6c1;margin:0 auto 18px;animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}p{color:#aab2c8;line-height:1.45}</style></head><body><div class="box"><div class="spin"></div><h2>Preparando WhatsApp</h2><p>Estamos registrando tu pedido. Esta ventana se abrirá en WhatsApp automáticamente.</p></div></body></html>');
+        win.document.close();
+      }
+    }catch(e){ win = null; }
+    return win;
+  }
+  async function insertOrder(client, order){
+    var first = order.items[0] || {};
+    var payload = {
+      source:order.source || 'whatsapp-checkout',
+      status:'pendiente',
+      total:Number(order.total || 0),
+      items:order.items,
+      proof:null,
+      proof_url:'',
+      payment_method:'pendiente',
+      product_name:first.title || order.product_name || 'Pedido',
+      product_option:first.option || order.product_option || '',
+      client_name:'Cliente WhatsApp',
+      client_phone:'',
+      client_email:'',
+      customer_name:'Cliente WhatsApp',
+      customer_phone:'',
+      customer_email:'',
+      notes:'Pedido registrado desde métodos de pago de la web. El comprobante se sube en segundo plano para abrir WhatsApp más rápido.'
+    };
+    var result = await client.from('orders').insert(payload).select().single();
+    if(result.error){
+      result = await client.from('orders').insert({
+        source:payload.source,
+        status:payload.status,
+        total:payload.total,
+        items:payload.items,
+        product_name:payload.product_name,
+        product_option:payload.product_option,
+        customer_name:'Cliente WhatsApp',
+        customer_email:'',
+        proof_url:''
+      }).select().single();
+    }
+    if(result.error) throw result.error;
+    return result.data;
+  }
+  function compressImage(file){
+    if(!file || !/^image\//i.test(file.type || '') || file.size < 850000){
+      return Promise.resolve(file);
+    }
+    return new Promise(function(resolve){
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function(){
+        try{
+          var max = 1600;
+          var w = img.naturalWidth || img.width;
+          var h = img.naturalHeight || img.height;
+          var scale = Math.min(1, max / Math.max(w, h));
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.round(w * scale));
+          canvas.height = Math.max(1, Math.round(h * scale));
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function(blob){
+            URL.revokeObjectURL(url);
+            if(blob) resolve(blob);
+            else resolve(file);
+          }, 'image/jpeg', 0.76);
+        }catch(e){
+          URL.revokeObjectURL(url);
+          resolve(file);
+        }
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); resolve(file); };
+      img.src = url;
+    });
+  }
+  async function uploadProofBackground(client, orderId, originalFile){
+    if(!client || !orderId || !originalFile) return null;
+    proofStatus('WhatsApp ya puede abrirse. Guardando comprobante en el panel...', 'warn');
+    var file = await compressImage(originalFile);
+    var originalName = originalFile.name || 'comprobante.jpg';
+    var ext = (originalName.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'') || 'jpg';
+    var path = String(orderId) + '/' + Date.now() + '-' + Math.random().toString(16).slice(2) + '.' + ext;
+    var upload = await client.storage.from('comprobantes').upload(path, file, {upsert:true, contentType:file.type || originalFile.type || 'image/jpeg'});
+    if(upload.error) throw upload.error;
+    var pub = client.storage.from('comprobantes').getPublicUrl(path);
+    var proof = {filename:originalName, path:path, url:pub.data.publicUrl, size:file.size || originalFile.size, type:file.type || originalFile.type || 'image/jpeg'};
+    await client.from('orders').update({proof:proof, proof_url:proof.url}).eq('id', orderId);
+    return proof;
+  }
+  function buildWhatsAppText(order, saved){
+    var lines = order.items.map(function(it, i){
+      return (i + 1) + '. ' + it.title + ' - ' + (it.option || 'Opción') + ' - ' + money(it.price);
+    }).join('\n');
+    return 'Hola, envío mi comprobante de pago.\n\nPedido #' + saved.id + '\n\n' + lines + '\n\nTotal: ' + money(order.total) + '\n\nEl comprobante fue cargado desde la web.';
+  }
+  function goWhatsApp(win, text){
+    var number = window.WHATSAPP_NUMBER || WHATSAPP_FALLBACK;
+    var url = 'https://wa.me/' + number + '?text=' + encodeURIComponent(text);
+    try{
+      if(win && !win.closed) win.location.href = url;
+      else window.open(url, '_blank');
+    }catch(e){
+      window.open(url, '_blank');
+    }
+  }
+
+  window.sendPaymentWhatsApp = async function(){
+    var order = normalizeOrder(window.pendingPaymentOrder);
+    if(!order.items.length){
+      alert('No hay pedido activo. Selecciona primero un producto o una oferta.');
+      return;
+    }
+    var input = qs('#proofInput');
+    var file = input && input.files && input.files[0] ? input.files[0] : null;
+    if(!file){
+      if(input) input.focus();
+      proofStatus('Sube el comprobante antes de mandar el pedido.', 'error');
+      alert('Sube el comprobante para confirmar la compra antes de mandar el mensaje por WhatsApp.');
+      return;
+    }
+    var client = getClient();
+    if(!client){
+      alert('Supabase no está configurado. Revisa la pestaña Supabase del panel administrador.');
+      return;
+    }
+
+    var popup = openWaitWindow();
+    setButtonLoading(true, 'Abriendo WhatsApp...');
+    proofStatus('Registrando pedido. WhatsApp abrirá en unos segundos...', 'warn');
+
+    try{
+      var key = orderKey(order);
+      var saved = null;
+      if(window.__vgFastPaymentOrder && window.__vgFastPaymentOrder.key === key && Date.now() - window.__vgFastPaymentOrder.time < ORDER_DEDUPE_MS){
+        saved = window.__vgFastPaymentOrder.order;
+      }
+      if(!saved){
+        saved = await insertOrder(client, order);
+        window.__vgFastPaymentOrder = {key:key, time:Date.now(), order:saved};
+      }
+
+      goWhatsApp(popup, buildWhatsAppText(order, saved));
+      proofStatus('WhatsApp abierto. El comprobante se está guardando en el panel...', 'warn');
+
+      uploadProofBackground(client, saved.id, file).then(function(proof){
+        if(proof){
+          proofStatus('Comprobante guardado correctamente en Supabase.');
+          if(typeof window.vgAdminLoadOrders === 'function') window.vgAdminLoadOrders();
+        }
+      }).catch(function(err){
+        console.warn('No se pudo subir comprobante en segundo plano:', err);
+        proofStatus('El pedido ya se registró, pero el comprobante tardó o falló al subir. Si no aparece en el panel, pídele al cliente que lo mande por WhatsApp.', 'error');
+      });
+
+      if(typeof window.vgAdminLoadOrders === 'function') setTimeout(function(){ window.vgAdminLoadOrders(); }, 900);
+    }catch(err){
+      try{ if(popup && !popup.closed) popup.close(); }catch(e){}
+      alert('No se pudo registrar el pedido: ' + (err && err.message ? err.message : 'error desconocido'));
+      proofStatus('No se pudo registrar el pedido. Intenta de nuevo.', 'error');
+    }finally{
+      setTimeout(function(){ setButtonLoading(false); }, 900);
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
