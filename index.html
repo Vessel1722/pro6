@@ -14804,5 +14804,244 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+<!-- VG UPDATE v73: admin stats reales + reinicio de ventas del panel -->
+<style id="vg-admin-stats-reset-v73-css">
+  #vgAdminResetSalesBtn,
+  .vg-admin-reset-sales-btn{
+    border:1px solid rgba(255,77,109,.38)!important;
+    background:linear-gradient(135deg,rgba(255,77,109,.92),rgba(130,24,48,.86))!important;
+    color:#fff!important;
+    border-radius:14px!important;
+    padding:11px 14px!important;
+    font-weight:950!important;
+    cursor:pointer!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.22),0 0 18px rgba(255,77,109,.10)!important;
+    white-space:nowrap!important;
+  }
+  #vgAdminResetSalesBtn:hover,
+  .vg-admin-reset-sales-btn:hover{
+    filter:brightness(1.06)!important;
+    transform:translateY(-1px)!important;
+  }
+  .vg-admin-reset-warning{
+    border:1px solid rgba(255,77,109,.24)!important;
+    background:rgba(255,77,109,.075)!important;
+    color:#ffdbe3!important;
+    border-radius:16px!important;
+    padding:11px 13px!important;
+    margin:0 0 14px!important;
+    font-size:.86rem!important;
+    line-height:1.42!important;
+  }
+  @media(max-width:960px){
+    #vgAdminOrders .vg-admin-tools{
+      grid-template-columns:1fr!important;
+    }
+    #vgAdminResetSalesBtn,
+    .vg-admin-reset-sales-btn{
+      width:100%!important;
+    }
+  }
+</style>
+<script id="vg-admin-stats-reset-v73-script">
+(function(){
+  'use strict';
+
+  var REVIEW_SOURCE = 'recommendation';
+  var RESET_SOURCE = 'admin-reset';
+  var wrappedLoad = false;
+  var wrappedRender = false;
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function money(value){
+    var n = Number(value || 0);
+    if(!isFinite(n)) n = 0;
+    return '$' + n.toLocaleString('es-MX', {maximumFractionDigits:0}) + ' MXN';
+  }
+  function parseMoney(value){
+    if(typeof value === 'number') return value;
+    var txt = String(value || '').replace(/MXN|USD|\$/gi, ' ').replace(/,/g, '');
+    var matches = txt.match(/-?\d+(?:\.\d+)?/g);
+    return matches && matches.length ? Number(matches[matches.length - 1]) : 0;
+  }
+  function getState(){
+    window.vgAdminState = window.vgAdminState || {orders:[], products:[], selectedOrderId:null};
+    if(!Array.isArray(window.vgAdminState.orders)) window.vgAdminState.orders = [];
+    return window.vgAdminState;
+  }
+  function getItems(order){
+    return Array.isArray(order && order.items) ? order.items : [];
+  }
+  function getTotal(order){
+    var total = parseMoney(order && order.total);
+    if(total > 0) return total;
+    total = getItems(order).reduce(function(sum, item){ return sum + parseMoney(item && item.price); }, 0);
+    if(total > 0) return total;
+    return parseMoney((order && (order.price_label || order.product_option || order.notes)) || 0);
+  }
+  function getProof(order){
+    return !!(order && ((order.proof && (order.proof.url || order.proof.path || order.proof.filename)) || order.proof_url));
+  }
+  function isRealSale(order){
+    if(!order) return false;
+    var source = String(order.source || '').toLowerCase();
+    var status = String(order.status || '').toLowerCase();
+    if(source === REVIEW_SOURCE || source === RESET_SOURCE) return false;
+    if(status === 'reiniciado' || status === 'borrado' || status === 'reset') return false;
+    return true;
+  }
+  function realOrders(){
+    return getState().orders.filter(isRealSale);
+  }
+  function renderRealStats(){
+    var stats = qs('#vgAdminStats');
+    if(!stats) return;
+    var orders = realOrders();
+    var total = orders.reduce(function(sum, row){ return sum + getTotal(row); }, 0);
+    var pending = orders.filter(function(row){ return String(row.status || 'pendiente').toLowerCase() === 'pendiente'; }).length;
+    var proofs = orders.filter(getProof).length;
+    stats.innerHTML =
+      '<div class="vg-admin-stat"><b>' + orders.length + '</b><span>Compras</span></div>' +
+      '<div class="vg-admin-stat"><b>' + money(total) + '</b><span>Total vendido</span></div>' +
+      '<div class="vg-admin-stat"><b>' + pending + '</b><span>Pendientes</span></div>' +
+      '<div class="vg-admin-stat"><b>' + proofs + '</b><span>Comprobantes</span></div>';
+  }
+  function ensureResetButton(){
+    var tools = qs('#vgAdminOrders .vg-admin-tools');
+    if(!tools || qs('#vgAdminResetSalesBtn')) return;
+    var btn = document.createElement('button');
+    btn.id = 'vgAdminResetSalesBtn';
+    btn.type = 'button';
+    btn.className = 'vg-admin-reset-sales-btn';
+    btn.textContent = 'Reiniciar ventas';
+    btn.onclick = function(ev){
+      ev.preventDefault();
+      if(typeof window.vgAdminResetSales === 'function') window.vgAdminResetSales();
+    };
+    tools.appendChild(btn);
+  }
+  function filterStateForSales(){
+    var state = getState();
+    state.orders = state.orders.filter(isRealSale);
+  }
+  function getSupabaseClient(){
+    if(window.vgAdminState && window.vgAdminState.sb) return window.vgAdminState.sb;
+    try{
+      var raw = localStorage.getItem('vg_supabase_cfg_v1') || '{}';
+      var cfg = JSON.parse(raw);
+      var url = cfg.url || window.VG_SUPABASE_URL || '';
+      var anon = cfg.anon || window.VG_SUPABASE_ANON_KEY || '';
+      if(window.supabase && url && anon){
+        window.vgAdminState = window.vgAdminState || {};
+        window.vgAdminState.sb = window.supabase.createClient(url, anon);
+        return window.vgAdminState.sb;
+      }
+    }catch(e){}
+    return null;
+  }
+  async function loadOrdersClean(){
+    var client = getSupabaseClient();
+    if(!client){
+      if(typeof window.vgAdminRenderOrders === 'function') window.vgAdminRenderOrders('Configura Supabase primero.');
+      renderRealStats();
+      ensureResetButton();
+      return;
+    }
+    var res = await client.from('orders').select('*').order('created_at', {ascending:false}).limit(500);
+    if(res.error){
+      if(typeof window.vgAdminRenderOrders === 'function') window.vgAdminRenderOrders(res.error.message);
+      renderRealStats();
+      ensureResetButton();
+      return;
+    }
+    getState().orders = (res.data || []).filter(isRealSale);
+    if(getState().orders[0] && !getState().selectedOrderId) getState().selectedOrderId = String(getState().orders[0].id);
+    renderRealStats();
+    if(typeof window.vgAdminRenderOrders === 'function') window.vgAdminRenderOrders();
+    ensureResetButton();
+  }
+  function wrapLoadOrders(){
+    if(wrappedLoad) return;
+    wrappedLoad = true;
+    window.vgAdminLoadOrders = loadOrdersClean;
+    window.vgAdminRenderStats = renderRealStats;
+  }
+  function wrapRenderOrders(){
+    if(wrappedRender || typeof window.vgAdminRenderOrders !== 'function') return;
+    wrappedRender = true;
+    var previousRender = window.vgAdminRenderOrders;
+    window.vgAdminRenderOrders = function(){
+      filterStateForSales();
+      var result = previousRender.apply(this, arguments);
+      renderRealStats();
+      ensureResetButton();
+      return result;
+    };
+  }
+  async function tryHardDelete(client){
+    try{
+      var del = await client.from('orders').delete().or('source.is.null,source.neq.' + RESET_SOURCE).neq('source', REVIEW_SOURCE);
+      if(!del.error) return {ok:true, mode:'delete'};
+      return {ok:false, error:del.error};
+    }catch(e){
+      return {ok:false, error:e};
+    }
+  }
+  async function softReset(client){
+    try{
+      var upd = await client.from('orders').update({source:RESET_SOURCE, status:'reiniciado'}).or('source.is.null,source.neq.' + REVIEW_SOURCE);
+      if(!upd.error) return {ok:true, mode:'soft-reset'};
+      return {ok:false, error:upd.error};
+    }catch(e){
+      return {ok:false, error:e};
+    }
+  }
+  window.vgAdminResetSales = async function(){
+    var orders = realOrders();
+    if(!orders.length){
+      alert('No hay ventas para reiniciar.');
+      renderRealStats();
+      return;
+    }
+    var total = orders.reduce(function(sum, row){ return sum + getTotal(row); }, 0);
+    var confirmText = 'Vas a limpiar ' + orders.length + ' compra(s) del panel y reiniciar el total mostrado (' + money(total) + ').\n\nLos pedidos nuevos seguirán entrando normalmente.\n\n¿Continuar?';
+    if(!confirm(confirmText)) return;
+    var second = prompt('Para confirmar escribe REINICIAR');
+    if(String(second || '').trim().toUpperCase() !== 'REINICIAR'){
+      alert('Reinicio cancelado.');
+      return;
+    }
+    var client = getSupabaseClient();
+    if(!client){ alert('Configura Supabase primero.'); return; }
+    var hard = await tryHardDelete(client);
+    if(!hard.ok){
+      var soft = await softReset(client);
+      if(!soft.ok){
+        alert('No se pudo reiniciar. Revisa las políticas RLS de Supabase. Error: ' + ((soft.error && soft.error.message) || (hard.error && hard.error.message) || 'desconocido'));
+        return;
+      }
+    }
+    getState().orders = [];
+    getState().selectedOrderId = null;
+    renderRealStats();
+    if(typeof window.vgAdminRenderOrders === 'function') window.vgAdminRenderOrders();
+    alert('Ventas reiniciadas. El panel quedó limpio para recibir pedidos nuevos.');
+  };
+  function boot(){
+    wrapLoadOrders();
+    wrapRenderOrders();
+    ensureResetButton();
+    renderRealStats();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  setTimeout(boot, 600);
+  setTimeout(boot, 1600);
+})();
+</script>
+
 </body>
 </html>
