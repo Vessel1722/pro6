@@ -5384,6 +5384,46 @@ window.WHATSAPP_NUMBER = "526611078412";
   }
 </style>
 
+
+
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JQBDC2D04T"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JQBDC2D04T', {
+      page_path: window.location.pathname + window.location.search + window.location.hash
+    });
+
+    // Registra cambios de URL internos sin recargar la página, por ejemplo links de productos.
+    (function(){
+      if (window.__vgGaRouterTracking) return;
+      window.__vgGaRouterTracking = true;
+
+      function trackPageView(){
+        if (typeof gtag !== 'function') return;
+        gtag('config', 'G-JQBDC2D04T', {
+          page_path: window.location.pathname + window.location.search + window.location.hash
+        });
+      }
+
+      var originalPushState = history.pushState;
+      var originalReplaceState = history.replaceState;
+
+      history.pushState = function(){
+        originalPushState.apply(this, arguments);
+        setTimeout(trackPageView, 0);
+      };
+
+      history.replaceState = function(){
+        originalReplaceState.apply(this, arguments);
+        setTimeout(trackPageView, 0);
+      };
+
+      window.addEventListener('popstate', trackPageView);
+    })();
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -15333,6 +15373,157 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
       setTimeout(function(){ setButtonLoading(false); }, 900);
     }
   };
+})();
+</script>
+
+
+<style id="vg-analytics-xbox-current-v75-css">
+  .vg-admin-analytics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+  .vg-analytics-card{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);border-radius:18px;padding:14px;min-height:86px}
+  .vg-analytics-card b{display:block;color:#fff;font-size:1.28rem;margin-bottom:5px}.vg-analytics-card span{color:#a7acba;font-size:.78rem;font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+  .vg-analytics-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.vg-analytics-box{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:18px;padding:14px;min-height:220px}.vg-analytics-box h3{margin:0 0 12px;color:#fff}.vg-analytics-row{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(255,255,255,.07);padding:9px 0;color:#dce4f8}.vg-analytics-row:last-child{border-bottom:0}.vg-analytics-row small{display:block;color:#8f9ab7;margin-top:3px}.vg-analytics-muted{color:#a7acba;line-height:1.45}.vg-admin-btn.danger.vg-danger-reset{background:rgba(255,77,109,.16)!important;border-color:rgba(255,77,109,.42)!important;color:#ffd7df!important}
+  .vg-xbox-current-modal{position:fixed;inset:0;z-index:15000;display:none;align-items:stretch;justify-content:stretch;background:rgba(0,0,0,.84);padding:0}.vg-xbox-current-modal.active{display:flex}.vg-xbox-current-card{width:100vw;height:100vh;background:radial-gradient(circle at 90% 0%,rgba(25,230,193,.10),transparent 28%),radial-gradient(circle at 0% 0%,rgba(139,92,246,.15),transparent 26%),#08090f;color:var(--text);display:flex;flex-direction:column;overflow:hidden}.vg-xbox-current-top{display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,.75fr);gap:14px;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.09);background:linear-gradient(135deg,rgba(17,25,49,.96),rgba(13,12,31,.96))}.vg-xbox-current-title h2{font-size:clamp(1.8rem,3.2vw,3.3rem);line-height:.95;margin:8px 0 8px;letter-spacing:-.04em;text-transform:uppercase}.vg-xbox-current-title p{margin:0;color:#a7acba;line-height:1.45;max-width:820px}.vg-xbox-current-quote{border:1px solid rgba(25,230,193,.18);background:rgba(255,255,255,.04);border-radius:20px;padding:14px}.vg-xbox-current-quote h3{margin:0 0 10px}.vg-xbox-current-form{display:grid;grid-template-columns:1fr 150px;gap:8px}.vg-xbox-current-form input,.vg-xbox-current-form select,.vg-xbox-current-form textarea,.vg-xbox-admin-form input,.vg-xbox-admin-form select{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);color:#fff;border-radius:14px;padding:11px 12px;outline:none}.vg-xbox-current-form textarea{grid-column:1/-1;min-height:58px;resize:vertical}.vg-xbox-current-form button{grid-column:1/-1}.vg-xbox-current-body{flex:1;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}.vg-xbox-current-controls{padding:12px 22px;display:grid;grid-template-columns:1fr 220px;gap:10px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02)}.vg-xbox-current-controls input,.vg-xbox-current-controls select{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);color:#fff;border-radius:16px;padding:12px 14px;outline:0}.vg-xbox-current-grid{overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;padding:16px 22px 28px}.vg-xbox-game-card{border:1px solid rgba(255,255,255,.10);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018)),#12141d;border-radius:20px;overflow:hidden;box-shadow:0 16px 38px rgba(0,0,0,.28);display:flex;flex-direction:column}.vg-xbox-game-cover{height:210px;background:#080b14;display:flex;align-items:center;justify-content:center;overflow:hidden}.vg-xbox-game-cover img{width:100%;height:100%;object-fit:contain;padding:8px}.vg-xbox-game-info{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}.vg-xbox-game-info h4{margin:0;color:#fff;line-height:1.18;min-height:42px}.vg-xbox-game-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:auto}.vg-xbox-platform{border:1px solid rgba(25,230,193,.25);background:rgba(25,230,193,.08);color:#d9fffa;border-radius:999px;padding:5px 8px;font-size:.68rem;font-weight:950}.vg-xbox-price{font-weight:950;color:#19e6c1}.vg-xbox-empty{grid-column:1/-1;border:1px dashed rgba(255,255,255,.18);border-radius:22px;padding:36px;text-align:center;color:#a7acba}.vg-xbox-current-close{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;cursor:pointer;z-index:4}.vg-xbox-tile{border-color:rgba(25,230,193,.28)!important}.vg-xbox-admin-form{display:grid;grid-template-columns:1.4fr 160px 130px 1fr 140px auto;gap:9px;margin-bottom:14px}.vg-xbox-admin-list{display:grid;gap:10px}.vg-xbox-admin-row{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:16px;padding:10px}.vg-xbox-admin-row img{width:62px;height:62px;object-fit:contain;background:#070b18;border-radius:12px}.vg-xbox-admin-row b{display:block;color:#fff}.vg-xbox-admin-row small{color:#a7acba}.vg-xbox-admin-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  @media(max-width:980px){.vg-admin-analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vg-analytics-layout,.vg-xbox-current-top{grid-template-columns:1fr}.vg-xbox-current-controls{grid-template-columns:1fr}.vg-xbox-current-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px}.vg-xbox-game-cover{height:150px}.vg-xbox-admin-form{grid-template-columns:1fr}.vg-xbox-admin-row{grid-template-columns:52px 1fr}.vg-xbox-admin-actions{grid-column:1/-1;justify-content:flex-start}.vg-xbox-current-top{padding:14px 14px 10px}.vg-xbox-current-title p{display:none}}
+</style>
+
+<div class="vg-xbox-current-modal" id="vgXboxCurrentModal" aria-hidden="true">
+  <div class="vg-xbox-current-card">
+    <button class="vg-xbox-current-close" type="button" onclick="closeXboxCurrentModal()">×</button>
+    <div class="vg-xbox-current-top">
+      <div class="vg-xbox-current-title"><span class="badge">Xbox One / Xbox Series</span><h2>Juegos Xbox actuales</h2><p>Consulta juegos disponibles para Xbox One y Xbox Series. Si no encuentras el título que buscas, deja una cotización y la enviamos directo por WhatsApp.</p></div>
+      <aside class="vg-xbox-current-quote"><h3>Cotizar un juego</h3><div class="vg-xbox-current-form"><input id="vgXboxQuoteName" placeholder="Nombre del juego que buscas"><select id="vgXboxQuotePlatform"><option>Xbox Series</option><option>Xbox One</option><option>Xbox One / Series</option></select><textarea id="vgXboxQuoteNotes" placeholder="Edición, cuenta, región o detalles opcionales"></textarea><button class="primary whatsapp" type="button" onclick="sendXboxCurrentQuote()">Cotizar por WhatsApp</button></div></aside>
+    </div>
+    <div class="vg-xbox-current-body"><div class="vg-xbox-current-controls"><input id="vgXboxCurrentSearch" placeholder="Buscar juego disponible..." oninput="renderXboxCurrentGames()"><select id="vgXboxCurrentPlatform" onchange="renderXboxCurrentGames()"><option value="all">Todas las plataformas</option><option value="Xbox Series">Xbox Series</option><option value="Xbox One">Xbox One</option><option value="Xbox One / Series">Xbox One / Series</option></select></div><div class="vg-xbox-current-grid" id="vgXboxCurrentGrid"></div></div>
+  </div>
+</div>
+
+<script id="vg-analytics-xbox-current-v75-script">
+(function(){
+  'use strict';
+  var ANALYTICS_TABLE = 'vg_analytics_events';
+  var XBOX_TABLE = 'vg_xbox_games';
+  var CFG_KEY = 'vg_supabase_cfg_v1';
+  var LS_XBOX = 'vg_xbox_current_games_local_v1';
+  var SESSION_KEY = 'vg_analytics_session_v1';
+  var CITY_KEY = 'vg_analytics_city_cache_v1';
+  var state = window.vgXBoxCurrentState = window.vgXBoxCurrentState || {games:[], loaded:false, selectedEditId:null, analytics:[]};
+
+  function $(s,r){return (r||document).querySelector(s)}
+  function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function esc(v){return String(v == null ? '' : v).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+  function money(n){return '$'+Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0})+' MXN'}
+  function readCfg(){try{var c=JSON.parse(localStorage.getItem(CFG_KEY)||'{}');return {url:c.url||window.VG_SUPABASE_URL||'',anon:c.anon||window.VG_SUPABASE_ANON_KEY||''}}catch(e){return {url:window.VG_SUPABASE_URL||'',anon:window.VG_SUPABASE_ANON_KEY||''}}}
+  function getSB(){var c=readCfg(); if(!window.supabase||!c.url||!c.anon)return null; window.__vgAdminExtraSB=window.__vgAdminExtraSB||{client:null,sig:''}; var sig=c.url+'|'+String(c.anon).slice(0,14); if(!window.__vgAdminExtraSB.client||window.__vgAdminExtraSB.sig!==sig){window.__vgAdminExtraSB.client=window.supabase.createClient(c.url,c.anon); window.__vgAdminExtraSB.sig=sig;} return window.__vgAdminExtraSB.client;}
+  function getServices(){try{if(typeof SERVICES!=='undefined'&&Array.isArray(SERVICES))return SERVICES}catch(e){} return Array.isArray(window.SERVICES)?window.SERVICES:[]}
+  function slug(v){return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80)}
+  function cleanUrl(params){var url = new URL(window.location.href); url.search=''; url.hash=''; if(params){Object.keys(params).forEach(function(k){if(params[k] != null && params[k] !== '')url.searchParams.set(k,params[k])})} history.replaceState({},'',url.pathname+(url.search||''));}
+  function getSession(){var s=localStorage.getItem(SESSION_KEY); if(!s){s='vg_'+Date.now()+'_'+Math.random().toString(16).slice(2);localStorage.setItem(SESSION_KEY,s)} return s;}
+  function readCity(){try{return JSON.parse(localStorage.getItem(CITY_KEY)||'{}')}catch(e){return {}}}
+  function saveCity(c){try{localStorage.setItem(CITY_KEY,JSON.stringify(c||{}))}catch(e){}}
+  function loadCity(){var cached=readCity(); if(cached && cached._ts && Date.now()-cached._ts<86400000)return Promise.resolve(cached); return Promise.race([fetch('https://ipapi.co/json/').then(function(r){return r.json()}).then(function(d){var c={city:d.city||'',region:d.region||'',country:d.country_name||d.country||'',_ts:Date.now()};saveCity(c);return c}).catch(function(){return cached||{}}), new Promise(function(res){setTimeout(function(){res(cached||{})},1600)})]);}
+  async function track(eventType, data){
+    data=data||{};
+    var geo=readCity();
+    var row={session_id:getSession(),event_type:eventType,product_id:data.product_id||null,product_name:data.product_name||null,section:data.section||null,scroll_depth:data.scroll_depth||null,city:geo.city||'',region:geo.region||'',country:geo.country||'',metadata:data.metadata||{}};
+    var client=getSB();
+    if(!client)return;
+    try{await client.from(ANALYTICS_TABLE).insert(row)}catch(e){}
+  }
+  window.vgTrackEvent = track;
+
+  function installAnalytics(){
+    loadCity();
+    track('page_view',{section:'inicio',metadata:{path:location.pathname,search:location.search,referrer:document.referrer||''}});
+    var milestones=[25,50,75,90], sent={};
+    window.addEventListener('scroll',function(){
+      var h=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)-innerHeight; if(h<=0)return; var pct=Math.round(Math.min(100,Math.max(0,(scrollY/h)*100)));
+      milestones.forEach(function(m){if(pct>=m&&!sent[m]){sent[m]=1;track('scroll_depth',{scroll_depth:m,metadata:{path:location.pathname}})}});
+    },{passive:true});
+    var oldShow=window.showSection;
+    if(typeof oldShow==='function'&&!oldShow.__vgAnalyticsWrapped){
+      var wrapped=function(cat){track('section_view',{section:String(cat||'all')}); return oldShow.apply(this,arguments)}; wrapped.__vgAnalyticsWrapped=true; window.showSection=wrapped;
+    }
+    var oldOpenRetro=window.openRetroModal;
+    if(typeof oldOpenRetro==='function'&&!oldOpenRetro.__vgAnalyticsWrapped){
+      var rw=function(){track('section_view',{section:'xbox-retro'}); return oldOpenRetro.apply(this,arguments)}; rw.__vgAnalyticsWrapped=true; window.openRetroModal=rw;
+    }
+    var oldOpen=window.openProduct;
+    if(typeof oldOpen==='function'&&!oldOpen.__vgXboxCurrentWrapped){
+      var ow=function(id){
+        var p=getServices().find(function(x){return String(x.id)===String(id)});
+        if(p){track('product_view',{product_id:String(p.id),product_name:p.title||p.displayTitle||'',section:p.category||'',metadata:{price:p.priceLabel||''}})}
+        if(p && /cotizar\s*juego\s*xbox/i.test(String(p.title||''))){ openXboxCurrentModal(); return; }
+        return oldOpen.apply(this,arguments);
+      };
+      ow.__vgXboxCurrentWrapped=true; window.openProduct=ow;
+    }
+  }
+
+  function localGames(){try{return JSON.parse(localStorage.getItem(LS_XBOX)||'[]')}catch(e){return []}}
+  function saveLocalGames(arr){try{localStorage.setItem(LS_XBOX,JSON.stringify(arr||[]))}catch(e){}}
+  async function loadXboxGames(){
+    var client=getSB();
+    if(!client){state.games=localGames();state.loaded=true;renderXboxCurrentGames();renderXboxAdminGames('Sin Supabase: los juegos se guardan solo en este navegador.');return;}
+    var res=await client.from(XBOX_TABLE).select('*').order('created_at',{ascending:false});
+    if(res.error){state.games=localGames();state.loaded=true;renderXboxCurrentGames();renderXboxAdminGames('No se pudo leer la tabla '+XBOX_TABLE+'. Crea la tabla en Supabase para publicar juegos a todos los clientes.');return;}
+    state.games=(res.data||[]).map(normalizeGame); state.loaded=true; renderXboxCurrentGames(); renderXboxAdminGames();
+  }
+  function normalizeGame(g){return {id:g.id||('local_'+Date.now()),title:g.title||g.name||'Juego Xbox',platform:g.platform||'Xbox One / Series',price:Number(g.price||0),image:g.image||g.cover_url||'',status:g.status||'active',created_at:g.created_at||new Date().toISOString()}}
+  function activeGames(){return (state.games||[]).filter(function(g){return String(g.status||'active')==='active'})}
+  window.renderXboxCurrentGames=function(){
+    var grid=$('#vgXboxCurrentGrid'); if(!grid)return;
+    var q=String($('#vgXboxCurrentSearch')&&$('#vgXboxCurrentSearch').value||'').toLowerCase(); var pf=String($('#vgXboxCurrentPlatform')&&$('#vgXboxCurrentPlatform').value||'all');
+    var list=activeGames().filter(function(g){return (pf==='all'||g.platform===pf) && (!q||[g.title,g.platform,g.price].join(' ').toLowerCase().indexOf(q)>=0)});
+    if(!list.length){grid.innerHTML='<div class="vg-xbox-empty"><b>No hay juegos Xbox One / Series cargados todavía.</b><br>Agrega juegos desde el panel admin o usa el cotizador para pedir un título específico.</div>';return;}
+    grid.innerHTML=list.map(function(g){return '<article class="vg-xbox-game-card"><div class="vg-xbox-game-cover"><img loading="lazy" decoding="async" src="'+esc(g.image||'portada.png')+'" alt="'+esc(g.title)+'" onerror="this.src=\'portada.png\'"></div><div class="vg-xbox-game-info"><h4>'+esc(g.title)+'</h4><div class="vg-xbox-game-meta"><span class="vg-xbox-platform">'+esc(g.platform)+'</span><span class="vg-xbox-price">'+(Number(g.price)>0?money(g.price):'Cotizar')+'</span></div><button class="primary whatsapp" type="button" onclick="buyXboxCurrentGame(\''+esc(g.id)+'\')">'+(Number(g.price)>0?'Comprar / métodos de pago':'Cotizar')+'</button></div></article>'}).join('');
+  };
+  window.openXboxCurrentModal=function(){
+    var m=$('#vgXboxCurrentModal'); if(!m)return; m.classList.add('active'); m.setAttribute('aria-hidden','false'); cleanUrl({seccion:'xbox-one-series'}); track('section_view',{section:'xbox-one-series'}); if(!state.loaded)loadXboxGames(); else renderXboxCurrentGames();
+  };
+  window.closeXboxCurrentModal=function(){var m=$('#vgXboxCurrentModal'); if(m){m.classList.remove('active');m.setAttribute('aria-hidden','true')} var u=new URL(location.href); if(u.searchParams.get('seccion')==='xbox-one-series')cleanUrl(null);};
+  window.buyXboxCurrentGame=function(id){var g=state.games.find(function(x){return String(x.id)===String(id)}); if(!g)return; track('product_view',{product_id:String(g.id),product_name:g.title,section:'xbox-one-series',metadata:{platform:g.platform,price:g.price}}); if(Number(g.price)>0&&typeof window.openPaymentModal==='function'){closeXboxCurrentModal(); window.openPaymentModal({items:[{title:g.title,option:g.platform,price:Number(g.price),image:g.image}],total:Number(g.price),source:'xbox-one-series'});return;} $('#vgXboxQuoteName').value=g.title; $('#vgXboxQuotePlatform').value=g.platform; sendXboxCurrentQuote();};
+  window.sendXboxCurrentQuote=async function(){
+    var name=String($('#vgXboxQuoteName')&&$('#vgXboxQuoteName').value||'').trim(); var platform=String($('#vgXboxQuotePlatform')&&$('#vgXboxQuotePlatform').value||'Xbox One / Series'); var notes=String($('#vgXboxQuoteNotes')&&$('#vgXboxQuoteNotes').value||'').trim();
+    if(!name){alert('Escribe el nombre del juego que quieres cotizar.');return;}
+    var item={title:'Cotización juego Xbox',option:name+' · '+platform+(notes?' · '+notes:''),price:0};
+    var client=getSB();
+    if(client){try{await client.from('orders').insert({source:'xbox_quote',status:'pendiente',total:0,items:[item],product_name:'Cotización juego Xbox',product_option:item.option,customer_name:'Cliente WhatsApp',notes:'Cotización Xbox One / Series: '+item.option})}catch(e){}}
+    track('quote_request',{section:'xbox-one-series',product_name:name,metadata:{platform:platform,notes:notes}});
+    var msg='Hola, quiero cotizar este juego para Xbox.\n\nJuego: '+name+'\nPlataforma: '+platform+(notes?'\nDetalles: '+notes:'');
+    window.open('https://wa.me/'+(window.WHATSAPP_NUMBER||'526611078412')+'?text='+encodeURIComponent(msg),'_blank');
+  };
+
+  function ensureXboxTile(){var home=$('#homeTiles'); if(home&&!$('#vgXboxCurrentTile')){var tile=document.createElement('article');tile.id='vgXboxCurrentTile';tile.className='service-carousel-card vg-xbox-tile';tile.onclick=openXboxCurrentModal;tile.innerHTML='<img decoding="async" loading="lazy" src="https://i.imgur.com/soHmMpn.jpg" alt="Xbox One y Series" referrerpolicy="no-referrer" onerror="this.src=\'portada.png\'"><div class="service-carousel-info"><span class="tag">Xbox One / Series</span><b>Juegos Xbox actuales</b><small>Cotiza títulos o compra juegos disponibles.</small><div class="service-carousel-price">Ver catálogo</div></div>';home.insertBefore(tile,home.firstChild)}}
+  function patchHome(){var old=window.renderHome; if(typeof old==='function'&&!old.__vgXboxTileWrapped){var nw=function(){var r=old.apply(this,arguments);setTimeout(ensureXboxTile,30);return r}; nw.__vgXboxTileWrapped=true; window.renderHome=nw} setTimeout(ensureXboxTile,500); setTimeout(ensureXboxTile,1500)}
+
+  function activateAdminTab(name){$$('.vg-admin-tab').forEach(function(b){b.classList.toggle('active',b.dataset.tab===name)}); $$('.vg-admin-section').forEach(function(s){s.classList.remove('active')}); var sec=$('#vgAdmin'+name.charAt(0).toUpperCase()+name.slice(1)); if(sec)sec.classList.add('active'); if(name==='analytics')loadAnalyticsAdmin(); if(name==='xboxcurrent')loadXboxGames();}
+  function ensureAdminSections(){
+    var tabs=$('.vg-admin-tabs'), content=$('.vg-admin-content'); if(!tabs||!content)return;
+    if(!$('.vg-admin-tab[data-tab="analytics"]',tabs)){var a=document.createElement('button');a.className='vg-admin-tab';a.dataset.tab='analytics';a.textContent='Analítica';a.onclick=function(){activateAdminTab('analytics')};tabs.appendChild(a)}
+    if(!$('#vgAdminAnalytics',content)){var sec=document.createElement('section');sec.className='vg-admin-section';sec.id='vgAdminAnalytics';sec.innerHTML='<div class="vg-admin-tools"><button class="vg-admin-btn primary" onclick="loadAnalyticsAdmin()">Actualizar analítica</button><button class="vg-admin-btn danger vg-danger-reset" onclick="resetAnalyticsAdmin()">Reiniciar analítica</button></div><div class="vg-admin-note vg-admin-ok">Este panel muestra datos internos guardados en Supabase: visitas, productos vistos, scroll y ciudad aproximada. Google Analytics real sigue disponible en GA4.</div><div id="vgAdminAnalyticsBody"></div>';content.appendChild(sec)}
+    if(!$('.vg-admin-tab[data-tab="xboxcurrent"]',tabs)){var x=document.createElement('button');x.className='vg-admin-tab';x.dataset.tab='xboxcurrent';x.textContent='Xbox One / Series';x.onclick=function(){activateAdminTab('xboxcurrent')};tabs.appendChild(x)}
+    if(!$('#vgAdminXboxcurrent',content)){var xs=document.createElement('section');xs.className='vg-admin-section';xs.id='vgAdminXboxcurrent';xs.innerHTML='<div class="vg-admin-note vg-admin-ok"><b>Catálogo Xbox One / Series:</b> agrega aquí los juegos que tienes disponibles. Se muestran en la nueva ventana pública de Xbox One / Series.</div><div class="vg-xbox-admin-form"><input id="vgXboxAdminTitle" placeholder="Nombre del juego"><select id="vgXboxAdminPlatform"><option>Xbox Series</option><option>Xbox One</option><option>Xbox One / Series</option></select><input id="vgXboxAdminPrice" type="number" min="0" placeholder="Precio MXN"><input id="vgXboxAdminImage" placeholder="URL de portada"><select id="vgXboxAdminStatus"><option value="active">Activo</option><option value="soldout">Agotado</option><option value="hidden">Oculto</option></select><button class="vg-admin-btn primary" onclick="saveXboxAdminGame()">Guardar</button></div><div class="vg-admin-tools"><button class="vg-admin-btn" onclick="clearXboxAdminForm()">Limpiar formulario</button><button class="vg-admin-btn" onclick="loadXboxGames()">Recargar juegos</button></div><div id="vgXboxAdminMessage" class="vg-analytics-muted"></div><div class="vg-xbox-admin-list" id="vgXboxAdminList"></div>';content.appendChild(xs)}
+  }
+  window.renderXboxAdminGames=function(message){var box=$('#vgXboxAdminList'); if(!box)return; var msg=$('#vgXboxAdminMessage'); if(msg)msg.textContent=message||''; if(!state.games.length){box.innerHTML='<div class="vg-admin-note">Aún no hay juegos cargados.</div>';return;} box.innerHTML=state.games.map(function(g){return '<div class="vg-xbox-admin-row"><img src="'+esc(g.image||'portada.png')+'" onerror="this.src=\'portada.png\'" alt=""><div><b>'+esc(g.title)+'</b><small>'+esc(g.platform)+' · '+(Number(g.price)>0?money(g.price):'Cotizar')+' · '+esc(g.status||'active')+'</small></div><div class="vg-xbox-admin-actions"><button class="vg-admin-btn" onclick="editXboxAdminGame(\''+esc(g.id)+'\')">Editar</button><button class="vg-admin-btn danger" onclick="deleteXboxAdminGame(\''+esc(g.id)+'\')">Borrar</button></div></div>'}).join('');};
+  window.clearXboxAdminForm=function(){state.selectedEditId=null; ['vgXboxAdminTitle','vgXboxAdminPrice','vgXboxAdminImage'].forEach(function(id){var el=$('#'+id); if(el)el.value=''}); var p=$('#vgXboxAdminPlatform'); if(p)p.value='Xbox Series'; var st=$('#vgXboxAdminStatus'); if(st)st.value='active'};
+  window.editXboxAdminGame=function(id){var g=state.games.find(function(x){return String(x.id)===String(id)}); if(!g)return; state.selectedEditId=id; $('#vgXboxAdminTitle').value=g.title||''; $('#vgXboxAdminPlatform').value=g.platform||'Xbox Series'; $('#vgXboxAdminPrice').value=Number(g.price||0); $('#vgXboxAdminImage').value=g.image||''; $('#vgXboxAdminStatus').value=g.status||'active'; activateAdminTab('xboxcurrent')};
+  window.saveXboxAdminGame=async function(){var title=String($('#vgXboxAdminTitle').value||'').trim(); if(!title){alert('Escribe el nombre del juego.');return;} var game={title:title,platform:$('#vgXboxAdminPlatform').value||'Xbox Series',price:Number($('#vgXboxAdminPrice').value||0),image:String($('#vgXboxAdminImage').value||'').trim(),status:$('#vgXboxAdminStatus').value||'active',updated_at:new Date().toISOString()}; var client=getSB(); if(client){var id=state.selectedEditId; var res=id?await client.from(XBOX_TABLE).update(game).eq('id',id):await client.from(XBOX_TABLE).insert(game); if(res.error){alert('No se pudo guardar en Supabase: '+res.error.message); return;}} else {var arr=localGames(); if(state.selectedEditId){arr=arr.map(function(x){return String(x.id)===String(state.selectedEditId)?Object.assign({},x,game):x})}else{game.id='local_'+Date.now();game.created_at=new Date().toISOString();arr.unshift(game)} saveLocalGames(arr)} clearXboxAdminForm(); await loadXboxGames();};
+  window.deleteXboxAdminGame=async function(id){if(!confirm('¿Borrar este juego del catálogo Xbox One / Series?'))return; var client=getSB(); if(client){var res=await client.from(XBOX_TABLE).delete().eq('id',id); if(res.error){alert('No se pudo borrar: '+res.error.message); return;}} else {saveLocalGames(localGames().filter(function(x){return String(x.id)!==String(id)}))} await loadXboxGames();};
+  window.loadXboxGames=loadXboxGames;
+
+  function groupCount(rows,keyFn){var map={}; rows.forEach(function(r){var k=keyFn(r)||'Sin dato'; map[k]=(map[k]||0)+1}); return Object.keys(map).map(function(k){return {name:k,count:map[k]}}).sort(function(a,b){return b.count-a.count}).slice(0,8)}
+  window.loadAnalyticsAdmin=async function(){
+    var body=$('#vgAdminAnalyticsBody'); if(!body)return; body.innerHTML='<div class="vg-admin-note">Cargando analítica...</div>'; var client=getSB(); if(!client){body.innerHTML='<div class="vg-admin-note">Configura Supabase para guardar analítica.</div>';return;}
+    var res=await client.from(ANALYTICS_TABLE).select('*').order('created_at',{ascending:false}).limit(2000);
+    if(res.error){body.innerHTML='<div class="vg-admin-note">No pude leer '+ANALYTICS_TABLE+': '+esc(res.error.message)+'<br><br>Crea la tabla en Supabase con el SQL que te dejo en la respuesta.</div>';return;}
+    var rows=res.data||[]; state.analytics=rows; var visits=rows.filter(function(r){return r.event_type==='page_view'}); var sessions={}; visits.forEach(function(r){sessions[r.session_id]=1}); var productViews=rows.filter(function(r){return r.event_type==='product_view'}); var scrolls=rows.filter(function(r){return r.event_type==='scroll_depth'&&r.scroll_depth}); var maxBySession={}; scrolls.forEach(function(r){var sid=r.session_id||'s'; maxBySession[sid]=Math.max(maxBySession[sid]||0,Number(r.scroll_depth||0))}); var maxVals=Object.keys(maxBySession).map(function(k){return maxBySession[k]}); var avgScroll=maxVals.length?Math.round(maxVals.reduce(function(a,b){return a+b},0)/maxVals.length):0; var cities=groupCount(rows,function(r){return [r.city,r.region].filter(Boolean).join(', ')}); var products=groupCount(productViews,function(r){return r.product_name});
+    body.innerHTML='<div class="vg-admin-analytics-grid"><div class="vg-analytics-card"><b>'+Object.keys(sessions).length+'</b><span>Visitantes</span></div><div class="vg-analytics-card"><b>'+visits.length+'</b><span>Visitas</span></div><div class="vg-analytics-card"><b>'+productViews.length+'</b><span>Productos vistos</span></div><div class="vg-analytics-card"><b>'+avgScroll+'%</b><span>Scroll promedio</span></div></div><div class="vg-analytics-layout"><div class="vg-analytics-box"><h3>Productos más vistos</h3>'+(products.length?products.map(function(x){return '<div class="vg-analytics-row"><div><b>'+esc(x.name)+'</b><small>Vistas de producto</small></div><strong>'+x.count+'</strong></div>'}).join(''):'<p class="vg-analytics-muted">Aún no hay productos vistos.</p>')+'</div><div class="vg-analytics-box"><h3>Ciudades</h3>'+(cities.length?cities.map(function(x){return '<div class="vg-analytics-row"><div><b>'+esc(x.name)+'</b><small>Ciudad aproximada por IP</small></div><strong>'+x.count+'</strong></div>'}).join(''):'<p class="vg-analytics-muted">Aún no hay ciudad registrada.</p>')+'</div></div>';
+  };
+  window.resetAnalyticsAdmin=async function(){if(!confirm('Esto borra los eventos de analítica interna. ¿Continuar?'))return; var client=getSB(); if(!client){alert('Configura Supabase primero.');return;} var res=await client.from(ANALYTICS_TABLE).delete().neq('id',0); if(res.error){alert('No se pudo reiniciar: '+res.error.message);return;} loadAnalyticsAdmin();};
+
+  function boot(){installAnalytics();patchHome();ensureAdminSections(); if(new URLSearchParams(location.search).get('seccion')==='xbox-one-series')setTimeout(openXboxCurrentModal,700); setTimeout(loadXboxGames,1000);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot); else boot();
+  document.addEventListener('click',function(e){var m=$('#vgXboxCurrentModal'); if(e.target===m)closeXboxCurrentModal();});
 })();
 </script>
 
