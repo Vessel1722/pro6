@@ -15863,35 +15863,212 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 </style>
 
 
-
-<!-- VG PATCH FINAL: ACTAS GOB grande, estable y sin título encimado -->
-<style id="vg-actas-gob-final-sin-titulo-v85">
-  #productModal.vg-actas-pro-modal{padding:16px!important;align-items:stretch!important;justify-content:center!important;background:rgba(0,0,0,.84)!important;}
-  #productModal.vg-actas-pro-modal .modal-card{width:min(1700px,calc(100vw - 32px))!important;height:calc(100vh - 32px)!important;max-width:none!important;max-height:none!important;border-radius:30px!important;grid-template-columns:210px minmax(0,1fr)!important;overflow:hidden!important;}
-  #productModal.vg-actas-pro-modal .modal-img{min-height:0!important;height:100%!important;padding:16px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
-  #productModal.vg-actas-pro-modal .modal-img img{width:100%!important;height:auto!important;max-height:64vh!important;object-fit:contain!important;}
-  #productModal.vg-actas-pro-modal .modal-body{padding:18px 24px 0!important;min-height:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) auto!important;}
-  #productModal.vg-actas-pro-modal #modalTitle{font-size:clamp(2rem,2.8vw,3.65rem)!important;line-height:.94!important;margin:0 62px 10px 0!important;}
-  #productModal.vg-actas-pro-modal #modalDesc,#productModal.vg-actas-pro-modal #vgActasModalLegalNote,#productModal.vg-actas-pro-modal .modal-body h3{display:none!important;margin:0!important;padding:0!important;height:0!important;min-height:0!important;overflow:hidden!important;}
-  #productModal.vg-actas-pro-modal .modal-delivery-note{margin:0 0 12px!important;padding:12px 15px!important;border-radius:17px!important;font-size:.9rem!important;line-height:1.3!important;}
-  #productModal.vg-actas-pro-modal #modalOptions{margin-top:0!important;min-height:0!important;max-height:none!important;overflow:auto!important;display:grid!important;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))!important;gap:13px!important;align-content:start!important;padding:2px 10px 104px 0!important;scrollbar-width:thin!important;}
-  #productModal.vg-actas-pro-modal #modalOptions .option{min-height:82px!important;margin:0!important;padding:17px 18px!important;border-radius:22px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;}
-  #productModal.vg-actas-pro-modal #modalOptions .option b{font-size:1.05rem!important;line-height:1.15!important;text-transform:uppercase!important;font-weight:950!important;}
-  #productModal.vg-actas-pro-modal #modalOptions .option strong{font-size:1.18rem!important;white-space:nowrap!important;margin-left:auto!important;}
-  #productModal.vg-actas-pro-modal .modal-actions{left:238px!important;right:24px!important;bottom:10px!important;}
-  @media(max-width:820px){#productModal.vg-actas-pro-modal{padding:0!important;}#productModal.vg-actas-pro-modal .modal-card{width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;grid-template-columns:1fr!important;}#productModal.vg-actas-pro-modal .modal-img{display:none!important;}#productModal.vg-actas-pro-modal .modal-body{padding:12px 12px 0!important;grid-template-rows:auto auto minmax(0,1fr) auto!important;}#productModal.vg-actas-pro-modal #modalTitle{font-size:1.75rem!important;line-height:1!important;margin:6px 48px 10px 0!important;}#productModal.vg-actas-pro-modal .modal-delivery-note{font-size:.8rem!important;padding:10px 11px!important;margin-bottom:9px!important;}#productModal.vg-actas-pro-modal #modalOptions{grid-template-columns:1fr!important;gap:8px!important;padding:2px 2px 96px 0!important;}#productModal.vg-actas-pro-modal #modalOptions .option{min-height:62px!important;padding:12px!important;border-radius:16px!important;}#productModal.vg-actas-pro-modal #modalOptions .option b{font-size:.88rem!important;}#productModal.vg-actas-pro-modal #modalOptions .option strong{font-size:.96rem!important;}#productModal.vg-actas-pro-modal .modal-actions{left:12px!important;right:12px!important;bottom:8px!important;}}
+<!-- VG UPDATE v91: admin Xbox Retro + edición de imágenes de servicios -->
+<style id="vg-admin-retro-service-images-v91-css">
+  .vg-img-admin-row{display:grid!important;grid-template-columns:120px minmax(0,1fr) 120px!important;gap:10px!important;align-items:center!important;margin:12px 0!important;padding:10px!important;border:1px solid rgba(25,230,193,.15)!important;background:rgba(25,230,193,.045)!important;border-radius:16px!important}
+  .vg-img-admin-row img{width:120px!important;height:76px!important;object-fit:cover!important;border-radius:12px!important;background:#070b18!important;border:1px solid rgba(255,255,255,.09)!important}
+  .vg-img-admin-row .vg-admin-input{min-width:0!important;width:100%!important}
+  .vg-img-admin-row small{display:block!important;color:#a7acba!important;font-size:.74rem!important;margin-top:5px!important;line-height:1.25!important}
+  .vg-img-test-btn{border:1px solid rgba(25,230,193,.24)!important;background:rgba(25,230,193,.08)!important;color:#dffff9!important;border-radius:12px!important;padding:10px 12px!important;font-size:.76rem!important;font-weight:950!important;cursor:pointer!important}
+  #vgAdminRetro .vg-admin-note{margin-bottom:14px!important}
+  .vg-retro-admin-form{display:grid!important;grid-template-columns:minmax(240px,1.25fr) 170px 130px minmax(260px,1fr) 150px auto!important;gap:10px!important;align-items:center!important;margin-bottom:12px!important}
+  .vg-retro-admin-tools{display:flex!important;gap:10px!important;flex-wrap:wrap!important;margin:12px 0 14px!important}
+  .vg-retro-admin-list{display:grid!important;gap:10px!important}
+  .vg-retro-admin-row{display:grid!important;grid-template-columns:70px minmax(0,1fr) auto!important;gap:12px!important;align-items:center!important;border:1px solid rgba(255,255,255,.08)!important;background:rgba(255,255,255,.035)!important;border-radius:18px!important;padding:10px!important}
+  .vg-retro-admin-row img{width:70px!important;height:86px!important;object-fit:cover!important;border-radius:12px!important;background:#070b18!important;border:1px solid rgba(255,255,255,.08)!important}
+  .vg-retro-admin-row b{display:block!important;color:#fff!important;line-height:1.18!important;margin-bottom:4px!important}
+  .vg-retro-admin-row small{display:block!important;color:#a7acba!important;line-height:1.35!important}
+  .vg-retro-admin-actions{display:flex!important;gap:8px!important;flex-wrap:wrap!important;justify-content:flex-end!important}
+  .vg-retro-admin-search{display:grid!important;grid-template-columns:minmax(260px,1fr) 180px!important;gap:10px!important;margin-bottom:10px!important}
+  .vg-retro-admin-preview{display:none!important;margin:0 0 12px!important;padding:10px!important;border:1px solid rgba(255,255,255,.08)!important;background:rgba(255,255,255,.035)!important;border-radius:16px!important;align-items:center!important;gap:12px!important}
+  .vg-retro-admin-preview.active{display:flex!important}
+  .vg-retro-admin-preview img{width:74px!important;height:90px!important;object-fit:cover!important;border-radius:12px!important;background:#070b18!important;border:1px solid rgba(255,255,255,.08)!important}
+  .vg-retro-admin-preview span{color:#a7acba!important;font-size:.84rem!important;line-height:1.35!important}
+  .vg-retro-admin-pill{display:inline-flex!important;align-items:center!important;width:max-content!important;padding:5px 8px!important;border-radius:999px!important;border:1px solid rgba(25,230,193,.24)!important;background:rgba(25,230,193,.08)!important;color:#dffff9!important;font-size:.68rem!important;font-weight:950!important;text-transform:uppercase!important;letter-spacing:.05em!important;margin-top:5px!important}
+  @media(max-width:1100px){.vg-retro-admin-form{grid-template-columns:1fr 1fr!important}.vg-retro-admin-form .vg-admin-btn.primary{grid-column:1/-1!important}.vg-retro-admin-search{grid-template-columns:1fr!important}}
+  @media(max-width:760px){.vg-img-admin-row{grid-template-columns:88px 1fr!important}.vg-img-admin-row img{width:88px!important;height:64px!important}.vg-img-test-btn{grid-column:1/-1!important}.vg-retro-admin-form{grid-template-columns:1fr!important}.vg-retro-admin-row{grid-template-columns:58px 1fr!important}.vg-retro-admin-row img{width:58px!important;height:74px!important}.vg-retro-admin-actions{grid-column:1/-1!important;justify-content:flex-start!important}}
 </style>
-<script id="vg-actas-gob-final-sin-titulo-v85-script">
+<script id="vg-admin-retro-service-images-v91-script">
 (function(){
   'use strict';
-  function qs(sel,root){return (root||document).querySelector(sel);}
-  function isActasOpen(){var modal=qs('#productModal');if(!modal||!modal.classList.contains('active'))return false;var cat=(qs('#modalCat',modal)&&qs('#modalCat',modal).textContent||'').toLowerCase();var title=(qs('#modalTitle',modal)&&qs('#modalTitle',modal).textContent||'').toLowerCase();return cat.indexOf('actas')!==-1||title.indexOf('actas')!==-1||title.indexOf('gob')!==-1;}
-  function apply(){var modal=qs('#productModal');if(!modal)return;var active=isActasOpen();modal.classList.toggle('vg-actas-pro-modal',active);if(active){var h3=qs('.modal-body h3',modal);if(h3){h3.textContent='';h3.setAttribute('aria-hidden','true');}var note=qs('.modal-delivery-note',modal);if(note)note.innerHTML='<b>Entrega estimada:</b> 3 a 8 horas · trámites legales sujetos a validación · sin reembolso una vez iniciado.';}}
-  function wrapOpenProduct(){if(typeof window.openProduct==='function'&&!window.openProduct.__vgActasFinalV85){var old=window.openProduct;var wrapped=function(){var r=old.apply(this,arguments);setTimeout(apply,20);setTimeout(apply,120);return r;};wrapped.__vgActasFinalV85=true;window.openProduct=wrapped;}}
-  function boot(){wrapOpenProduct();apply();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+  var CFG = 'vg_supabase_cfg_v1';
+  var RETRO_PREFIX = 'retro_game:';
+  var LOCAL_RETRO = 'vg_retro_admin_overrides_v91';
+  var state = window.vgAdminState = window.vgAdminState || {};
+  state.retroOverrides = state.retroOverrides || [];
+  state.retroEditId = state.retroEditId || '';
+
+  function qs(s,r){return (r||document).querySelector(s)}
+  function qsa(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+  function attr(v){return esc(v).replace(/`/g,'&#96;')}
+  function money(n){return '$' + Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0}) + ' MXN'}
+  function readCfg(){try{var c=JSON.parse(localStorage.getItem(CFG)||'{}');return {url:c.url||window.VG_SUPABASE_URL||'',anon:c.anon||window.VG_SUPABASE_ANON_KEY||''}}catch(e){return {url:window.VG_SUPABASE_URL||'',anon:window.VG_SUPABASE_ANON_KEY||''}}}
+  function getSB(){var c=readCfg(); if(!window.supabase||!c.url||!c.anon)return null; if(!state.__v91sb||state.__v91sig!==c.url+'|'+String(c.anon).slice(0,12)){state.__v91sb=window.supabase.createClient(c.url,c.anon);state.__v91sig=c.url+'|'+String(c.anon).slice(0,12)} return state.__v91sb}
+  function services(){try{if(typeof SERVICES!=='undefined'&&Array.isArray(SERVICES)){window.SERVICES=SERVICES;return SERVICES}}catch(e){} return Array.isArray(window.SERVICES)?window.SERVICES:[]}
+  function retroData(){try{if(typeof RETRO_DATA!=='undefined'&&Array.isArray(RETRO_DATA))return RETRO_DATA}catch(e){} return Array.isArray(window.RETRO_DATA)?window.RETRO_DATA:[]}
+  function fallbackCover(){return 'portada.png'}
+  function normalizeImgur(u){
+    u=String(u||'').trim(); if(!u)return '';
+    if(/^\/\//.test(u))u='https:'+u;
+    if(!/^https?:\/\//i.test(u))return u;
+    try{
+      var url=new URL(u); var host=url.hostname.toLowerCase(); var path=url.pathname.replace(/^\/+/, '');
+      if(host==='imgur.com'||host==='www.imgur.com'){
+        if(path.indexOf('a/')===0||path.indexOf('gallery/')===0)return u;
+        var id=(path.split('/')[0]||'').split('.')[0];
+        if(id)return 'https://i.imgur.com/'+id+'.jpg';
+      }
+      if(host==='i.imgur.com'&&!/\.(png|jpe?g|webp|gif)(\?.*)?$/i.test(url.pathname))return u+'.jpg';
+    }catch(e){}
+    return u;
+  }
+  window.vgNormalizeExternalImageUrl = normalizeImgur;
+
+  function getLocalRetro(){try{return JSON.parse(localStorage.getItem(LOCAL_RETRO)||'[]')}catch(e){return []}}
+  function setLocalRetro(arr){try{localStorage.setItem(LOCAL_RETRO,JSON.stringify(arr||[]))}catch(e){}}
+  function overrideToGame(row){
+    var op = Array.isArray(row.options)&&row.options[0] ? row.options[0] : {};
+    var status = /\[HIDDEN\]/i.test(row.stock||'') ? 'hidden' : /\[SOLDOUT\]/i.test(row.stock||'') ? 'soldout' : 'active';
+    return {id:String(row.product_id||'').replace(RETRO_PREFIX,''), name:row.title||'Juego retro', platform:op.name||row.platform||'Xbox 360', price:Number(op.price||row.price||0), image:normalizeImgur(row.image||''), status:status, source:'override'};
+  }
+  function gameToRow(game){
+    var status=game.status||'active'; var tokens=[]; if(status==='hidden')tokens.push('[HIDDEN]'); if(status==='soldout')tokens.push('[SOLDOUT]');
+    return {product_id:RETRO_PREFIX+String(game.id), title:game.name||game.title||'Juego retro', category:'Xbox Retro Juego', image:normalizeImgur(game.image||''), price_label:money(game.price||0), stock:tokens.join(' '), badge:status==='soldout'?'Agotado':'Disponible', options:[{name:game.platform||'Xbox 360', price:Number(game.price||0)}], updated_at:new Date().toISOString()};
+  }
+  function retroOverridesMap(){
+    var map=new Map(); (state.retroOverrides||[]).forEach(function(row){var g=overrideToGame(row); if(g.id)map.set(String(g.id),g)}); return map;
+  }
+  function baseRetroList(){
+    var arr=retroData(); if(!arr.length)return [];
+    return arr.map(function(g){return {id:g.id,name:g.name||g.title||'Juego retro',platform:g.platform||'Xbox 360',price:Number(g.price||0),image:g.image||'',status:g.status||'active',base:g}});
+  }
+  function currentRetroList(){
+    var base=baseRetroList(); var map=retroOverridesMap(); var seen=new Set(); var out=base.map(function(g){var o=map.get(String(g.id)); seen.add(String(g.id)); return Object.assign({},g,o||{})});
+    map.forEach(function(g,id){if(!seen.has(String(id)))out.push(g)}); return out;
+  }
+  function applyRetroOverrides(){
+    var arr=retroData(); if(!arr.length)return;
+    var map=retroOverridesMap();
+    map.forEach(function(o,id){
+      var g=arr.find(function(x){return String(x.id)===String(id)});
+      if(!g){g={id:String(id),name:o.name,price:o.price,platform:o.platform}; arr.push(g)}
+      if(o.name)g.name=o.name; if(o.platform)g.platform=o.platform; if(!isNaN(Number(o.price)))g.price=Number(o.price); g.status=o.status||'active'; g.image=o.image||'';
+      window.RETRO_GAME_IMAGES = window.RETRO_GAME_IMAGES || {}; if(o.image) window.RETRO_GAME_IMAGES[g.name]=o.image;
+    });
+    try{if(typeof window.renderRetroGrid==='function')window.renderRetroGrid()}catch(e){}
+  }
+  async function loadRetroOverrides(){
+    var client=getSB();
+    if(client){
+      var res=await client.from('products_admin').select('*').like('product_id',RETRO_PREFIX+'%');
+      if(!res.error){state.retroOverrides=res.data||[]; setLocalRetro(state.retroOverrides); applyRetroOverrides(); return true}
+    }
+    state.retroOverrides=getLocalRetro(); applyRetroOverrides(); return false;
+  }
+  window.vgLoadRetroOverrides = loadRetroOverrides;
+
+  function makeCover(name, platform){
+    var title=esc(name||'Xbox Retro'); var plat=esc(platform||'Xbox');
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1100" viewBox="0 0 800 1100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset=".55" stop-color="#172447"/><stop offset="1" stop-color="#111827"/></linearGradient></defs><rect width="800" height="1100" fill="url(#g)"/><circle cx="400" cy="390" r="205" fill="#19e6c1" opacity=".13"/><text x="58" y="122" font-family="Arial" font-size="42" fill="#bffff5" font-weight="900">'+plat.toUpperCase()+'</text><text x="400" y="690" text-anchor="middle" font-family="Arial" font-size="52" fill="#fff" font-weight="900">XBOX RETRO</text><foreignObject x="70" y="745" width="660" height="220"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Arial;color:white;font-size:50px;line-height:1.08;font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;height:220px;text-transform:uppercase;">'+title+'</div></foreignObject><text x="400" y="1018" text-anchor="middle" font-family="Arial" font-size="34" fill="#19e6c1" font-weight="900">VESSEL GAMES</text></svg>';
+    return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+  }
+  function retroImg(g){
+    if(g.image)return normalizeImgur(g.image);
+    var custom=window.RETRO_GAME_IMAGES && window.RETRO_GAME_IMAGES[g.name]; if(custom)return normalizeImgur(custom);
+    var clean=String(g.name||'').replace(/[®™]/g,'').replace(/\+/g,' plus ').replace(/[:]+/g,' ').replace(/\s+/g,' ').trim();
+    if(clean)return 'https://tse4.mm.bing.net/th?q='+encodeURIComponent('"'+clean+'" '+(String(g.platform||'').toLowerCase().includes('cl')?'original xbox':'xbox 360')+' front cover box art')+'&w=800&h=1200&c=7&rs=1&qlt=95&p=0&o=5&pid=1.7&mkt=en-US';
+    return makeCover(g.name,g.platform);
+  }
+  function patchRetroRender(){
+    if(window.__vgRetroAdminRenderV91)return; window.__vgRetroAdminRenderV91=true;
+    window.renderRetroGrid=function(){
+      var box=qs('#retroGridContainer'); if(!box)return;
+      var q=String(qs('#retroSearch')&&qs('#retroSearch').value||'').trim().toLowerCase();
+      var plat=String(qs('#retroPlatform')&&qs('#retroPlatform').value||'all').toLowerCase();
+      if(plat==='360')plat='xbox 360'; if(plat.indexOf('cl')>=0)plat='clásico';
+      var list=currentRetroList().filter(function(g){return g.status!=='hidden'&&(plat==='all'||String(g.platform||'').toLowerCase()===plat)&&(!q||String(g.name||'').toLowerCase().indexOf(q)>=0)});
+      if(!list.length){box.innerHTML='<div class="vg-retro-empty">No encontré juegos con esa búsqueda.</div>'; try{if(typeof updateTotals==='function')updateTotals()}catch(e){} return;}
+      box.innerHTML=list.map(function(g){
+        var active=false; try{active=retroSelected.some(function(x){return String(x.id)===String(g.id)})}catch(e){}
+        var img=retroImg(g);
+        return '<article class="vg-retro-game '+(active?'active':'')+'" onclick="vgRetroToggleAdminAware(\''+attr(g.id)+'\')"><div class="vg-retro-cover"><div class="vg-retro-cover-bg" style="background-image:url(\''+attr(img)+'\')"></div><img decoding="async" class="vg-retro-cover-img" loading="lazy" src="'+attr(img)+'" alt="'+attr(g.name)+'" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=\''+makeCover(g.name,g.platform).replace(/'/g,'&#39;')+'\'; if(this.previousElementSibling)this.previousElementSibling.style.backgroundImage=\'none\';"></div><div class="vg-retro-info"><h4>'+esc(g.name)+'</h4><div class="vg-retro-meta"><span class="vg-retro-platform">'+esc(g.platform)+'</span><span class="vg-retro-price">'+money(g.price)+'</span></div></div></article>';
+      }).join('');
+      try{if(typeof updateTotals==='function')updateTotals()}catch(e){}
+    };
+  }
+  window.vgRetroToggleAdminAware=function(id){
+    try{
+      var list=currentRetroList(); var g=list.find(function(x){return String(x.id)===String(id)}); if(!g)return;
+      var i=retroSelected.findIndex(function(x){return String(x.id)===String(id)}); if(i>=0)retroSelected.splice(i,1); else retroSelected.push(g);
+      window.renderRetroGrid(); if(typeof updateTotals==='function')updateTotals(); return;
+    }catch(e){try{if(typeof toggleRetroGame==='function')toggleRetroGame(id)}catch(err){}}
+  };
+
+  function activateTab(name){
+    qsa('.vg-admin-tab').forEach(function(b){b.classList.toggle('active',b.dataset.tab===name)});
+    qsa('.vg-admin-section').forEach(function(s){s.classList.remove('active')});
+    var sec=qs('#vgAdmin'+name.charAt(0).toUpperCase()+name.slice(1)); if(sec)sec.classList.add('active');
+    if(name==='retro')loadRetroAdmin();
+  }
+  function ensureRetroAdmin(){
+    var tabs=qs('#vgAdminModal .vg-admin-tabs'), content=qs('#vgAdminModal .vg-admin-content'); if(!tabs||!content)return;
+    if(!qs('.vg-admin-tab[data-tab="retro"]',tabs)){var b=document.createElement('button'); b.className='vg-admin-tab'; b.dataset.tab='retro'; b.textContent='Xbox Retro'; b.onclick=function(){activateTab('retro')}; tabs.appendChild(b)}
+    if(!qs('#vgAdminRetro',content)){
+      var s=document.createElement('section'); s.className='vg-admin-section'; s.id='vgAdminRetro';
+      s.innerHTML='<div class="vg-admin-note vg-admin-ok"><b>Catálogo Xbox Retro:</b> edita nombre, plataforma, precio e imagen de tus juegos Xbox 360 / Clásico. Se guarda en la tabla existente <b>products_admin</b>.</div><div class="vg-retro-admin-form"><input class="vg-admin-input" id="vgRetroAdminTitle" placeholder="Nombre del juego"><select class="vg-admin-select" id="vgRetroAdminPlatform"><option>Xbox 360</option><option>Clásico</option></select><input class="vg-admin-input" id="vgRetroAdminPrice" type="number" min="0" placeholder="Precio MXN"><input class="vg-admin-input" id="vgRetroAdminImage" placeholder="URL de portada directa"><select class="vg-admin-select" id="vgRetroAdminStatus"><option value="active">Activo</option><option value="soldout">Agotado</option><option value="hidden">Oculto</option></select><button class="vg-admin-btn primary" onclick="vgSaveRetroAdminGame()">Guardar</button></div><div class="vg-retro-admin-preview" id="vgRetroAdminPreview"><img id="vgRetroAdminPreviewImg" src="portada.png" alt=""><span>Vista previa de la portada. Si no aparece, usa el enlace directo de imagen.</span></div><div class="vg-retro-admin-tools"><button class="vg-admin-btn" onclick="vgClearRetroAdminForm()">Limpiar formulario</button><button class="vg-admin-btn" onclick="vgTestRetroAdminImage()">Probar imagen</button><button class="vg-admin-btn" onclick="loadRetroAdmin()">Recargar juegos</button><button class="vg-admin-btn" onclick="vgSyncAllRetroBase()">Subir lista base a Supabase</button></div><div class="vg-retro-admin-search"><input class="vg-admin-input" id="vgRetroAdminSearch" placeholder="Buscar juego retro..." oninput="renderRetroAdminList()"><select class="vg-admin-select" id="vgRetroAdminFilter" onchange="renderRetroAdminList()"><option value="all">Todas las plataformas</option><option value="Xbox 360">Xbox 360</option><option value="Clásico">Clásico</option></select></div><div id="vgRetroAdminMsg" class="vg-analytics-muted"></div><div class="vg-retro-admin-list" id="vgRetroAdminList"></div>';
+      content.appendChild(s);
+      var input=s.querySelector('#vgRetroAdminImage'); if(input)input.addEventListener('input',function(){this.value=normalizeImgur(this.value)});
+    }
+  }
+  window.renderRetroAdminList=function(message){
+    var box=qs('#vgRetroAdminList'); if(!box)return; var msg=qs('#vgRetroAdminMsg'); if(msg)msg.textContent=message||'';
+    var q=String(qs('#vgRetroAdminSearch')&&qs('#vgRetroAdminSearch').value||'').toLowerCase(); var f=String(qs('#vgRetroAdminFilter')&&qs('#vgRetroAdminFilter').value||'all');
+    var list=currentRetroList().filter(function(g){return (f==='all'||String(g.platform)===f)&&(!q||[g.name,g.platform,g.id].join(' ').toLowerCase().indexOf(q)>=0)});
+    if(!list.length){box.innerHTML='<div class="vg-admin-note">No encontré juegos retro.</div>';return;}
+    box.innerHTML=list.map(function(g){var img=retroImg(g);return '<div class="vg-retro-admin-row"><img src="'+attr(img)+'" onerror="this.src=\'portada.png\'" alt=""><div><b>'+esc(g.name)+'</b><small>'+esc(g.platform)+' · '+money(g.price)+' · '+esc(g.status||'active')+' · ID '+esc(g.id)+'</small><span class="vg-retro-admin-pill">'+(g.image?'Imagen personalizada':'Imagen automática')+'</span></div><div class="vg-retro-admin-actions"><button class="vg-admin-btn" onclick="vgEditRetroAdminGame(\''+attr(g.id)+'\')">Editar</button><button class="vg-admin-btn danger" onclick="vgResetRetroAdminGame(\''+attr(g.id)+'\')">Restablecer</button></div></div>'}).join('');
+  };
+  window.loadRetroAdmin=async function(){ensureRetroAdmin(); await loadRetroOverrides(); window.renderRetroAdminList('Juegos retro cargados. Puedes editar las portadas y precios.');};
+  window.vgEditRetroAdminGame=function(id){var g=currentRetroList().find(function(x){return String(x.id)===String(id)}); if(!g)return; state.retroEditId=String(id); qs('#vgRetroAdminTitle').value=g.name||''; qs('#vgRetroAdminPlatform').value=g.platform||'Xbox 360'; qs('#vgRetroAdminPrice').value=Number(g.price||0); qs('#vgRetroAdminImage').value=normalizeImgur(g.image||''); qs('#vgRetroAdminStatus').value=g.status||'active'; vgTestRetroAdminImage(); activateTab('retro')};
+  window.vgClearRetroAdminForm=function(){state.retroEditId=''; ['#vgRetroAdminTitle','#vgRetroAdminPrice','#vgRetroAdminImage'].forEach(function(s){var el=qs(s); if(el)el.value=''}); var p=qs('#vgRetroAdminPlatform'); if(p)p.value='Xbox 360'; var st=qs('#vgRetroAdminStatus'); if(st)st.value='active'; var prev=qs('#vgRetroAdminPreview'); if(prev)prev.classList.remove('active')};
+  window.vgTestRetroAdminImage=function(){var u=normalizeImgur(qs('#vgRetroAdminImage')&&qs('#vgRetroAdminImage').value||''); var prev=qs('#vgRetroAdminPreview'), img=qs('#vgRetroAdminPreviewImg'); if(!prev||!img)return; if(!u){prev.classList.remove('active');return} img.src=u; img.onerror=function(){this.src='portada.png'}; prev.classList.add('active')};
+  window.vgSaveRetroAdminGame=async function(){
+    var title=String(qs('#vgRetroAdminTitle')&&qs('#vgRetroAdminTitle').value||'').trim(); if(!title){alert('Escribe el nombre del juego.');return;}
+    var id=state.retroEditId || ('xretro-custom-'+Date.now());
+    var game={id:id,name:title,platform:qs('#vgRetroAdminPlatform').value||'Xbox 360',price:Number(qs('#vgRetroAdminPrice').value||0),image:normalizeImgur(qs('#vgRetroAdminImage').value||''),status:qs('#vgRetroAdminStatus').value||'active'};
+    var row=gameToRow(game); var client=getSB();
+    var arr=(state.retroOverrides||[]).filter(function(x){return String(x.product_id)!==String(row.product_id)}); arr.push(row); state.retroOverrides=arr; setLocalRetro(arr); applyRetroOverrides(); renderRetroAdminList('Cambio aplicado en pantalla. Guardando...');
+    if(client){var res=await client.from('products_admin').upsert(row,{onConflict:'product_id'}); if(res.error){alert('No se pudo guardar: '+res.error.message);return;} await loadRetroOverrides();}
+    vgClearRetroAdminForm(); renderRetroAdminList('Juego retro guardado.');
+  };
+  window.vgResetRetroAdminGame=async function(id){if(!confirm('¿Restablecer este juego retro a sus datos base?'))return; var productId=RETRO_PREFIX+String(id); var client=getSB(); state.retroOverrides=(state.retroOverrides||[]).filter(function(x){return String(x.product_id)!==productId}); setLocalRetro(state.retroOverrides); if(client){var res=await client.from('products_admin').delete().eq('product_id',productId); if(res.error){alert(res.error.message);return;}} applyRetroOverrides(); renderRetroAdminList('Juego restablecido.');};
+  window.vgSyncAllRetroBase=async function(){var client=getSB(); if(!client){alert('Configura Supabase para sincronizar.');return;} if(!confirm('Esto subirá todos los juegos retro base a Supabase para poder editarlos. ¿Continuar?'))return; var list=currentRetroList(); for(var i=0;i<list.length;i++){var row=gameToRow(list[i]); var res=await client.from('products_admin').upsert(row,{onConflict:'product_id'}); if(res.error){alert('Error en '+list[i].name+': '+res.error.message);return;}} await loadRetroOverrides(); renderRetroAdminList('Lista base sincronizada.');};
+
+  function currentOverride(id){return (state.products||[]).find(function(x){return String(x.product_id)===String(id)})||null}
+  function applyServiceImageOverrides(){
+    var ss=services(); (state.products||[]).forEach(function(ov){ if(!ov||ov.product_id==null||String(ov.product_id).indexOf(RETRO_PREFIX)===0)return; if(!ov.image)return; var p=ss.find(function(x){return String(x.id)===String(ov.product_id)}); if(p)p.image=normalizeImgur(ov.image); });
+    try{if(typeof window.renderProducts==='function')window.renderProducts()}catch(e){}
+  }
+  function enhanceServiceImageInputs(){
+    qsa('#vgAdminProductsList [data-pid]').forEach(function(card){
+      if(qs('.vg-img-admin-row',card))return; var id=card.getAttribute('data-pid'); var p=services().find(function(x){return String(x.id)===String(id)}); if(!p)return; var ov=currentOverride(id)||{}; var url=normalizeImgur(ov.image||p.image||'');
+      var row=document.createElement('div'); row.className='vg-img-admin-row';
+      row.innerHTML='<img src="'+attr(url||'portada.png')+'" onerror="this.src=\'portada.png\'" alt=""><div><input class="vg-admin-input" data-field="image" placeholder="URL de imagen / portada del servicio" value="'+attr(url)+'"><small>Pega un enlace directo de imagen. Imgur se convierte automáticamente si usas imgur.com/ID.</small></div><button class="vg-img-test-btn" type="button">Probar imagen</button>';
+      var head=qs('.vg-product-admin-head,.vg-admin-cardtop',card)||card.firstElementChild; if(head)head.insertAdjacentElement('afterend',row); else card.prepend(row);
+      var input=qs('[data-field="image"]',row), img=qs('img',row); input.addEventListener('change',function(){this.value=normalizeImgur(this.value); img.src=this.value||'portada.png'}); qs('button',row).onclick=function(){input.value=normalizeImgur(input.value); img.src=input.value||'portada.png'};
+    });
+  }
+  function patchProductAdmin(){
+    if(window.__vgServiceImageAdminV91)return; window.__vgServiceImageAdminV91=true;
+    var oldRender=window.vgAdminRenderProducts; if(typeof oldRender==='function'){window.vgAdminRenderProducts=function(){var out=oldRender.apply(this,arguments); setTimeout(enhanceServiceImageInputs,0); return out;};}
+    var oldLoad=window.vgAdminLoadProducts; if(typeof oldLoad==='function'){window.vgAdminLoadProducts=async function(){var out=await oldLoad.apply(this,arguments); applyServiceImageOverrides(); setTimeout(enhanceServiceImageInputs,0); return out;};}
+    ['vgAdminSaveProduct','vgAdminMarkSoldOut','vgAdminHideProduct','vgAdminActivateProduct'].forEach(function(fn){var old=window[fn]; if(typeof old!=='function')return; window[fn]=function(id){var card=qs('[data-pid="'+(window.CSS&&CSS.escape?CSS.escape(String(id)):String(id).replace(/"/g,'\\"'))+'"]'); var inp=card&&qs('[data-field="image"]',card); var p=services().find(function(x){return String(x.id)===String(id)}); if(inp&&p)p.image=normalizeImgur(inp.value||p.image||''); return old.apply(this,arguments);};});
+  }
+
+  function boot(){ensureRetroAdmin(); patchProductAdmin(); patchRetroRender(); loadRetroOverrides(); applyServiceImageOverrides(); setTimeout(enhanceServiceImageInputs,300);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
   window.addEventListener('load',boot,{once:true});
-  document.addEventListener('click',function(){setTimeout(apply,60);},true);
+  document.addEventListener('click',function(){setTimeout(function(){ensureRetroAdmin(); enhanceServiceImageInputs();},120)},true);
 })();
 </script>
 
