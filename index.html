@@ -16232,5 +16232,359 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   }
 </style>
 
+
+<!-- VG PATCH v81: Actas GOB ultra amplia, lista prioritaria y servicios legibles -->
+<style id="vg-actas-gob-ultra-v81-css">
+  #productModal.vg-actas-ultra-v81{
+    position:fixed!important;
+    inset:0!important;
+    z-index:30000!important;
+    display:flex!important;
+    align-items:stretch!important;
+    justify-content:stretch!important;
+    padding:8px!important;
+    background:rgba(0,0,0,.90)!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-card{
+    width:calc(100vw - 16px)!important;
+    height:calc(100vh - 16px)!important;
+    max-width:none!important;
+    max-height:none!important;
+    min-width:0!important;
+    border-radius:26px!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-columns:190px minmax(0,1fr)!important;
+    background:
+      radial-gradient(circle at 92% 0%,rgba(25,230,193,.13),transparent 34%),
+      radial-gradient(circle at 0% 100%,rgba(139,92,246,.14),transparent 34%),
+      linear-gradient(135deg,#060913,#10172b)!important;
+    border:1px solid rgba(25,230,193,.22)!important;
+    box-shadow:0 36px 110px rgba(0,0,0,.62)!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-img{
+    min-height:0!important;
+    height:100%!important;
+    padding:12px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:
+      linear-gradient(180deg,rgba(25,230,193,.08),rgba(139,92,246,.06)),
+      #050812!important;
+    border-right:1px solid rgba(255,255,255,.075)!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-img img{
+    width:100%!important;
+    height:auto!important;
+    max-height:260px!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    border-radius:16px!important;
+    box-shadow:0 18px 40px rgba(0,0,0,.34)!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-body{
+    min-height:0!important;
+    overflow:hidden!important;
+    padding:14px 18px 0!important;
+    display:grid!important;
+    grid-template-rows:auto minmax(0,1fr) auto!important;
+    gap:0!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .x{
+    position:absolute!important;
+    top:16px!important;
+    right:16px!important;
+    z-index:60!important;
+    width:46px!important;
+    height:46px!important;
+    float:none!important;
+    margin:0!important;
+    border-radius:18px!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalCat{
+    width:max-content!important;
+    max-width:calc(100% - 66px)!important;
+    margin:0 0 8px!important;
+    padding:8px 14px!important;
+    font-size:.78rem!important;
+    letter-spacing:.10em!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalTitle{
+    max-width:1180px!important;
+    margin:0 62px 8px 0!important;
+    font-size:clamp(2rem,2.75vw,3.7rem)!important;
+    line-height:.94!important;
+    letter-spacing:-.05em!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalDesc,
+  #productModal.vg-actas-ultra-v81 #vgActasModalLegalNote{
+    display:none!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-delivery-note{
+    margin:0 0 10px!important;
+    padding:10px 13px!important;
+    border-radius:16px!important;
+    font-size:.86rem!important;
+    line-height:1.28!important;
+    background:linear-gradient(135deg,rgba(25,230,193,.13),rgba(139,92,246,.07))!important;
+    border:1px solid rgba(25,230,193,.30)!important;
+    color:#dcfffa!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-body h3{
+    margin:0 0 10px!important;
+    padding:0!important;
+    font-size:1.28rem!important;
+    line-height:1.05!important;
+    color:#fff!important;
+    letter-spacing:-.02em!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalOptions{
+    min-height:0!important;
+    max-height:none!important;
+    overflow:auto!important;
+    padding:2px 8px 104px 0!important;
+    display:grid!important;
+    grid-template-columns:repeat(auto-fill,minmax(245px,1fr))!important;
+    gap:12px!important;
+    align-content:start!important;
+    scrollbar-width:thin!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalOptions .option{
+    margin:0!important;
+    min-height:74px!important;
+    padding:15px 16px!important;
+    border-radius:20px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.020)),
+      rgba(15,19,32,.90)!important;
+    border:1px solid rgba(255,255,255,.105)!important;
+    box-shadow:0 14px 30px rgba(0,0,0,.18)!important;
+    transition:transform .16s ease,border-color .16s ease,background .16s ease!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalOptions .option:hover{
+    transform:translateY(-2px)!important;
+    border-color:rgba(25,230,193,.44)!important;
+    background:linear-gradient(135deg,rgba(25,230,193,.14),rgba(139,92,246,.08))!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalOptions .option.active{
+    border-color:rgba(25,230,193,.72)!important;
+    background:linear-gradient(135deg,rgba(25,230,193,.19),rgba(139,92,246,.11))!important;
+    box-shadow:0 0 0 1px rgba(25,230,193,.22),0 18px 38px rgba(0,0,0,.24)!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalOptions .option b{
+    font-size:1rem!important;
+    line-height:1.15!important;
+    color:#fff!important;
+    font-weight:950!important;
+    text-transform:uppercase!important;
+    letter-spacing:-.01em!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 #modalOptions .option strong{
+    margin-left:auto!important;
+    color:#19e6c1!important;
+    font-size:1.12rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    font-weight:950!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-actions{
+    position:absolute!important;
+    left:206px!important;
+    right:18px!important;
+    bottom:8px!important;
+    z-index:34!important;
+    display:flex!important;
+    justify-content:flex-end!important;
+    gap:10px!important;
+    margin:0!important;
+    padding:26px 0 10px!important;
+    background:linear-gradient(180deg,rgba(6,9,19,0),rgba(6,9,19,.86) 38%,rgba(6,9,19,.98))!important;
+    pointer-events:none!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-actions .primary,
+  #productModal.vg-actas-ultra-v81 .modal-actions .secondary{
+    min-height:56px!important;
+    border-radius:18px!important;
+    pointer-events:auto!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-actions .primary:first-child{
+    display:none!important;
+  }
+
+  #productModal.vg-actas-ultra-v81 .modal-actions .whatsapp{
+    min-width:330px!important;
+  }
+
+  @media(max-width:980px){
+    #productModal.vg-actas-ultra-v81{
+      padding:0!important;
+      align-items:stretch!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-card{
+      width:100vw!important;
+      height:100vh!important;
+      max-height:100vh!important;
+      border-radius:0!important;
+      grid-template-columns:1fr!important;
+      grid-template-rows:auto minmax(0,1fr)!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-img{
+      display:none!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-body{
+      padding:10px 10px 0!important;
+      grid-template-rows:auto minmax(0,1fr) auto!important;
+      overflow:hidden!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .x{
+      top:8px!important;
+      right:8px!important;
+      width:40px!important;
+      height:40px!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 #modalCat{
+      margin-right:46px!important;
+      padding:7px 11px!important;
+      font-size:.70rem!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 #modalTitle{
+      font-size:1.48rem!important;
+      line-height:1!important;
+      margin:5px 44px 6px 0!important;
+      letter-spacing:-.035em!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-delivery-note{
+      padding:9px 10px!important;
+      font-size:.76rem!important;
+      margin-bottom:8px!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-body h3{
+      margin:0 0 8px!important;
+      font-size:1rem!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 #modalOptions{
+      grid-template-columns:1fr!important;
+      gap:8px!important;
+      padding:2px 2px 92px 0!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 #modalOptions .option{
+      min-height:58px!important;
+      padding:12px 13px!important;
+      border-radius:16px!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 #modalOptions .option b{
+      font-size:.86rem!important;
+      line-height:1.12!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 #modalOptions .option strong{
+      font-size:.98rem!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-actions{
+      left:10px!important;
+      right:10px!important;
+      bottom:6px!important;
+      display:grid!important;
+      grid-template-columns:1fr!important;
+      padding:16px 0 8px!important;
+    }
+
+    #productModal.vg-actas-ultra-v81 .modal-actions .whatsapp{
+      width:100%!important;
+      min-width:0!important;
+      min-height:52px!important;
+    }
+  }
+</style>
+<script id="vg-actas-gob-ultra-v81-script">
+(function(){
+  'use strict';
+  function qs(sel,root){return (root||document).querySelector(sel);}
+  function textOf(sel,root){var el=qs(sel,root);return (el&&el.textContent||'').toLowerCase();}
+  function isActasOpen(modal){
+    if(!modal || !modal.classList.contains('active')) return false;
+    var t=[textOf('#modalCat',modal),textOf('#modalTitle',modal),textOf('#modalOptions',modal)].join(' ');
+    return /actas|gob|curp|sindos|infonavit|repuve|tenencia|nss|imss|defuncion|matrimonio|divorcio|nacimiento/.test(t);
+  }
+  function apply(){
+    var modal=qs('#productModal');
+    if(!modal) return;
+    var on=isActasOpen(modal);
+    modal.classList.toggle('vg-actas-ultra-v81', on);
+    var card=qs('.modal-card',modal);
+    var body=qs('.modal-body',modal);
+    if(card) card.classList.toggle('vg-actas-ultra-card-v81', on);
+    if(body) body.classList.toggle('vg-actas-ultra-body-v81', on);
+    if(on){
+      var h3=qs('.modal-body h3',modal);
+      if(h3 && /selecciona/i.test(h3.textContent||'')) h3.textContent='Servicios disponibles';
+      var note=qs('.modal-delivery-note',modal);
+      if(note) note.innerHTML='<b>Entrega estimada:</b> 3 a 8 horas · trámites legales sujetos a validación · sin reembolso una vez iniciado.';
+    }
+  }
+  function wrapOpenProduct(){
+    if(typeof window.openProduct==='function' && !window.openProduct.__vgActasUltraV81){
+      var old=window.openProduct;
+      var wrapped=function(){
+        var r=old.apply(this,arguments);
+        requestAnimationFrame(apply);
+        setTimeout(apply,40);
+        setTimeout(apply,160);
+        setTimeout(apply,420);
+        return r;
+      };
+      wrapped.__vgActasUltraV81=true;
+      window.openProduct=wrapped;
+    }
+  }
+  function boot(){wrapOpenProduct();apply();}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+  window.addEventListener('load',boot,{once:true});
+  document.addEventListener('click',function(){setTimeout(apply,30);setTimeout(apply,160);},true);
+  document.addEventListener('keydown',function(){setTimeout(apply,30);},true);
+  var modal=qs('#productModal');
+  if(modal){
+    new MutationObserver(apply).observe(modal,{subtree:true,childList:true,attributes:true,characterData:true,attributeFilter:['class','style']});
+  }
+  setInterval(function(){wrapOpenProduct();apply();},300);
+})();
+</script>
+
 </body>
 </html>
