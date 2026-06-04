@@ -16645,5 +16645,137 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
 })();
 </script>
 
+
+
+<style id="vg-analytics-panel-fix-v104-css">
+  #vgAdminAnalyticsBody .vg-analytics-status{margin:0 0 14px;padding:12px 14px;border:1px solid rgba(25,230,193,.22);background:rgba(25,230,193,.06);border-radius:16px;color:#d9fffa;font-size:.88rem;line-height:1.45}
+  #vgAdminAnalyticsBody .vg-analytics-status.warn{border-color:rgba(255,180,92,.25);background:rgba(255,180,92,.07);color:#ffe5c7}
+  #vgAdminAnalyticsBody .vg-analytics-actions{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+  #vgAdminAnalyticsBody .vg-analytics-small{color:#8f9ab7;font-size:.78rem;line-height:1.4;margin-top:4px}
+  #vgAdminAnalyticsBody .vg-analytics-row strong{font-variant-numeric:tabular-nums}
+  @media(max-width:820px){#vgAdminAnalyticsBody .vg-admin-analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#vgAdminAnalyticsBody .vg-analytics-layout{grid-template-columns:1fr!important}}
+</style>
+
+<script id="vg-analytics-panel-fix-v104">
+(function(){
+  'use strict';
+  var TABLE='vg_analytics_events';
+  var CFG='vg_supabase_cfg_v1';
+  var SESSION='vg_analytics_session_v1';
+  var CITY='vg_analytics_city_cache_v1';
+  var QUEUE='vg_analytics_queue_v104';
+  var RESET='vg_analytics_reset_at_v104';
+  var PAGE_ID='pg_'+Date.now()+'_'+Math.random().toString(16).slice(2);
+  var booted=false, productWrapped=false, retroWrapped=false, sectionWrapped=false, payWrapped=false, xboxWrapped=false;
+
+  function qs(s,r){return (r||document).querySelector(s)}
+  function qsa(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+  function readJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||'')}catch(e){return d}}
+  function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function readCfg(){var c=readJSON(CFG,{});return {url:(c&&c.url)||window.VG_SUPABASE_URL||'',anon:(c&&c.anon)||window.VG_SUPABASE_ANON_KEY||''}}
+  function getSB(){var c=readCfg(); if(!window.supabase||!c.url||!c.anon)return null; window.__vgAnalyticsSB104=window.__vgAnalyticsSB104||{sig:'',client:null}; var sig=c.url+'|'+String(c.anon).slice(0,18); if(!window.__vgAnalyticsSB104.client||window.__vgAnalyticsSB104.sig!==sig){window.__vgAnalyticsSB104.client=window.supabase.createClient(c.url,c.anon); window.__vgAnalyticsSB104.sig=sig;} return window.__vgAnalyticsSB104.client;}
+  function session(){var s=localStorage.getItem(SESSION); if(!s){s='vg_'+Date.now()+'_'+Math.random().toString(16).slice(2);localStorage.setItem(SESSION,s)} return s;}
+  function cityCache(){return readJSON(CITY,{})||{}}
+  function saveCity(c){if(!c)return; c._ts=Date.now(); writeJSON(CITY,c)}
+  function timeout(ms){return new Promise(function(res){setTimeout(function(){res(null)},ms)})}
+  async function loadCityFast(){var c=cityCache(); if(c&&c._ts&&Date.now()-c._ts<86400000)return c; var fetchers=[
+      function(){return fetch('https://ipapi.co/json/').then(function(r){return r.json()}).then(function(d){return {city:d.city||'',region:d.region||'',country:d.country_name||d.country||''}})},
+      function(){return fetch('https://ipwho.is/').then(function(r){return r.json()}).then(function(d){return {city:d.city||'',region:d.region||'',country:d.country||''}})}
+    ];
+    for(var i=0;i<fetchers.length;i++){try{var out=await Promise.race([fetchers[i](),timeout(1200)]); if(out&&(out.city||out.region||out.country)){saveCity(out);return out}}catch(e){}}
+    return c||{};
+  }
+  var cityPromise=loadCityFast();
+
+  async function insertRows(rows){var client=getSB(); if(!client||!rows.length)return false; try{var res=await client.from(TABLE).insert(rows); if(res&&res.error)throw res.error; return true}catch(e){return false}}
+  async function flushQueue(){var q=readJSON(QUEUE,[])||[]; if(!q.length)return; var ok=await insertRows(q.slice(0,40)); if(ok){q.splice(0,40); writeJSON(QUEUE,q)}}
+  async function track(type,data){
+    data=data||{};
+    var geo=cityCache();
+    if(!geo.city&&!geo.region&&!geo.country){try{geo=await Promise.race([cityPromise,timeout(900)])||{}}catch(e){geo={}}}
+    var row={
+      session_id:session(),
+      event_type:type,
+      product_id:data.product_id||null,
+      product_name:data.product_name||null,
+      section:data.section||null,
+      scroll_depth:data.scroll_depth==null?null:Number(data.scroll_depth)||null,
+      city:geo.city||'', region:geo.region||'', country:geo.country||'',
+      metadata:Object.assign({tracker:'v104',page_id:PAGE_ID,path:location.pathname,search:location.search,hash:location.hash,ts:new Date().toISOString()},data.metadata||{})
+    };
+    var ok=false; try{await flushQueue(); ok=await insertRows([row])}catch(e){ok=false}
+    if(!ok){var q=readJSON(QUEUE,[])||[]; q.push(row); if(q.length>150)q=q.slice(-150); writeJSON(QUEUE,q)}
+  }
+  window.vgAnalyticsTrackV104=track;
+
+  function services(){try{if(Array.isArray(window.SERVICES))return window.SERVICES}catch(e){} try{if(typeof SERVICES!=='undefined'&&Array.isArray(SERVICES))return SERVICES}catch(e){} return []}
+  function serviceById(id){return services().find(function(p){return String(p.id)===String(id)})||null}
+  function getCat(p){return p?(p.categoryName||p.category||p.type||'catálogo'):''}
+  function installTracking(){
+    if(!booted){booted=true; track('page_view',{section:'inicio',metadata:{referrer:document.referrer||''}}); var sent={}; window.addEventListener('scroll',function(){var h=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)-window.innerHeight;if(h<=0)return;var pct=Math.round(Math.min(100,Math.max(0,(window.scrollY/h)*100)));[25,50,75,90].forEach(function(m){if(pct>=m&&!sent[m]){sent[m]=1;track('scroll_depth',{scroll_depth:m})}})},{passive:true});}
+    if(typeof window.openProduct==='function'&&!productWrapped){var old=window.openProduct; window.openProduct=function(id){var p=serviceById(id); if(p){track('product_view',{product_id:String(p.id),product_name:p.title||p.displayTitle||'',section:getCat(p),metadata:{price:p.priceLabel||'',source:'openProduct'}})} return old.apply(this,arguments)}; productWrapped=true;}
+    if(typeof window.openRetroModal==='function'&&!retroWrapped){var oldR=window.openRetroModal; window.openRetroModal=function(){track('product_view',{product_id:'xbox-retro',product_name:'Juegos Retro (Xbox)',section:'gaming',metadata:{source:'openRetroModal'}}); return oldR.apply(this,arguments)}; retroWrapped=true;}
+    if(typeof window.openXboxCurrentModal==='function'&&!xboxWrapped){var oldX=window.openXboxCurrentModal; window.openXboxCurrentModal=function(){track('product_view',{product_id:'xbox-one-series',product_name:'Xbox One / Series',section:'gaming',metadata:{source:'openXboxCurrentModal'}}); return oldX.apply(this,arguments)}; xboxWrapped=true;}
+    if(typeof window.showSection==='function'&&!sectionWrapped){var oldS=window.showSection; window.showSection=function(cat){track('section_view',{section:String(cat||'todos')}); return oldS.apply(this,arguments)}; sectionWrapped=true;}
+    if(typeof window.openPaymentModal==='function'&&!payWrapped){var oldP=window.openPaymentModal; window.openPaymentModal=function(order){try{var first=(order&&order.items&&order.items[0])||{}; track('checkout_open',{section:order&&order.source||'checkout',product_name:first.title||'',metadata:{total:order&&order.total||0}})}catch(e){} return oldP.apply(this,arguments)}; payWrapped=true;}
+  }
+
+  function toTime(r){var t=Date.parse(r.created_at||r.inserted_at||''); return isFinite(t)?t:0}
+  function resetAt(){return Number(localStorage.getItem(RESET)||0)||0}
+  function afterReset(rows){var r=resetAt(); return r?rows.filter(function(x){return toTime(x)>=r}):rows}
+  function deDupe(rows,keyFn){var m={},out=[]; rows.forEach(function(r){var k=keyFn(r); if(!m[k]){m[k]=1;out.push(r)}}); return out}
+  function bucket(r,min){var t=toTime(r)||Date.now(); return Math.floor(t/(min*60000))}
+  function group(rows,keyFn,limit){var map={}; rows.forEach(function(r){var k=keyFn(r)||'Sin dato'; map[k]=(map[k]||0)+1}); return Object.keys(map).map(function(k){return {name:k,count:map[k]}}).sort(function(a,b){return b.count-a.count}).slice(0,limit||8)}
+  function fmtDate(t){if(!t)return 'sin registro'; try{return new Date(t).toLocaleString('es-MX')}catch(e){return 'sin registro'}}
+
+  window.loadAnalyticsAdmin=async function(){
+    var body=qs('#vgAdminAnalyticsBody'); if(!body)return;
+    body.innerHTML='<div class="vg-admin-note">Cargando analítica real de Supabase...</div>';
+    var client=getSB();
+    if(!client){body.innerHTML='<div class="vg-analytics-status warn"><b>Supabase no está configurado.</b><br>Entra a la pestaña Supabase y guarda tu URL + anon key para que la analítica pueda registrar visitas.</div>';return;}
+    await flushQueue();
+    var res; try{res=await client.from(TABLE).select('id,created_at,session_id,event_type,product_id,product_name,section,scroll_depth,city,region,country,metadata').order('created_at',{ascending:false}).limit(5000)}catch(e){res={error:e}}
+    if(res.error){body.innerHTML='<div class="vg-analytics-status warn"><b>No pude leer la tabla '+TABLE+'.</b><br>'+esc(res.error.message||res.error)+'<br><br>Revisa que exista la tabla y sus políticas RLS de lectura/escritura.</div>';return;}
+    var all=afterReset(res.data||[]);
+    var visitsRaw=all.filter(function(r){return r.event_type==='page_view'||r.event_type==='page_view_v104'});
+    var visits=deDupe(visitsRaw,function(r){var md=r.metadata||{};return (md.page_id||'') || ((r.session_id||'s')+'|'+bucket(r,5)+'|'+((md.path||'')+(md.search||'')))});
+    var sessions={}; visits.forEach(function(r){sessions[r.session_id||('sin_'+r.id)]=1});
+    var productRaw=all.filter(function(r){return r.event_type==='product_view'});
+    var productViews=deDupe(productRaw,function(r){return (r.session_id||'s')+'|'+(r.product_id||r.product_name||'producto')+'|'+bucket(r,1)});
+    var checkout=deDupe(all.filter(function(r){return r.event_type==='checkout_open'}),function(r){return (r.session_id||'s')+'|'+(r.product_name||'checkout')+'|'+bucket(r,2)});
+    var scrolls=all.filter(function(r){return r.event_type==='scroll_depth'&&Number(r.scroll_depth)>0});
+    var maxBySession={}; scrolls.forEach(function(r){var sid=r.session_id||'s'; maxBySession[sid]=Math.max(maxBySession[sid]||0,Number(r.scroll_depth||0))});
+    var vals=Object.keys(maxBySession).map(function(k){return maxBySession[k]}); var avg=vals.length?Math.round(vals.reduce(function(a,b){return a+b},0)/vals.length):0;
+    var cityRows=deDupe(visits.concat(all.filter(function(r){return r.city||r.region})),function(r){return (r.session_id||'s')+'|'+(r.city||'')+'|'+(r.region||'')});
+    var cities=group(cityRows,function(r){return [r.city,r.region].filter(Boolean).join(', ')||'Sin dato'},10);
+    var products=group(productViews,function(r){return r.product_name||r.product_id||'Producto'},10);
+    var last=all.reduce(function(a,r){return Math.max(a,toTime(r))},0);
+    var queued=(readJSON(QUEUE,[])||[]).length;
+    body.innerHTML=
+      '<div class="vg-analytics-status"><b>Analítica conectada.</b> Datos leídos desde Supabase. Último evento: '+esc(fmtDate(last))+(queued?' · Pendientes por subir: '+queued:'')+'</div>'+ 
+      '<div class="vg-analytics-actions"><button class="vg-admin-btn" onclick="vgAnalyticsSendTest()">Probar registro</button><button class="vg-admin-btn" onclick="loadAnalyticsAdmin()">Recargar</button></div>'+ 
+      '<div class="vg-admin-analytics-grid"><div class="vg-analytics-card"><b>'+Object.keys(sessions).length+'</b><span>Visitantes</span><div class="vg-analytics-small">Sesiones únicas</div></div><div class="vg-analytics-card"><b>'+visits.length+'</b><span>Visitas</span><div class="vg-analytics-small">Páginas abiertas</div></div><div class="vg-analytics-card"><b>'+productViews.length+'</b><span>Productos vistos</span><div class="vg-analytics-small">Vistas sin duplicados</div></div><div class="vg-analytics-card"><b>'+avg+'%</b><span>Scroll promedio</span><div class="vg-analytics-small">Máximo por visitante</div></div></div>'+ 
+      '<div class="vg-admin-analytics-grid"><div class="vg-analytics-card"><b>'+checkout.length+'</b><span>Compras iniciadas</span><div class="vg-analytics-small">Métodos de pago abiertos</div></div><div class="vg-analytics-card"><b>'+all.length+'</b><span>Eventos</span><div class="vg-analytics-small">Después del último reinicio</div></div><div class="vg-analytics-card"><b>'+cities.length+'</b><span>Ciudades</span><div class="vg-analytics-small">Ubicación aproximada</div></div><div class="vg-analytics-card"><b>'+productRaw.length+'</b><span>Eventos producto</span><div class="vg-analytics-small">Registros crudos</div></div></div>'+ 
+      '<div class="vg-analytics-layout"><div class="vg-analytics-box"><h3>Productos más vistos</h3>'+(products.length?products.map(function(x){return '<div class="vg-analytics-row"><div><b>'+esc(x.name)+'</b><small>Vistas limpias</small></div><strong>'+x.count+'</strong></div>'}).join(''):'<p class="vg-analytics-muted">Todavía no hay productos vistos.</p>')+'</div><div class="vg-analytics-box"><h3>Ciudades</h3>'+(cities.length?cities.map(function(x){return '<div class="vg-analytics-row"><div><b>'+esc(x.name)+'</b><small>Ciudad aproximada por IP</small></div><strong>'+x.count+'</strong></div>'}).join(''):'<p class="vg-analytics-muted">Todavía no hay ciudad registrada.</p>')+'</div></div>';
+  };
+
+  window.vgAnalyticsSendTest=async function(){await track('page_view',{section:'admin-test',metadata:{manual_test:true}}); setTimeout(function(){window.loadAnalyticsAdmin&&window.loadAnalyticsAdmin()},900)};
+  window.resetAnalyticsAdmin=async function(){
+    if(!confirm('Esto reinicia la analítica del panel. ¿Continuar?'))return;
+    localStorage.setItem(RESET,String(Date.now()));
+    var client=getSB();
+    if(client){try{await client.from(TABLE).delete().not('id','is',null)}catch(e){}}
+    writeJSON(QUEUE,[]);
+    setTimeout(function(){window.loadAnalyticsAdmin&&window.loadAnalyticsAdmin()},400);
+  };
+
+  function patchAdminTabs(){
+    qsa('.vg-admin-tab[data-tab="analytics"]').forEach(function(btn){btn.onclick=function(){qsa('.vg-admin-tab').forEach(function(b){b.classList.toggle('active',b===btn)});qsa('.vg-admin-section').forEach(function(s){s.classList.remove('active')});var sec=qs('#vgAdminAnalytics'); if(sec)sec.classList.add('active'); window.loadAnalyticsAdmin();};});
+  }
+  function boot(){installTracking(); setTimeout(installTracking,700); setTimeout(installTracking,1800); setTimeout(patchAdminTabs,800); setTimeout(patchAdminTabs,1800)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+</script>
 </body>
 </html>
