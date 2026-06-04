@@ -16501,6 +16501,36 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   }
 </style>
 
+<style id="vg-redes-modal-remove-final-v103">
+  /* El aviso legal de redes queda únicamente en el apartado REDES del catálogo. */
+  #productModal #vgRedesTermsModal,
+  #productModal .vg-redes-terms{
+    display:none!important;
+  }
+
+  @media(max-width:820px){
+    /* Mantiene los servicios legibles en celular sin saturar la ventana. */
+    .modal-card{
+      grid-template-rows:28vh minmax(0,1fr)!important;
+    }
+    .modal-img{
+      height:28vh!important;
+      min-height:28vh!important;
+    }
+    .modal-img img{
+      max-height:calc(28vh - 24px)!important;
+      object-fit:contain!important;
+    }
+    .modal-body h2{
+      font-size:1.55rem!important;
+      line-height:1.05!important;
+    }
+    #modalOptions{
+      max-height:44vh!important;
+    }
+  }
+</style>
+
 <script id="vg-redes-terms-mobile-v102-script">
 (function(){
   'use strict';
@@ -16564,25 +16594,10 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   }
 
   function ensureModalTerms(){
-    var modal = document.getElementById('productModal');
-    var cat = document.getElementById('modalCat');
-    if(!modal || !cat) return;
-
+    // El aviso de REDES debe mostrarse solo en la sección principal del catálogo,
+    // no dentro de la ventana de cada servicio para no tapar las opciones.
     var existing = document.getElementById('vgRedesTermsModal');
-    var isRedes = modal.classList.contains('active') && String(cat.textContent || '').toLowerCase().indexOf('redes') !== -1;
-
-    if(isRedes){
-      if(!existing){
-        var wrap = document.createElement('div');
-        wrap.innerHTML = TERMS_HTML.replace('id="vgRedesTermsCatalog"', 'id="vgRedesTermsModal"');
-        var desc = document.getElementById('modalDesc');
-        if(desc && desc.parentNode){
-          desc.parentNode.insertBefore(wrap.firstElementChild, desc.nextSibling);
-        }
-      }
-    }else if(existing){
-      existing.remove();
-    }
+    if(existing) existing.remove();
   }
 
   function runSoon(){
