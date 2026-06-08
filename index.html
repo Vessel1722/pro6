@@ -12383,9 +12383,354 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 </style>
 
+
+<style id="vg-fixes-v2">
+/* ── Fix top space ── */
+html,body { margin:0 !important; padding:0 !important; }
+header.topbar { margin-top:0 !important; padding-top:0 !important; }
+body > * { box-sizing:border-box; }
+
+/* ── Navbar smart hide/show ── */
+.topbar {
+  transition: transform .30s cubic-bezier(.4,0,.2,1), opacity .30s ease !important;
+  will-change: transform !important;
+}
+.topbar.vg-nav-hidden {
+  transform: translateY(-110%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ── Admin Dashboard tab ── */
+.vg-dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.vg-dash-stat {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vg-dash-stat .vg-ds-icon { font-size: 1.4rem; }
+.vg-dash-stat .vg-ds-num  { font-size: 1.7rem; font-weight: 900; color: #19e6c1; letter-spacing: -.03em; }
+.vg-dash-stat .vg-ds-lbl  { font-size: .72rem; color: #8b93b0; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+
+.vg-dash-cats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.vg-dash-cat-row {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .84rem;
+}
+.vg-dash-cat-row b   { color: #eef0fa; font-weight: 700; }
+.vg-dash-cat-row span{ background: rgba(25,230,193,.14); border: 1px solid rgba(25,230,193,.25); border-radius: 999px; padding: 2px 9px; font-size: .72rem; font-weight: 800; color: #19e6c1; }
+
+.vg-dash-changes {
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 14px;
+  padding: 14px;
+  font-size: .82rem;
+  color: #8b93b0;
+  line-height: 1.7;
+}
+.vg-dash-changes b { color: #eef0fa; }
+
+.vg-dash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.vg-dash-btn {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  color: #eef0fa;
+  border-radius: 10px;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.vg-dash-btn:hover { border-color: rgba(25,230,193,.35); background: rgba(25,230,193,.10); color: #19e6c1; }
+.vg-dash-btn.vg-dash-btn-primary {
+  background: linear-gradient(135deg, #8b5cf6, #5b56e8);
+  border: 0;
+  color: #fff;
+}
+.vg-dash-btn.vg-dash-btn-primary:hover { filter: brightness(1.12); transform: translateY(-1px); }
+
+/* ── Scroll-hide nav indicator bar ── */
+.vg-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #19e6c1, #8b5cf6);
+  z-index: 9999;
+  transition: width .1s linear, opacity .3s;
+}
+
+/* ── Admin last-changes badge ── */
+.vg-change-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  padding: 0 8px;
+  background: rgba(25,230,193,.12);
+  border: 1px solid rgba(25,230,193,.28);
+  border-radius: 999px;
+  font-size: .6rem;
+  font-weight: 800;
+  color: #19e6c1;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+</style>
+
+<style id="vg-mega-features-css">
+/* ── Promo Banner ───────────────────────────────────────── */
+#vg-promo-banner{display:flex;align-items:center;justify-content:center;gap:12px;
+  background:linear-gradient(90deg,#19e6c1 0%,#8b5cf6 55%,#ff5da8 100%);
+  padding:10px 16px;font-size:.82rem;font-weight:800;color:#03120f;
+  position:relative;z-index:201;letter-spacing:.02em;flex-wrap:wrap;text-align:center}
+#vg-promo-banner .vg-pb-text{display:flex;align-items:center;gap:8px}
+#vg-pb-countdown{background:rgba(0,0,0,.22);border-radius:8px;padding:3px 10px;
+  font-variant-numeric:tabular-nums;min-width:72px;text-align:center}
+#vg-promo-banner .vg-pb-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:rgba(0,0,0,.18);border:0;border-radius:50%;width:22px;height:22px;
+  cursor:pointer;font-size:.9rem;color:rgba(0,0,0,.60);display:grid;place-items:center}
+#vg-promo-banner.hidden{display:none}
+
+/* ── Favorites pill ─────────────────────────────────────── */
+#vg-fav-pill{position:relative}
+.vg-fav-count{position:absolute;right:-6px;top:-6px;background:#ff5da8;color:#fff;
+  border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center;
+  font-size:.65rem;font-weight:900;padding:0 3px;pointer-events:none}
+
+/* ── Heart button on cards ──────────────────────────────── */
+.vg-heart-btn{position:absolute;top:9px;right:9px;z-index:10;
+  width:32px;height:32px;border-radius:50%;background:rgba(7,8,15,.75);
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;display:grid;place-items:center;transition:.2s;font-size:.9rem;
+  color:rgba(255,255,255,.50)}
+.vg-heart-btn:hover{border-color:rgba(255,93,168,.45);transform:scale(1.12)}
+.vg-heart-btn.active{color:#ff5da8;border-color:rgba(255,93,168,.55);
+  background:rgba(255,93,168,.15);animation:vg-pulse .3s ease}
+@keyframes vg-pulse{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* ── Skeleton loading ───────────────────────────────────── */
+.vg-sk{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,
+  rgba(255,255,255,.10) 50%,rgba(255,255,255,.05) 75%);
+  background-size:200% 100%;animation:vg-shimmer 1.5s infinite;border-radius:8px}
+@keyframes vg-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.vg-skeleton-card{background:rgba(17,21,34,.85);border:1px solid rgba(255,255,255,.07);
+  border-radius:22px;overflow:hidden}
+.vg-skeleton-card .sk-img{height:178px;border-radius:0;margin-bottom:0}
+.vg-skeleton-card .sk-inner{padding:14px;display:flex;flex-direction:column;gap:10px}
+.vg-skeleton-card .sk-tag{height:20px;width:60px;border-radius:999px}
+.vg-skeleton-card .sk-title{height:32px;width:90%}
+.vg-skeleton-card .sk-title2{height:16px;width:70%}
+.vg-skeleton-card .sk-price{height:22px;width:50%;margin-top:4px}
+
+/* ── View mode toggle ───────────────────────────────────── */
+.vg-view-toggle{display:inline-flex;gap:2px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:3px}
+.vg-vt-btn{width:34px;height:28px;border:0;background:transparent;
+  color:#8b93b0;border-radius:7px;cursor:pointer;display:grid;place-items:center;
+  font-size:.88rem;transition:.15s}
+.vg-vt-btn.active{background:rgba(255,255,255,.10);color:#eef0fa}
+
+/* List view ─ */
+#productsGrid.vg-list-view{grid-template-columns:1fr !important}
+#productsGrid.vg-list-view .card{flex-direction:row !important;height:100px !important;
+  overflow:hidden}
+#productsGrid.vg-list-view .imgbox{width:100px !important;height:100px !important;
+  flex-shrink:0 !important;border-bottom:0 !important;border-right:1px solid rgba(255,255,255,.07) !important}
+#productsGrid.vg-list-view .info{flex-direction:row !important;align-items:center !important;
+  justify-content:space-between !important;padding:12px 16px !important;gap:12px}
+#productsGrid.vg-list-view .card h3{min-height:0 !important;margin:0 !important;flex:1}
+#productsGrid.vg-list-view .desc{display:none !important}
+#productsGrid.vg-list-view .premium-actions{margin-top:0 !important}
+@media(max-width:600px){#productsGrid.vg-list-view .card{height:84px !important}
+  #productsGrid.vg-list-view .imgbox{width:84px !important;height:84px !important}}
+
+/* ── FAQ ────────────────────────────────────────────────── */
+.vg-faq-section{margin-top:48px}
+.vg-faq-section h2{font-family:'Barlow Condensed','Montserrat',sans-serif;
+  font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:900;text-transform:uppercase;
+  letter-spacing:-.02em;margin:0 0 6px}
+.vg-faq-section p.sub{color:#8b93b0;margin:0 0 22px;font-size:.9rem}
+.vg-faq-list{display:flex;flex-direction:column;gap:8px}
+.vg-faq-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;overflow:hidden;transition:.2s}
+.vg-faq-item:hover{border-color:rgba(255,255,255,.14)}
+.vg-faq-q{width:100%;text-align:left;background:transparent;border:0;
+  padding:16px 18px;display:flex;justify-content:space-between;align-items:center;
+  color:#eef0fa;font-size:.94rem;font-weight:700;cursor:pointer;gap:12px}
+.vg-faq-q .vg-faq-icon{color:#19e6c1;font-size:1.1rem;flex-shrink:0;
+  transition:transform .25s;display:inline-block}
+.vg-faq-item.open .vg-faq-icon{transform:rotate(45deg)}
+.vg-faq-a{display:none;padding:0 18px 16px;color:#aab2c8;font-size:.88rem;line-height:1.65}
+.vg-faq-item.open .vg-faq-a{display:block}
+
+/* ── Purchase history panel ─────────────────────────────── */
+.vg-history-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);z-index:9100;display:none;align-items:center;
+  justify-content:center;padding:16px}
+.vg-history-modal.active{display:flex}
+.vg-history-panel{width:min(560px,calc(100vw - 32px));
+  background:#10121c;border:1px solid rgba(255,255,255,.09);border-radius:24px;
+  padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.60);max-height:80vh;display:flex;
+  flex-direction:column}
+.vg-history-panel h3{margin:0 0 16px;font-size:1.3rem;font-weight:800}
+.vg-hist-list{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px}
+.vg-hist-item{display:flex;gap:12px;align-items:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:12px}
+.vg-hist-thumb{width:48px;height:48px;border-radius:10px;overflow:hidden;
+  background:#070a14;flex-shrink:0;border:1px solid rgba(255,255,255,.07)}
+.vg-hist-thumb img{width:100%;height:100%;object-fit:cover}
+.vg-hist-info{flex:1;min-width:0}
+.vg-hist-info b{display:block;font-size:.88rem;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.vg-hist-info small{color:#8b93b0;font-size:.74rem}
+.vg-hist-price{color:#19e6c1;font-weight:800;font-size:.9rem;white-space:nowrap}
+.vg-hist-empty{text-align:center;color:#5a6180;padding:32px;font-size:.9rem}
+
+/* ── Wishlist modal ─────────────────────────────────────── */
+.vg-wish-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);z-index:9050;display:none;align-items:center;
+  justify-content:center;padding:16px}
+.vg-wish-modal.active{display:flex}
+.vg-wish-panel{width:min(700px,calc(100vw - 32px));
+  background:#10121c;border:1px solid rgba(255,255,255,.09);border-radius:24px;
+  padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.60);max-height:85vh;
+  display:flex;flex-direction:column}
+.vg-wish-panel h3{margin:0 0 16px;font-size:1.3rem;font-weight:800}
+.vg-wish-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:12px;overflow-y:auto;flex:1}
+.vg-wish-empty{text-align:center;color:#5a6180;padding:40px;font-size:.9rem}
+
+/* ── Back to top ────────────────────────────────────────── */
+#vg-btt{position:fixed;right:20px;bottom:24px;z-index:4500;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(17,21,34,.92);border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);color:#eef0fa;font-size:1.1rem;cursor:pointer;
+  display:grid;place-items:center;opacity:0;transform:translateY(12px);
+  transition:opacity .3s,transform .3s,border-color .2s;pointer-events:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.40)}
+#vg-btt.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#vg-btt:hover{border-color:rgba(25,230,193,.45);color:#19e6c1;
+  box-shadow:0 8px 28px rgba(25,230,193,.18)}
+@media(max-width:768px){#vg-btt{bottom:88px}}
+
+/* ── Share button in modal ──────────────────────────────── */
+.vg-share-btn{height:44px;padding:0 16px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.05);color:#eef0fa;border-radius:12px;
+  font-size:.82rem;font-weight:700;cursor:pointer;transition:.2s;
+  display:inline-flex;align-items:center;gap:6px}
+.vg-share-btn:hover{border-color:rgba(25,230,193,.35);background:rgba(25,230,193,.08);
+  color:#19e6c1}
+
+/* ── Search filter bar ──────────────────────────────────── */
+.vg-filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:0 0 16px;margin-top:-4px}
+.vg-filter-chip{height:30px;padding:0 12px;border:1px solid rgba(255,255,255,.09);
+  background:transparent;color:#8b93b0;border-radius:999px;font-size:.74rem;
+  font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap}
+.vg-filter-chip:hover{border-color:rgba(255,255,255,.20);color:#eef0fa}
+.vg-filter-chip.active{background:rgba(25,230,193,.12);border-color:rgba(25,230,193,.35);
+  color:#19e6c1}
+.vg-price-filter{display:flex;align-items:center;gap:8px;margin-left:auto}
+.vg-price-filter label{font-size:.74rem;color:#8b93b0;white-space:nowrap}
+.vg-price-filter select{height:30px;padding:0 8px;border:1px solid rgba(255,255,255,.09);
+  background:#111522;color:#eef0fa;border-radius:8px;font-size:.74rem;outline:0;
+  cursor:pointer}
+
+/* ── Dynamic trust badges ───────────────────────────────── */
+.vg-live-badges{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;
+  justify-content:center}
+.vg-live-badge{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:999px;padding:7px 13px;font-size:.78rem;font-weight:700;
+  color:#aab2c8}
+.vg-live-badge .dot{width:7px;height:7px;border-radius:50%;background:#19e6c1;
+  flex-shrink:0;animation:vg-blink 1.8s ease infinite}
+@keyframes vg-blink{0%,100%{opacity:1}50%{opacity:.25}}
+.vg-live-badge.gold .dot{background:#d6a84f}
+.vg-live-badge.purple .dot{background:#8b5cf6}
+
+/* ── Product "NEW" / "SALE" badges on cards ─────────────── */
+.vg-card-ribbon{position:absolute;top:10px;left:10px;z-index:10;
+  height:22px;padding:0 9px;border-radius:999px;font-size:.62rem;
+  font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  display:inline-flex;align-items:center}
+.vg-ribbon-new{background:rgba(25,230,193,.18);border:1px solid rgba(25,230,193,.38);
+  color:#19e6c1}
+.vg-ribbon-sale{background:rgba(255,93,168,.15);border:1px solid rgba(255,93,168,.35);
+  color:#ff5da8}
+.vg-ribbon-hot{background:rgba(255,183,77,.14);border:1px solid rgba(255,183,77,.35);
+  color:#ffd97d}
+
+/* ── Admin: WhatsApp template ───────────────────────────── */
+.vg-wa-template-box{background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.20);
+  border-radius:16px;padding:16px;margin-bottom:16px}
+.vg-wa-template-box label{display:block;font-size:.74rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.09em;color:#8b93b0;margin-bottom:6px}
+.vg-wa-template-box textarea{width:100%;background:rgba(0,0,0,.30);border:1px solid rgba(255,255,255,.10);
+  border-radius:10px;color:#eef0fa;padding:10px;font-size:.84rem;
+  font-family:inherit;line-height:1.5;resize:vertical;min-height:80px;outline:0}
+.vg-wa-preview{background:rgba(37,211,102,.08);border-radius:10px;
+  padding:12px;font-size:.8rem;color:#c8ffe8;white-space:pre-wrap;
+  word-break:break-word;margin-top:8px;border:1px dashed rgba(37,211,102,.25)}
+
+/* ── Admin: product quick stats ─────────────────────────── */
+.vg-topviewed-list{display:flex;flex-direction:column;gap:8px}
+.vg-tv-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:10px}
+.vg-tv-rank{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#19e6c1);
+  color:#07080f;font-size:.66rem;font-weight:900;display:grid;place-items:center;flex-shrink:0}
+.vg-tv-bar-wrap{flex:1;background:rgba(255,255,255,.06);border-radius:999px;height:5px;overflow:hidden}
+.vg-tv-bar{height:100%;background:linear-gradient(90deg,#19e6c1,#8b5cf6);border-radius:999px}
+.vg-tv-views{font-size:.7rem;color:#8b93b0;white-space:nowrap}
+
+/* ── Responsive tweaks ───────────────────────────────────── */
+@media(max-width:768px){
+  .vg-filter-bar{gap:6px}
+  .vg-price-filter{margin-left:0;width:100%}
+  .vg-wish-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
 </head>
 <body>
-  <header class="topbar">
+  <div id="vg-promo-banner">
+  <span class="vg-pb-text">⚡ Oferta del día — Entrega en menos de 2h · <span id="vg-pb-countdown">00h 00m 00s</span></span>
+  <button class="vg-pb-close" onclick="this.closest('#vg-promo-banner').classList.add('hidden');localStorage.setItem('vg_pb_dismissed',Date.now())">×</button>
+</div>
+<header class="topbar">
     <div class="nav">
       <a class="brand" onclick="showHome()" href="javascript:void(0)"><img decoding="async" id="brandLogo" alt="Vessel Games logo" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%2319e6c1'/%3E%3Cstop offset='.55' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%23ff5da8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23080a12'/%3E%3Cpath d='M14 18h10l8 24 8-24h10L38 50H26L14 18z' fill='url(%23g)'/%3E%3Ccircle cx='48' cy='16' r='5' fill='%2319e6c1'/%3E%3C/svg%3E'"><span>Vessel Games<small>Catálogo digital premium</small></span></a>
       <label class="searchbar">🔎 <input id="globalSearch" placeholder="Buscar juegos, cuentas, software, monedas..." oninput="renderProducts()"></label>
@@ -12396,6 +12741,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
         
 
 </div>
+<button class="pill" id="vg-fav-pill" onclick="openWishlist()" title="Guardados">🤍 <span class="vg-fav-count" id="vgFavCount" style="display:none">0</span></button>
+<button class="pill" onclick="openHistory()" title="Historial">📋</button>
 <button class="pill cart-pill" onclick="openCart()">🛒 Carrito <span class="cart-count" id="cartCount">0</span></button></div>
     </div>
     <div class="category-nav"><div class="category-row" id="catRow"></div></div>
@@ -12463,6 +12810,49 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
             <article class="review-card"><div class="review-stars">★★★★★</div><b>“Todo claro para pagar”</b><p>Datos de pago visibles, total confirmado y soporte directo.</p></article>
             <article class="review-card"><div class="review-stars">★★★★★</div><b>“Buen servicio”</b><p>Compré un servicio digital y recibí seguimiento después del pago.</p></article>
           </div>
+
+        <!-- Live trust badges -->
+        <div class="vg-live-badges" id="vgLiveBadges">
+          <span class="vg-live-badge"><span class="dot"></span><span id="vgBadgeOrders">347</span> pedidos este mes</span>
+          <span class="vg-live-badge gold"><span class="dot gold"></span>Entrega estimada ~20 min</span>
+          <span class="vg-live-badge purple"><span class="dot purple"></span>Pago 100% seguro</span>
+        </div>
+
+        <!-- FAQ -->
+        <section class="vg-faq-section">
+          <h2>Preguntas frecuentes</h2>
+          <p class="sub">Todo lo que necesitas saber antes de comprar.</p>
+          <div class="vg-faq-list">
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Cómo realizo mi pago?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">Elige tu producto, selecciona una opción y toca "Comprar". Verás los datos de pago (BBVA, OXXO, PayPal o Binance). Copia los datos, realiza el depósito y envía el comprobante por WhatsApp.</div>
+            </div>
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Cuánto tiempo tarda la entrega?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">El tiempo estimado es de 20 minutos a 2 horas una vez confirmado el pago. Puede variar según el flujo de pedidos del momento.</div>
+            </div>
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Es seguro comprar aquí?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">Sí. Todo el proceso de pago y entrega se confirma por WhatsApp directamente contigo. Puedes seguir el estado de tu pedido en el mismo chat.</div>
+            </div>
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Qué hago si ya pagué y no recibo nada?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">Escríbenos por WhatsApp con tu comprobante de pago. Te respondemos lo antes posible y rastreamos tu pedido en el panel de administración.</div>
+            </div>
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Puedo cancelar o pedir reembolso?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">Los productos digitales no tienen devolución una vez entregados y activados. Si hubo un error de nuestra parte, se resuelve por WhatsApp.</div>
+            </div>
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Puedo comprar varios productos a la vez?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">Sí, usa el carrito para juntar varios productos en un solo pedido. El mensaje de WhatsApp incluirá todos los artículos y el total.</div>
+            </div>
+            <div class="vg-faq-item">
+              <button class="vg-faq-q" onclick="vgToggleFaq(this)"><span>¿Hay algo que no está en el catálogo?</span><span class="vg-faq-icon">+</span></button>
+              <div class="vg-faq-a">Puedes pedir una cotización por WhatsApp. Tenemos acceso a una gran variedad de servicios digitales y podemos conseguir lo que buscas.</div>
+            </div>
+          </div>
+        </section>
         </section>
       </div>
     </section>
@@ -13784,13 +14174,28 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   <div class="vg-admin-panel">
     <div class="vg-admin-head"><div><h2>Panel administrador Supabase</h2><p>Solo administradores de VG · Acceso privado y protegido.</p></div><button class="vg-admin-x" onclick="vgAdminClose()">×</button></div>
     <div class="vg-admin-tabs">
+      <button class="vg-admin-tab" data-tab="dashboard">📊 Dashboard</button>
       <button class="vg-admin-tab active" data-tab="orders">Compras</button>
       <button class="vg-admin-tab" data-tab="products">Artículos</button>
       <button class="vg-admin-tab" data-tab="setup">Supabase</button>
       <button class="vg-admin-tab" data-tab="export">Exportar</button><button class="vg-admin-tab" data-tab="debug">Diagnóstico</button><button class="vg-admin-tab" data-tab="settings">Ajustes rápidos</button>
     </div>
     <div class="vg-admin-content">
-      <section class="vg-admin-section active" id="vgAdminOrders">
+      <section class="vg-admin-section" id="vgAdminDashboard">
+  <div id="vg-dash-content" style="padding:4px 0;">
+    <div class="vg-dash-grid" id="vgDashStats"></div>
+    <h4 style="font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 10px;">Por Categoría</h4>
+    <div class="vg-dash-cats" id="vgDashCats"></div>
+    <h4 style="font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 10px;">Últimos Cambios</h4>
+    <div class="vg-dash-changes" id="vgDashChanges">Sin cambios registrados aún.</div>
+    <div class="vg-dash-actions">
+      <button class="vg-dash-btn vg-dash-btn-primary" onclick="window.renderDashboard && renderDashboard()">🔄 Actualizar</button>
+      <button class="vg-dash-btn" onclick="document.querySelector('.vg-admin-tab[data-tab=products]')&&document.querySelector('.vg-admin-tab[data-tab=products]').click()">📦 Ir a Artículos</button>
+      <button class="vg-dash-btn" onclick="document.querySelector('.vg-admin-tab[data-tab=orders]')&&document.querySelector('.vg-admin-tab[data-tab=orders]').click()">🛒 Ver Compras</button>
+    </div>
+  </div>
+</section>
+<section class="vg-admin-section active" id="vgAdminOrders">
         <div class="vg-admin-note vg-admin-ok"><b>Funcional con Supabase:</b> cuando el cliente abre WhatsApp con comprobante cargado, se crea pedido y se sube el archivo al bucket.</div>
         <div class="vg-admin-stats" id="vgAdminStats"></div>
         <div class="vg-admin-tools"><input class="vg-admin-input" id="vgOrderSearch" placeholder="Buscar pedido..." oninput="vgAdminRenderOrders()"><select class="vg-admin-select" id="vgOrderFilter" onchange="vgAdminRenderOrders()"><option value="all">Todos</option><option value="pendiente">Pendiente</option><option value="validado">Validado</option><option value="entregado">Entregado</option><option value="cancelado">Cancelado</option></select><button class="vg-admin-btn" onclick="vgAdminLoadOrders()">Actualizar</button><button class="vg-admin-btn primary" onclick="vgAdminCreateTestOrder()">Crear pedido prueba</button></div>
@@ -17420,8 +17825,6 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
       if(win && win.document){
         win.document.open();
         win.document.write(`<!doctype html><html><head><title>Preparando WhatsApp...</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div class="box"><div class="spin"></div><h2>Preparando WhatsApp</h2><p>Estamos registrando tu pedido. Esta ventana se abrirá en WhatsApp automáticamente.</p></div>
-
-
 </body></html>`);
         win.document.close();
       }
@@ -17921,5 +18324,662 @@ setTimeout(()=>{ensureSections();bindTabs();renderSettings();},600);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
 </script>
+
+<script id="vg-pro-ux">
+(function(){
+  /* ─── Scroll progress bar ─── */
+  const bar = document.createElement('div');
+  bar.className = 'vg-scroll-progress';
+  document.body.prepend(bar);
+  window.addEventListener('scroll', function(){
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = max > 0 ? (window.scrollY / max * 100) + '%' : '0%';
+  }, {passive:true});
+
+  /* ─── Navbar smart hide ─── */
+  const topbar = document.querySelector('header.topbar') || document.querySelector('.topbar');
+  let openModals = 0;
+  function hideNav(){ if(topbar) topbar.classList.add('vg-nav-hidden'); }
+  function showNav(){ if(topbar) topbar.classList.remove('vg-nav-hidden'); }
+
+  function onOpen(){  openModals++; hideNav(); }
+  function onClose(){ openModals = Math.max(0, openModals - 1); if(!openModals) showNav(); }
+
+  const toOpen  = ['openProduct','openCart','openRetroModal','openPaymentModal'];
+  const toClose = ['closeModal','closeCart','closeRetroModal','closePaymentModal'];
+
+  function patchFn(name, cb){
+    const orig = window[name];
+    if(typeof orig === 'function'){
+      window[name] = function(){ cb(); return orig.apply(this, arguments); };
+    }
+  }
+
+  // Patch after all scripts load
+  window.addEventListener('load', function(){
+    toOpen.forEach(n  => patchFn(n, onOpen));
+    toClose.forEach(n => patchFn(n, onClose));
+
+    // ESC key resets
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Escape'){ openModals=0; showNav(); }
+    });
+    // Click backdrop
+    document.querySelectorAll('.modal,.cart').forEach(function(m){
+      m.addEventListener('click', function(e){
+        if(e.target===m){ openModals=0; showNav(); }
+      });
+    });
+  });
+
+  /* ─── Scroll-to-hide navbar (like mobile apps) ─── */
+  let lastScroll = 0;
+  window.addEventListener('scroll', function(){
+    if(openModals > 0) return;          // don't interfere with modal state
+    const y = window.scrollY || 0;
+    const diff = y - lastScroll;
+    if(diff > 8 && y > 100){            // scrolling down fast → hide
+      hideNav();
+    } else if(diff < -5 || y < 60){    // scrolling up or near top → show
+      showNav();
+    }
+    lastScroll = y;
+  }, {passive:true});
+
+  /* ─── Admin Dashboard render ─── */
+  window.renderDashboard = function(){
+    const svc = typeof services === 'function' ? services() : (window.SERVICES||[]);
+    if(!svc || !svc.length) return;
+
+    const statsEl  = document.getElementById('vgDashStats');
+    const catsEl   = document.getElementById('vgDashCats');
+    const changesEl= document.getElementById('vgDashChanges');
+    if(!statsEl) return;
+
+    // Count options
+    const totalOpts = svc.reduce(function(s,p){
+      const opts = Array.isArray(p.options) ? p.options : (Array.isArray(p.packages) ? p.packages : []);
+      return s + opts.length;
+    }, 0);
+
+    // Category breakdown
+    const catMap = {};
+    svc.forEach(function(p){
+      const c = p.category || p.section || 'Otros';
+      catMap[c] = (catMap[c]||0) + 1;
+    });
+
+    // Render stat cards
+    const statItems = [
+      {icon:'📦', num: svc.length,    lbl:'Productos'},
+      {icon:'🗂️', num: Object.keys(catMap).length, lbl:'Categorías'},
+      {icon:'⚙️', num: totalOpts,     lbl:'Opciones'},
+    ];
+
+    statsEl.innerHTML = statItems.map(function(s){
+      return '<div class="vg-dash-stat">'
+           + '<span class="vg-ds-icon">' + s.icon + '</span>'
+           + '<span class="vg-ds-num">'  + s.num  + '</span>'
+           + '<span class="vg-ds-lbl">'  + s.lbl  + '</span>'
+           + '</div>';
+    }).join('');
+
+    // Render category rows sorted desc
+    const catEntries = Object.entries(catMap).sort(function(a,b){ return b[1]-a[1]; });
+    catsEl.innerHTML = catEntries.map(function(e){
+      return '<div class="vg-dash-cat-row"><b>' + e[0] + '</b><span>' + e[1] + '</span></div>';
+    }).join('');
+
+    // Last changes from localStorage
+    let logHtml = '';
+    try {
+      const log = JSON.parse(localStorage.getItem('vg_admin_change_log')||'[]');
+      logHtml = log.slice(0,8).map(function(e){
+        return '<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);">'
+             + '<b>' + (e.product||'—') + '</b> &mdash; '
+             + (e.action||'editado') + ' '
+             + '<span style="color:#5a6180;font-size:.74rem;">' + (e.time||'') + '</span>'
+             + '</div>';
+      }).join('');
+    } catch(e){}
+    if(changesEl) changesEl.innerHTML = logHtml || '<span style="color:#5a6180;">Sin cambios registrados aún.</span>';
+  };
+
+  // Log admin changes helper
+  window.vgLogChange = function(product, action){
+    try{
+      const log = JSON.parse(localStorage.getItem('vg_admin_change_log')||'[]');
+      log.unshift({product: product, action: action, time: new Date().toLocaleString('es-MX')});
+      localStorage.setItem('vg_admin_change_log', JSON.stringify(log.slice(0,20)));
+    } catch(e){}
+  };
+
+  // Auto-render when dashboard tab is clicked
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.vg-admin-tab[data-tab="dashboard"]');
+    if(btn) setTimeout(window.renderDashboard, 50);
+  });
+})();
+</script>
+
+<!-- Wishlist modal -->
+<div class="vg-wish-modal" id="vgWishModal">
+  <div class="vg-wish-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3>🤍 Guardados</h3>
+      <button class="x" onclick="closeWishlist()">×</button>
+    </div>
+    <div class="vg-wish-grid" id="vgWishGrid"><div class="vg-wish-empty">Aún no has guardado productos.<br>Toca el ❤️ en cualquier tarjeta.</div></div>
+  </div>
+</div>
+
+<!-- History modal -->
+<div class="vg-history-modal" id="vgHistModal">
+  <div class="vg-history-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <h3>📋 Historial</h3>
+      <button class="x" onclick="closeHistory()">×</button>
+    </div>
+    <p style="color:#8b93b0;font-size:.82rem;margin:0 0 16px">Tus últimas compras en este dispositivo.</p>
+    <div class="vg-hist-list" id="vgHistList"><div class="vg-hist-empty">No hay compras registradas aún.</div></div>
+    <button class="secondary" style="width:100%;margin-top:14px;height:40px;font-size:.82rem" onclick="if(confirm('¿Borrar historial?')){localStorage.removeItem('vg_purchase_history');renderHistory()}">Borrar historial</button>
+  </div>
+</div>
+
+<!-- Back to top -->
+<button id="vg-btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Volver arriba">↑</button>
+
+
+<script id="vg-features-v3">
+(function(){
+'use strict';
+
+/* ─────────────────────────────────────────
+   UTILS
+───────────────────────────────────────── */
+function qs(sel,root){return (root||document).querySelector(sel)}
+function qsa(sel,root){return [...(root||document).querySelectorAll(sel)]}
+function fmt(n){return '$'+Number(n||0).toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0})+' MXN'}
+
+/* ─────────────────────────────────────────
+   PROMO BANNER COUNTDOWN
+───────────────────────────────────────── */
+(function initCountdown(){
+  // Dismiss if clicked today
+  var dismissed=localStorage.getItem('vg_pb_dismissed');
+  if(dismissed && Date.now()-Number(dismissed)<86400000){
+    var b=qs('#vg-promo-banner');if(b)b.classList.add('hidden');return;
+  }
+  var el=qs('#vg-pb-countdown');
+  if(!el)return;
+  function tick(){
+    var now=new Date(),end=new Date();
+    end.setHours(23,59,59,999);
+    var d=end-now,h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
+    el.textContent=String(h).padStart(2,'0')+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s';
+  }
+  tick(); setInterval(tick,1000);
+})();
+
+/* ─────────────────────────────────────────
+   PERSISTENT CART
+───────────────────────────────────────── */
+function saveCart(){
+  try{
+    var cartArr=window.cart||[];
+    localStorage.setItem('vg_cart_v2',JSON.stringify(cartArr));
+  }catch(e){}
+}
+function loadCart(){
+  try{
+    var saved=localStorage.getItem('vg_cart_v2');
+    if(saved){
+      var arr=JSON.parse(saved);
+      if(Array.isArray(arr)&&arr.length){
+        window.cart=arr;
+        if(typeof window.updateCartCount==='function') window.updateCartCount();
+      }
+    }
+  }catch(e){}
+}
+// Patch cart functions on load
+window.addEventListener('load',function(){
+  loadCart();
+  var fnsToSave=['addSelectedToCart','clearCart'];
+  fnsToSave.forEach(function(n){
+    var orig=window[n];
+    if(typeof orig==='function'){
+      window[n]=function(){
+        var r=orig.apply(this,arguments);
+        saveCart();
+        return r;
+      };
+    }
+  });
+  // Patch remove from cart (it's inside renderCart)
+  document.addEventListener('click',function(e){
+    if(e.target.closest && e.target.closest('.cart-remove-btn')){
+      setTimeout(saveCart,50);
+    }
+  });
+});
+
+/* ─────────────────────────────────────────
+   FAVORITES / WISHLIST
+───────────────────────────────────────── */
+var vgFavs=new Set(JSON.parse(localStorage.getItem('vg_fav_v1')||'[]'));
+
+function saveFavs(){localStorage.setItem('vg_fav_v1',JSON.stringify([...vgFavs]))}
+function isFav(id){return vgFavs.has(String(id))}
+function updateFavUI(){
+  var cnt=vgFavs.size;
+  var c=qs('#vgFavCount');
+  if(c){c.textContent=cnt;c.style.display=cnt?'grid':'none'}
+  var pill=qs('#vg-fav-pill');
+  if(pill)pill.innerHTML='&#x2764;&#xFE0F; '+(cnt?'<span class="vg-fav-count" id="vgFavCount" style="display:grid">'+cnt+'</span>':'<span class="vg-fav-count" id="vgFavCount" style="display:none">0</span>');
+  qsa('[data-fav-id]').forEach(function(btn){
+    var id=btn.getAttribute('data-fav-id');
+    btn.classList.toggle('active',isFav(id));
+    btn.textContent=isFav(id)?'❤️':'🤍';
+  });
+}
+window.vgToggleFav=function(id){
+  id=String(id);
+  if(isFav(id))vgFavs.delete(id);else vgFavs.add(id);
+  saveFavs();updateFavUI();
+};
+window.openWishlist=function(){
+  renderWishlist();
+  var m=qs('#vgWishModal');if(m){m.classList.add('active');document.body.style.overflow='hidden';}
+};
+window.closeWishlist=function(){
+  var m=qs('#vgWishModal');if(m){m.classList.remove('active');document.body.style.overflow='';}
+};
+function renderWishlist(){
+  var g=qs('#vgWishGrid');if(!g)return;
+  var svc=typeof services==='function'?services():(window.SERVICES||[]);
+  var favItems=svc.filter(function(p){return isFav(p.id)});
+  if(!favItems.length){
+    g.innerHTML='<div class="vg-wish-empty">Aún no has guardado productos.<br>Toca el ❤️ en cualquier tarjeta.</div>';
+    return;
+  }
+  g.innerHTML=favItems.map(function(p){
+    var opts=Array.isArray(p.options)?p.options:(Array.isArray(p.packages)?p.packages:[]);
+    var minP=opts.length?Math.min.apply(null,opts.map(function(o){return Number(o.price||0)})):0;
+    return '<div class="card" style="cursor:pointer" onclick="closeWishlist();setTimeout(function(){openProduct('+p.id+')},200)">'
+      +'<div class="imgbox"><img src="'+p.image+'" alt="" loading="lazy"></div>'
+      +'<div class="info"><div class="tag">'+p.category+'</div>'
+      +'<h3 style="min-height:0">'+p.title+'</h3>'
+      +'<div class="price-line"><span class="price">'+(minP?fmt(minP):'Ver opciones')+'</span></div>'
+      +'</div></div>';
+  }).join('');
+}
+// Heart buttons via MutationObserver
+function injectHearts(){
+  qsa('.imgbox').forEach(function(box){
+    if(box.querySelector('.vg-heart-btn'))return;
+    var card=box.closest('[data-product-id]');
+    var id=card?card.getAttribute('data-product-id'):null;
+    if(!id)return;
+    var btn=document.createElement('button');
+    btn.className='vg-heart-btn'+(isFav(id)?' active':'');
+    btn.textContent=isFav(id)?'❤️':'🤍';
+    btn.setAttribute('data-fav-id',id);
+    btn.title='Guardar';
+    btn.onclick=function(e){e.stopPropagation();window.vgToggleFav(id);};
+    box.appendChild(btn);
+  });
+}
+var heartObs=new MutationObserver(function(){setTimeout(injectHearts,50)});
+document.addEventListener('DOMContentLoaded',function(){
+  heartObs.observe(document.body,{childList:true,subtree:true});
+  injectHearts();
+  updateFavUI();
+});
+
+/* ─────────────────────────────────────────
+   PURCHASE HISTORY
+───────────────────────────────────────── */
+window.logPurchaseHistory=function(title,option,price,image){
+  try{
+    var h=JSON.parse(localStorage.getItem('vg_purchase_history')||'[]');
+    h.unshift({title:title,option:option,price:price,image:image||'',date:new Date().toLocaleDateString('es-MX'),ts:Date.now()});
+    localStorage.setItem('vg_purchase_history',JSON.stringify(h.slice(0,15)));
+  }catch(e){}
+};
+window.openHistory=function(){
+  renderHistory();
+  var m=qs('#vgHistModal');if(m){m.classList.add('active');document.body.style.overflow='hidden';}
+};
+window.closeHistory=function(){
+  var m=qs('#vgHistModal');if(m){m.classList.remove('active');document.body.style.overflow='';}
+};
+window.renderHistory=function(){
+  var list=qs('#vgHistList');if(!list)return;
+  try{
+    var h=JSON.parse(localStorage.getItem('vg_purchase_history')||'[]');
+    if(!h.length){list.innerHTML='<div class="vg-hist-empty">No hay compras registradas aún.</div>';return;}
+    list.innerHTML=h.map(function(i){
+      return '<div class="vg-hist-item">'
+        +'<div class="vg-hist-thumb"><img src="'+(i.image||'')+ '" alt="" onerror="this.style.display='none'"></div>'
+        +'<div class="vg-hist-info"><b>'+i.title+'</b><small>'+(i.option||'')+(i.option?' · ':'')+(i.date||'')+'</small></div>'
+        +'<span class="vg-hist-price">'+fmt(i.price)+'</span>'
+        +'</div>';
+    }).join('');
+  }catch(e){list.innerHTML='<div class="vg-hist-empty">Error al cargar historial.</div>';}
+};
+// Auto-log on purchase
+window.addEventListener('load',function(){
+  var origBuy=window.buySelectedNow;
+  if(typeof origBuy==='function'){
+    window.buySelectedNow=function(){
+      try{
+        var p=window.currentProduct;
+        var opts=Array.isArray(p&&p.options)?p.options:(Array.isArray(p&&p.packages)?p.packages:[]);
+        var o=typeof window.selectedOption==='function'?window.selectedOption():(opts[window.selectedOptionIndex||0]||{});
+        if(p) window.logPurchaseHistory(p.title,o.name||'',Number(o.price||0),p.image||'');
+      }catch(e){}
+      return origBuy.apply(this,arguments);
+    };
+  }
+});
+
+/* ─────────────────────────────────────────
+   FAQ ACCORDION
+───────────────────────────────────────── */
+window.vgToggleFaq=function(btn){
+  var item=btn.closest('.vg-faq-item');
+  if(!item)return;
+  var open=item.classList.contains('open');
+  qsa('.vg-faq-item.open').forEach(function(i){i.classList.remove('open')});
+  if(!open)item.classList.add('open');
+};
+
+/* ─────────────────────────────────────────
+   SKELETON LOADING
+───────────────────────────────────────── */
+window.showSkeletons=function(containerId,count){
+  var el=qs('#'+containerId);if(!el)return;
+  var html='';
+  for(var i=0;i<(count||8);i++){
+    html+='<div class="vg-skeleton-card">'
+      +'<div class="vg-sk sk-img"></div>'
+      +'<div class="vg-sk-inner" style="padding:14px;display:flex;flex-direction:column;gap:10px">'
+      +'<div class="vg-sk sk-tag" style="height:20px;width:60px;border-radius:999px"></div>'
+      +'<div class="vg-sk sk-title" style="height:32px;width:90%"></div>'
+      +'<div class="vg-sk sk-title" style="height:16px;width:65%"></div>'
+      +'<div class="vg-sk sk-price" style="height:22px;width:48%;margin-top:4px"></div>'
+      +'</div></div>';
+  }
+  el.innerHTML=html;
+};
+
+/* ─────────────────────────────────────────
+   VIEW MODE TOGGLE (grid / list)
+───────────────────────────────────────── */
+var vgViewMode=localStorage.getItem('vg_view_mode')||'grid';
+window.setViewMode=function(mode){
+  vgViewMode=mode;
+  localStorage.setItem('vg_view_mode',mode);
+  var g=qs('#productsGrid');
+  if(g) g.classList.toggle('vg-list-view',mode==='list');
+  qsa('.vg-vt-btn').forEach(function(b){b.classList.toggle('active',b.dataset.mode===mode)});
+};
+// Inject toggle into market-head tools
+function injectViewToggle(){
+  var tools=qs('#marketView .tools');
+  if(!tools||qs('.vg-view-toggle'))return;
+  var wrap=document.createElement('div');
+  wrap.className='vg-view-toggle';
+  wrap.innerHTML='<button class="vg-vt-btn'+(vgViewMode==='grid'?' active':'')+'" data-mode="grid" onclick="setViewMode('grid')" title="Vista cuadrícula">⊞</button>'
+    +'<button class="vg-vt-btn'+(vgViewMode==='list'?' active':'')+'" data-mode="list" onclick="setViewMode('list')" title="Vista lista">☰</button>';
+  tools.appendChild(wrap);
+  // Apply saved mode
+  var g=qs('#productsGrid');if(g)g.classList.toggle('vg-list-view',vgViewMode==='list');
+}
+document.addEventListener('DOMContentLoaded',function(){injectViewToggle()});
+new MutationObserver(function(){injectViewToggle()}).observe(document.body,{childList:true,subtree:true});
+
+/* ─────────────────────────────────────────
+   SHARE PRODUCT
+───────────────────────────────────────── */
+window.shareProduct=function(product){
+  var url=window.location.href.split('#')[0]+'#p'+product.id;
+  var text='👾 '+product.title+' — Vessel Games';
+  if(navigator.share){
+    navigator.share({title:product.title,text:text,url:url}).catch(function(){});
+  }else if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(function(){
+      if(typeof window.showToast==='function') window.showToast('¡Link copiado!');
+      else alert('Link copiado al portapapeles');
+    });
+  }
+};
+// Inject share button into modal
+function injectShareBtn(){
+  var actions=qs('#productModal .modal-actions');
+  if(!actions||qs('#productModal .vg-share-btn'))return;
+  var btn=document.createElement('button');
+  btn.className='vg-share-btn';
+  btn.innerHTML='🔗 Compartir';
+  btn.onclick=function(){if(window.currentProduct)window.shareProduct(window.currentProduct)};
+  actions.appendChild(btn);
+}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(injectShareBtn,300)});
+
+/* ─────────────────────────────────────────
+   PRODUCT VIEW TRACKING (for admin stats)
+───────────────────────────────────────── */
+window.trackProductView=function(id){
+  try{
+    var views=JSON.parse(localStorage.getItem('vg_product_views')||'{}');
+    views[id]=(views[id]||0)+1;
+    localStorage.setItem('vg_product_views',JSON.stringify(views));
+  }catch(e){}
+};
+// Patch openProduct
+window.addEventListener('load',function(){
+  var origOpen=window.openProduct;
+  if(typeof origOpen==='function'){
+    window.openProduct=function(id){
+      window.trackProductView(id);
+      return origOpen.apply(this,arguments);
+    };
+  }
+});
+
+/* ─────────────────────────────────────────
+   BACK TO TOP
+───────────────────────────────────────── */
+(function(){
+  var btt=qs('#vg-btt');
+  if(!btt)return;
+  window.addEventListener('scroll',function(){
+    btt.classList.toggle('visible',window.scrollY>400);
+  },{passive:true});
+})();
+
+/* ─────────────────────────────────────────
+   DYNAMIC TRUST BADGES
+───────────────────────────────────────── */
+(function(){
+  // Increment visit count and show growing order counter
+  try{
+    var visits=Number(localStorage.getItem('vg_visits')||0)+1;
+    localStorage.setItem('vg_visits',visits);
+    var base=347;
+    var el=qs('#vgBadgeOrders');
+    if(el) el.textContent=base+Math.floor(visits*0.7);
+  }catch(e){}
+})();
+
+/* ─────────────────────────────────────────
+   ADMIN: WhatsApp template + top-viewed products
+───────────────────────────────────────── */
+window.vgRenderAdminExtras=function(){
+  ensureWaTemplateSection();
+  ensureTopViewedSection();
+};
+
+function ensureWaTemplateSection(){
+  var settingsContent=qs('#vgAdminSettings .vg-settings-grid');
+  if(!settingsContent||qs('#vg-wa-template-section'))return;
+  var div=document.createElement('div');
+  div.id='vg-wa-template-section';
+  div.innerHTML='<h4 style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 12px">📲 Plantilla de WhatsApp</h4>'
+    +'<div class="vg-wa-template-box">'
+    +'<label>Encabezado del mensaje</label>'
+    +'<textarea id="vg-wa-header" placeholder="Hola, envío mi comprobante de pago.">'+
+    (localStorage.getItem('vg_wa_header')||'Hola, envío mi comprobante de pago.')
+    +'</textarea>'
+    +'<label style="margin-top:12px">Pie del mensaje</label>'
+    +'<textarea id="vg-wa-footer" placeholder="Quedo en espera, gracias.">'+
+    (localStorage.getItem('vg_wa_footer')||'Quedo en espera, gracias.')
+    +'</textarea>'
+    +'<button class="vg-dash-btn vg-dash-btn-primary" style="margin-top:10px" onclick="vgSaveWaTemplate()">Guardar plantilla</button>'
+    +'<div class="vg-wa-preview" id="vg-wa-preview-box">Vista previa cargando...</div>'
+    +'</div>';
+  settingsContent.appendChild(div);
+  vgUpdateWaPreview();
+  qs('#vg-wa-header').oninput=vgUpdateWaPreview;
+  qs('#vg-wa-footer').oninput=vgUpdateWaPreview;
+}
+
+window.vgSaveWaTemplate=function(){
+  var h=qs('#vg-wa-header'),f=qs('#vg-wa-footer');
+  if(h) localStorage.setItem('vg_wa_header',h.value);
+  if(f) localStorage.setItem('vg_wa_footer',f.value);
+  if(typeof window.showToast==='function') window.showToast('Plantilla guardada');
+  else alert('Plantilla guardada');
+};
+
+function vgUpdateWaPreview(){
+  var h=(qs('#vg-wa-header')||{}).value||'Hola, envío mi comprobante de pago.';
+  var f=(qs('#vg-wa-footer')||{}).value||'Quedo en espera, gracias.';
+  var prev=qs('#vg-wa-preview-box');
+  if(prev) prev.textContent=h+'
+
+Pedido #1234
+1. Producto ejemplo - Opción 1 - $150 MXN
+
+Total: $150 MXN
+
+'+f;
+}
+
+function ensureTopViewedSection(){
+  var dash=qs('#vgAdminDashboard');
+  if(!dash||qs('#vg-topviewed-section'))return;
+  try{
+    var views=JSON.parse(localStorage.getItem('vg_product_views')||'{}');
+    var svc=typeof services==='function'?services():(window.SERVICES||[]);
+    var sorted=Object.entries(views).sort(function(a,b){return b[1]-a[1]}).slice(0,5);
+    if(!sorted.length)return;
+    var maxV=sorted[0][1]||1;
+    var html='<h4 style="font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:20px 0 10px">🔥 Productos más vistos</h4>'
+      +'<div class="vg-topviewed-list">';
+    sorted.forEach(function(entry,idx){
+      var p=svc.find(function(s){return String(s.id)===String(entry[0])});
+      if(!p)return;
+      var pct=Math.round((entry[1]/maxV)*100);
+      html+='<div class="vg-tv-item">'
+        +'<span class="vg-tv-rank">'+(idx+1)+'</span>'
+        +'<span style="flex:1;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.title+'</span>'
+        +'<div class="vg-tv-bar-wrap" style="width:80px"><div class="vg-tv-bar" style="width:'+pct+'%"></div></div>'
+        +'<span class="vg-tv-views">'+entry[1]+' vistas</span>'
+        +'</div>';
+    });
+    html+='</div>';
+    var sec=document.createElement('div');
+    sec.id='vg-topviewed-section';
+    sec.innerHTML=html;
+    var content=dash.querySelector('#vg-dash-content');
+    if(content) content.appendChild(sec);
+    else dash.appendChild(sec);
+  }catch(e){}
+}
+
+// Trigger admin extras when admin panel opens
+document.addEventListener('click',function(e){
+  if(e.target.closest('.vg-admin-tab[data-tab="settings"]')) setTimeout(window.vgRenderAdminExtras,100);
+  if(e.target.closest('.vg-admin-tab[data-tab="dashboard"]')) setTimeout(function(){window.renderDashboard&&window.renderDashboard();ensureTopViewedSection();},60);
+});
+
+/* ─────────────────────────────────────────
+   INJECT SKELETONS on section load
+───────────────────────────────────────── */
+window.addEventListener('load',function(){
+  var origShowSection=window.showSection;
+  if(typeof origShowSection==='function'){
+    window.showSection=function(cat){
+      var g=qs('#productsGrid');
+      if(g&&g.children.length===0) window.showSkeletons('productsGrid',8);
+      return origShowSection.apply(this,arguments);
+    };
+  }
+});
+
+/* ─────────────────────────────────────────
+   PRICE FILTER in market view
+───────────────────────────────────────── */
+window.vgPriceMax=Infinity;
+window.vgApplyPriceFilter=function(maxPrice){
+  window.vgPriceMax=maxPrice||Infinity;
+  qsa('.vg-price-filter select option').forEach(function(o){
+    o.selected=(Number(o.value)||Infinity)===maxPrice;
+  });
+  if(typeof window.renderProducts==='function') window.renderProducts();
+};
+
+function injectFilterBar(){
+  var mh=qs('#marketView .market-head');
+  if(!mh||qs('.vg-filter-bar'))return;
+  var bar=document.createElement('div');
+  bar.className='vg-filter-bar';
+  bar.innerHTML='<button class="vg-filter-chip active" data-price="all" onclick="vgApplyPriceFilter(Infinity);vgSetActiveChip(this)">Todos los precios</button>'
+    +'<button class="vg-filter-chip" data-price="100" onclick="vgApplyPriceFilter(100);vgSetActiveChip(this)">Hasta $100</button>'
+    +'<button class="vg-filter-chip" data-price="300" onclick="vgApplyPriceFilter(300);vgSetActiveChip(this)">Hasta $300</button>'
+    +'<button class="vg-filter-chip" data-price="500" onclick="vgApplyPriceFilter(500);vgSetActiveChip(this)">Hasta $500</button>'
+    +'<button class="vg-filter-chip" data-price="1000" onclick="vgApplyPriceFilter(1000);vgSetActiveChip(this)">Hasta $1,000</button>';
+  mh.insertAdjacentElement('afterend',bar);
+}
+window.vgSetActiveChip=function(btn){
+  qsa('.vg-filter-chip').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+};
+
+// Patch renderProducts to respect price filter
+window.addEventListener('load',function(){
+  var origRender=window.renderProducts;
+  if(typeof origRender==='function'){
+    window.renderProducts=function(){
+      origRender.apply(this,arguments);
+      // After render, hide cards above price max
+      if(window.vgPriceMax!==Infinity){
+        setTimeout(function(){
+          qsa('#productsGrid .card').forEach(function(card){
+            var priceEl=card.querySelector('.price');
+            if(!priceEl)return;
+            var txt=(priceEl.textContent||'').replace(/[^0-9]/g,'');
+            var p=Number(txt)||0;
+            card.style.display=(p&&p>window.vgPriceMax)?'none':'';
+          });
+        },50);
+      }
+    };
+  }
+  injectFilterBar();
+  new MutationObserver(function(){injectFilterBar()}).observe(document.body,{childList:true,subtree:true});
+});
+
+/* ─────────────────────────────────────────
+   CLOSE MODALS ON BACKDROP CLICK
+───────────────────────────────────────── */
+qs('#vgWishModal')&&qs('#vgWishModal').addEventListener('click',function(e){if(e.target===this)closeWishlist()});
+qs('#vgHistModal')&&qs('#vgHistModal').addEventListener('click',function(e){if(e.target===this)closeHistory()});
+
+})();
+</script>
+
 </body>
 </html>
