@@ -12863,6 +12863,378 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
   .vg-related-chip{width:120px}
 }
 </style>
+<style id="vg-pro-system-css">
+/* ─── PRO MODAL OVERLAY ───────────────────────────── */
+.vg-pro-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);
+  z-index:9500;display:none;align-items:center;justify-content:center;padding:12px}
+.vg-pro-overlay.active{display:flex}
+.vg-pro-card{width:min(760px,calc(100vw - 24px));max-height:92vh;background:#0d0f1c;
+  border:1px solid rgba(255,255,255,.09);border-radius:28px;
+  box-shadow:0 32px 100px rgba(0,0,0,.70);display:flex;flex-direction:column;overflow:hidden}
+
+/* ─── PRO HEADER ───────────────────────────────────── */
+.vg-pro-header{padding:22px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0}
+.vg-pro-user-info{display:flex;align-items:center;gap:14px}
+.vg-pro-avatar{width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#8b5cf6,#19e6c1);
+  display:grid;place-items:center;font-weight:900;font-size:1.3rem;color:#07080f;flex-shrink:0}
+.vg-pro-name{font-size:1.15rem;font-weight:800;line-height:1.2}
+.vg-pro-phone{font-size:.8rem;color:#8b93b0;margin-top:2px}
+.vg-token-pill{display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(139,92,246,.20),rgba(25,230,193,.12));
+  border:1px solid rgba(25,230,193,.30);border-radius:999px;padding:7px 14px;
+  font-weight:800;font-size:.92rem;color:#eef0fa;margin-top:6px;cursor:default}
+.vg-token-pill .tp-num{color:#19e6c1;font-size:1.05rem}
+
+/* ─── PRO TABS ─────────────────────────────────────── */
+.vg-pro-tabs{display:flex;gap:4px;padding:18px 24px 0;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.vg-pro-tab{height:36px;padding:0 16px;border:0;background:transparent;
+  color:#8b93b0;font-size:.82rem;font-weight:700;letter-spacing:.04em;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:.18s;white-space:nowrap}
+.vg-pro-tab.active{color:#eef0fa;border-bottom-color:#8b5cf6}
+
+/* ─── TAB CONTENT ──────────────────────────────────── */
+.vg-pro-body{flex:1;overflow-y:auto;padding:20px 24px 24px}
+.vg-pro-section{display:none}.vg-pro-section.active{display:block}
+
+/* ─── ORDER ITEMS ──────────────────────────────────── */
+.vg-order-list{display:flex;flex-direction:column;gap:10px}
+.vg-order-item{display:flex;align-items:center;gap:14px;padding:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;transition:.2s}
+.vg-order-item:hover{border-color:rgba(255,255,255,.13)}
+.vg-order-thumb{width:50px;height:50px;border-radius:10px;overflow:hidden;
+  background:#060810;flex-shrink:0;border:1px solid rgba(255,255,255,.07)}
+.vg-order-thumb img{width:100%;height:100%;object-fit:cover}
+.vg-order-info{flex:1;min-width:0}
+.vg-order-info b{display:block;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vg-order-info small{color:#8b93b0;font-size:.76rem}
+.vg-order-meta{text-align:right;flex-shrink:0}
+.vg-order-price{font-weight:800;color:#19e6c1;font-size:.9rem}
+.vg-order-status{font-size:.7rem;padding:3px 9px;border-radius:999px;font-weight:700;margin-top:4px;display:inline-block}
+.vg-order-status.pending{background:rgba(255,183,77,.14);color:#ffc46b;border:1px solid rgba(255,183,77,.25)}
+.vg-order-status.delivered{background:rgba(25,230,193,.12);color:#19e6c1;border:1px solid rgba(25,230,193,.25)}
+.vg-order-status.review{background:rgba(139,92,246,.14);color:#c4b5fd;border:1px solid rgba(139,92,246,.25)}
+
+/* ─── WALLET ───────────────────────────────────────── */
+.vg-wallet-header{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.vg-wallet-stat{flex:1;min-width:130px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px}
+.vg-wallet-stat .ws-val{font-size:2rem;font-weight:900;color:#19e6c1;font-family:'Barlow Condensed','Montserrat',sans-serif;line-height:1}
+.vg-wallet-stat .ws-lbl{font-size:.72rem;color:#8b93b0;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.vg-progress-wrap{background:rgba(255,255,255,.07);border-radius:999px;height:6px;margin:14px 0 4px;overflow:hidden}
+.vg-progress-bar{height:100%;background:linear-gradient(90deg,#8b5cf6,#19e6c1);border-radius:999px;transition:width .5s}
+.vg-progress-hint{font-size:.76rem;color:#8b93b0;margin-bottom:20px}
+
+/* ─── REDEEM CATALOG ───────────────────────────────── */
+.vg-redeem-title{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.10em;color:#8b93b0;margin:0 0 12px}
+.vg-redeem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+.vg-redeem-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:16px 12px;text-align:center;transition:.2s;cursor:pointer}
+.vg-redeem-card:hover{border-color:rgba(25,230,193,.30);transform:translateY(-2px)}
+.vg-redeem-card.locked{opacity:.55;cursor:not-allowed;filter:grayscale(.5)}
+.vg-redeem-logo{font-size:1.8rem;margin-bottom:6px}
+.vg-redeem-service{font-size:.8rem;font-weight:800;color:#eef0fa;margin-bottom:6px}
+.vg-redeem-cost{display:inline-flex;align-items:center;gap:4px;
+  background:rgba(25,230,193,.10);border:1px solid rgba(25,230,193,.22);
+  border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:800;color:#19e6c1}
+.vg-redeem-btn{margin-top:10px;width:100%;height:32px;border:0;border-radius:10px;
+  background:linear-gradient(135deg,#8b5cf6,#19e6c1);color:#07080f;
+  font-weight:800;font-size:.78rem;cursor:pointer;transition:.2s}
+.vg-redeem-btn:hover{filter:brightness(1.10)}
+.vg-redeem-btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
+
+/* ─── TX HISTORY ───────────────────────────────────── */
+.vg-tx-list{display:flex;flex-direction:column;gap:7px}
+.vg-tx-item{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px}
+.vg-tx-desc{font-size:.82rem;color:#aab2c8}
+.vg-tx-date{font-size:.7rem;color:#5a6180;margin-top:2px}
+.vg-tx-amount{font-weight:800;font-size:.9rem}
+.vg-tx-amount.plus{color:#19e6c1}.vg-tx-amount.minus{color:#ff7090}
+
+/* ─── REFERRAL TAB ─────────────────────────────────── */
+.vg-ref-link-box{background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.28);
+  border-radius:14px;padding:16px;margin-bottom:16px}
+.vg-ref-link-box label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.09em;color:#8b93b0;margin-bottom:8px}
+.vg-ref-link-row{display:flex;gap:8px}
+.vg-ref-link-input{flex:1;height:40px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);
+  border-radius:10px;color:#eef0fa;padding:0 12px;font-size:.82rem;outline:0;cursor:pointer}
+.vg-ref-copy-btn{height:40px;padding:0 16px;border:0;border-radius:10px;
+  background:linear-gradient(135deg,#8b5cf6,#19e6c1);color:#07080f;
+  font-weight:800;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.vg-ref-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.vg-ref-step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:14px;text-align:center}
+.vg-ref-step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#19e6c1);
+  color:#07080f;font-weight:900;display:grid;place-items:center;font-size:.8rem;margin:0 auto 8px}
+.vg-ref-step b{display:block;font-size:.8rem;margin-bottom:4px}
+.vg-ref-step p{font-size:.72rem;color:#8b93b0;margin:0}
+.vg-ref-stats{display:flex;gap:10px;flex-wrap:wrap}
+.vg-ref-stat{flex:1;min-width:100px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:12px;text-align:center}
+.vg-ref-stat .rs-num{font-size:1.8rem;font-weight:900;color:#8b5cf6}
+.vg-ref-stat .rs-lbl{font-size:.7rem;color:#8b93b0;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+
+/* ─── LOGIN FORM (inside Pro modal) ───────────────── */
+.vg-pro-login-wrap{padding:16px 0;max-width:400px;margin:0 auto}
+.vg-pro-login-wrap h3{font-size:1.4rem;font-weight:900;text-transform:uppercase;
+  font-family:'Barlow Condensed','Montserrat',sans-serif;letter-spacing:-.01em;margin:0 0 6px}
+.vg-pro-login-wrap p{color:#8b93b0;font-size:.88rem;margin:0 0 22px}
+.vg-input-group{margin-bottom:14px}
+.vg-input-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.09em;color:#8b93b0;margin-bottom:6px}
+.vg-input-group input{width:100%;height:44px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);border-radius:12px;color:#eef0fa;
+  padding:0 14px;font-size:.92rem;font-family:inherit;outline:0;transition:.2s;box-sizing:border-box}
+.vg-input-group input:focus{border-color:rgba(25,230,193,.40);box-shadow:0 0 0 3px rgba(25,230,193,.08)}
+.vg-pro-login-btn{width:100%;height:46px;border:0;border-radius:14px;
+  background:linear-gradient(135deg,#8b5cf6,#5b56e8);color:#fff;font-size:.94rem;
+  font-weight:800;cursor:pointer;transition:.2s;margin-bottom:10px}
+.vg-pro-login-btn:hover{filter:brightness(1.10);transform:translateY(-1px)}
+.vg-pro-skip-btn{width:100%;height:38px;border:1px solid rgba(255,255,255,.10);background:transparent;
+  color:#8b93b0;border-radius:12px;cursor:pointer;font-size:.84rem;transition:.2s}
+.vg-pro-skip-btn:hover{border-color:rgba(255,255,255,.20);color:#eef0fa}
+.vg-logout-row{display:flex;justify-content:flex-end;margin-top:8px}
+.vg-logout-btn{height:32px;padding:0 14px;border:1px solid rgba(255,77,125,.22);
+  background:transparent;color:#ff7090;border-radius:999px;font-size:.76rem;
+  font-weight:700;cursor:pointer;transition:.2s}
+.vg-logout-btn:hover{background:rgba(255,77,125,.12)}
+
+/* ─── FOOTER REFERRAL BANNER ──────────────────────── */
+.vg-ref-banner{background:linear-gradient(135deg,#0e0b1f 0%,#12102a 50%,#0b1a1a 100%);
+  border-top:1px solid rgba(139,92,246,.20);border-bottom:1px solid rgba(25,230,193,.12);
+  padding:60px 24px}
+.vg-ref-banner-inner{max-width:1200px;margin:0 auto}
+.vg-ref-banner-head{text-align:center;margin-bottom:48px}
+.vg-ref-banner-head .badge{display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(25,230,193,.12));
+  border:1px solid rgba(139,92,246,.35);border-radius:999px;
+  padding:7px 16px;font-size:.72rem;font-weight:800;letter-spacing:.10em;
+  text-transform:uppercase;color:#c4b5fd;margin-bottom:16px}
+.vg-ref-banner-head h2{font-family:'Barlow Condensed','Montserrat',sans-serif;
+  font-size:clamp(2rem,5vw,3.4rem);font-weight:900;text-transform:uppercase;
+  letter-spacing:-.02em;margin:0 0 12px}
+.vg-ref-banner-head h2 span{background:linear-gradient(90deg,#8b5cf6,#19e6c1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.vg-ref-banner-head p{color:#8b93b0;max-width:560px;margin:0 auto;font-size:.95rem;line-height:1.6}
+.vg-ref-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px;position:relative}
+.vg-ref-flow::before{content:'';position:absolute;top:36px;left:calc(16.6% + 20px);
+  right:calc(16.6% + 20px);height:1px;background:linear-gradient(90deg,transparent,#8b5cf6,#19e6c1,transparent);
+  z-index:0}
+.vg-ref-flow-step{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:24px;text-align:center;position:relative;z-index:1;transition:.2s}
+.vg-ref-flow-step:hover{border-color:rgba(139,92,246,.30);transform:translateY(-4px)}
+.vg-rf-icon{font-size:2.4rem;margin-bottom:12px}
+.vg-rf-num{display:inline-flex;width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#8b5cf6,#19e6c1);color:#07080f;
+  font-weight:900;font-size:.78rem;align-items:center;justify-content:center;
+  position:absolute;top:12px;right:14px}
+.vg-ref-flow-step h4{font-size:1rem;font-weight:800;margin:0 0 6px;color:#eef0fa}
+.vg-ref-flow-step p{font-size:.82rem;color:#8b93b0;margin:0;line-height:1.5}
+.vg-reward-catalog{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;padding:28px}
+.vg-reward-catalog h3{font-size:1.1rem;font-weight:800;margin:0 0 20px;text-align:center}
+.vg-reward-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+.vg-reward-chip{display:flex;align-items:center;gap:10px;padding:12px 18px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  border-radius:14px;transition:.2s;min-width:130px}
+.vg-reward-chip:hover{border-color:rgba(25,230,193,.30);background:rgba(25,230,193,.06)}
+.vg-reward-chip .rc-logo{font-size:1.4rem}
+.vg-reward-chip .rc-info b{display:block;font-size:.84rem;font-weight:800}
+.vg-reward-chip .rc-info span{font-size:.76rem;color:#19e6c1;font-weight:800}
+.vg-ref-cta{text-align:center}
+.vg-ref-cta-btn{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 30px;
+  border:0;border-radius:16px;background:linear-gradient(135deg,#8b5cf6,#5b56e8);
+  color:#fff;font-size:.95rem;font-weight:800;cursor:pointer;transition:.2s;
+  box-shadow:0 8px 28px rgba(139,92,246,.35)}
+.vg-ref-cta-btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 12px 36px rgba(139,92,246,.45)}
+.vg-ref-cta p{color:#8b93b0;font-size:.84rem;margin:12px 0 0}
+
+/* ─── ADMIN USERS TABLE ────────────────────────────── */
+.vg-users-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.vg-users-search{flex:1;height:36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  border-radius:10px;color:#eef0fa;padding:0 12px;font-size:.82rem;outline:0}
+.vg-users-table-wrap{overflow-x:auto;border-radius:14px;border:1px solid rgba(255,255,255,.07)}
+.vg-users-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.vg-users-table thead th{padding:10px 14px;text-align:left;font-size:.68rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.09em;color:#8b93b0;
+  background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.07)}
+.vg-users-table tbody tr{border-bottom:1px solid rgba(255,255,255,.05);transition:.15s}
+.vg-users-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.vg-users-table tbody td{padding:10px 14px;color:#eef0fa;vertical-align:middle}
+.vg-ut-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#19e6c1);
+  display:grid;place-items:center;font-weight:900;font-size:.8rem;color:#07080f}
+.vg-token-edit-row{display:flex;gap:6px;align-items:center}
+.vg-token-edit-input{width:64px;height:30px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);border-radius:8px;color:#eef0fa;
+  text-align:center;font-size:.82rem;font-weight:700;outline:0}
+.vg-token-edit-save{height:30px;padding:0 10px;border:0;border-radius:8px;
+  background:rgba(25,230,193,.15);color:#19e6c1;font-size:.74rem;font-weight:700;cursor:pointer;transition:.2s}
+.vg-token-edit-save:hover{background:rgba(25,230,193,.25)}
+.vg-sql-block{background:#060810;border:1px solid rgba(139,92,246,.20);border-radius:12px;
+  padding:14px;font-family:monospace;font-size:.74rem;color:#c4b5fd;
+  overflow-x:auto;white-space:pre;max-height:300px;overflow-y:auto;line-height:1.6}
+
+/* ─── RESPONSIVE ──────────────────────────────────── */
+@media(max-width:768px){
+  .vg-pro-card{max-height:100vh;border-radius:24px 24px 0 0}
+  .vg-pro-overlay{align-items:flex-end;padding:0}
+  .vg-wallet-header{gap:10px}
+  .vg-redeem-grid{grid-template-columns:repeat(2,1fr)}
+  .vg-ref-flow{grid-template-columns:1fr}
+  .vg-ref-flow::before{display:none}
+  .vg-reward-row{gap:8px}
+  .vg-ref-steps{grid-template-columns:1fr}
+}
+</style>
+<style id="vg-pro-system-css">
+/* ── TOKENS / COINS ── */
+.vg-coin{display:inline-flex;align-items:center;gap:5px;color:#d6a84f;font-weight:900}
+.vg-coin-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#f0c44a,#d68e14);
+  box-shadow:0 2px 8px rgba(214,168,79,.45);display:grid;place-items:center;font-size:.66rem;
+  color:#3a1f00;font-weight:900;flex-shrink:0}
+.vg-token-big{font-family:'Barlow Condensed','Montserrat',sans-serif;font-size:3rem;
+  font-weight:900;line-height:1;background:linear-gradient(135deg,#f0c44a,#d68e14);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.vg-token-progress{height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin:8px 0}
+.vg-token-progress-bar{height:100%;background:linear-gradient(90deg,#d6a84f,#f0c44a);border-radius:999px;transition:width .5s ease}
+
+/* ── DASHBOARD MODAL ── */
+.vg-dash-modal{position:fixed;inset:0;background:rgba(0,0,0,.80);backdrop-filter:blur(14px);
+  z-index:9300;display:none;align-items:flex-start;justify-content:center;padding:20px 16px;overflow-y:auto}
+.vg-dash-modal.active{display:flex}
+.vg-dash-card{width:min(780px,100%);background:#0d0f1a;border:1px solid rgba(255,255,255,.09);
+  border-radius:28px;box-shadow:0 32px 80px rgba(0,0,0,.70);overflow:hidden;margin:auto}
+
+/* Dash header */
+.vg-dh{padding:28px;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(25,230,193,.10));
+  border-bottom:1px solid rgba(255,255,255,.07);display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.vg-dh-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#19e6c1);
+  display:grid;place-items:center;font-size:1.6rem;font-weight:900;color:#07080f;flex-shrink:0;
+  border:3px solid rgba(255,255,255,.12)}
+.vg-dh-info{flex:1;min-width:0}
+.vg-dh-name{font-size:1.3rem;font-weight:800;margin:0}
+.vg-dh-phone{color:#8b93b0;font-size:.84rem;margin:2px 0 10px}
+.vg-dh-badges{display:flex;gap:8px;flex-wrap:wrap}
+.vg-dh-badge{height:26px;padding:0 11px;border-radius:999px;font-size:.7rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;gap:5px}
+.vg-dh-badge.tokens{background:rgba(214,168,79,.15);border:1px solid rgba(214,168,79,.35);color:#d6a84f}
+.vg-dh-badge.ref{background:rgba(25,230,193,.12);border:1px solid rgba(25,230,193,.28);color:#19e6c1}
+.vg-dh-token-box{text-align:center;padding:12px 20px;background:rgba(0,0,0,.30);
+  border:1px solid rgba(214,168,79,.20);border-radius:18px}
+
+/* Dash tabs */
+.vg-dash-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.07)}
+.vg-dt{flex:1;height:46px;border:0;background:transparent;color:#8b93b0;font-size:.82rem;
+  font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.04em;position:relative}
+.vg-dt::after{content:'';position:absolute;bottom:0;left:20%;width:60%;height:2px;
+  background:linear-gradient(90deg,#8b5cf6,#19e6c1);border-radius:999px;opacity:0;transition:.2s}
+.vg-dt.active{color:#eef0fa}.vg-dt.active::after{opacity:1}
+.vg-dash-section{display:none;padding:22px}.vg-dash-section.active{display:block}
+
+/* Orders tab */
+.vg-order-row{display:flex;gap:12px;align-items:center;padding:12px 14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;margin-bottom:8px}
+.vg-order-row:last-child{margin-bottom:0}
+.vg-order-status{height:22px;padding:0 9px;border-radius:999px;font-size:.62rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;white-space:nowrap}
+.vg-order-status.pendiente{background:rgba(255,183,77,.12);border:1px solid rgba(255,183,77,.28);color:#ffc46b}
+.vg-order-status.validado{background:rgba(25,230,193,.12);border:1px solid rgba(25,230,193,.28);color:#19e6c1}
+.vg-order-status.entregado{background:rgba(33,198,107,.12);border:1px solid rgba(33,198,107,.28);color:#21c66b}
+.vg-order-status.cancelado{background:rgba(255,77,125,.12);border:1px solid rgba(255,77,125,.28);color:#ff5da8}
+
+/* Wallet tab */
+.vg-wallet-hero{text-align:center;padding:20px 0 24px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:20px}
+.vg-wallet-progress-label{display:flex;justify-content:space-between;font-size:.74rem;color:#8b93b0;margin-bottom:6px}
+.vg-redeem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px}
+.vg-redeem-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:16px 14px;text-align:center;transition:.2s;cursor:pointer}
+.vg-redeem-card:hover{border-color:rgba(214,168,79,.40);background:rgba(214,168,79,.06);transform:translateY(-2px)}
+.vg-redeem-card.locked{opacity:.45;cursor:not-allowed}
+.vg-redeem-card.locked:hover{transform:none;background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08)}
+.vg-redeem-icon{font-size:2rem;margin-bottom:8px}
+.vg-redeem-name{font-size:.88rem;font-weight:800;margin-bottom:5px}
+.vg-redeem-cost{display:inline-flex;align-items:center;gap:4px;background:rgba(214,168,79,.12);
+  border:1px solid rgba(214,168,79,.25);border-radius:999px;padding:3px 9px;
+  font-size:.68rem;font-weight:800;color:#d6a84f}
+.vg-token-log{max-height:200px;overflow-y:auto;margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.vg-tlog-row{display:flex;justify-content:space-between;align-items:center;
+  padding:9px 12px;background:rgba(255,255,255,.03);border-radius:10px;font-size:.8rem}
+.vg-tlog-amount.plus{color:#21c66b;font-weight:800}
+.vg-tlog-amount.minus{color:#ff5da8;font-weight:800}
+
+/* Referral tab */
+.vg-ref-hero{text-align:center;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:20px}
+.vg-ref-code-box{background:rgba(25,230,193,.07);border:1px dashed rgba(25,230,193,.35);
+  border-radius:16px;padding:16px;text-align:center;margin:16px 0}
+.vg-ref-code{font-family:'Barlow Condensed','Montserrat',sans-serif;font-size:1.6rem;
+  font-weight:900;letter-spacing:.18em;color:#19e6c1;display:block;margin:4px 0 12px}
+.vg-ref-steps{display:flex;flex-direction:column;gap:8px}
+.vg-ref-step{display:flex;gap:12px;align-items:flex-start;padding:12px;
+  background:rgba(255,255,255,.03);border-radius:12px}
+.vg-ref-step-n{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#19e6c1);
+  color:#07080f;font-weight:900;font-size:.82rem;display:grid;place-items:center;flex-shrink:0}
+
+/* ── REFERRAL FOOTER BANNER ── */
+.vg-ref-banner{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(25,230,193,.08));
+  border-top:1px solid rgba(139,92,246,.20);border-bottom:1px solid rgba(25,230,193,.15);
+  padding:48px 24px}
+.vg-ref-banner-inner{max-width:1520px;margin:0 auto;display:grid;
+  grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.vg-ref-banner h2{font-family:'Barlow Condensed','Montserrat',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);
+  font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin:0 0 12px}
+.vg-ref-banner h2 span{background:linear-gradient(90deg,#d6a84f,#f0c44a);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}
+.vg-ref-banner p{color:#aab2c8;line-height:1.65;font-size:.92rem;margin:0 0 20px}
+.vg-ref-rewards-row{display:flex;flex-wrap:wrap;gap:10px}
+.vg-ref-reward-item{display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  border-radius:14px;padding:14px 16px;min-width:80px}
+.vg-ref-reward-item b{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#8b93b0}
+.vg-ref-reward-item span{font-family:'Barlow Condensed','Montserrat',sans-serif;font-size:1.1rem;
+  font-weight:800;color:#d6a84f}
+.vg-ref-cta-box{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;padding:28px}
+.vg-ref-user-link-box{background:rgba(25,230,193,.06);border:1px dashed rgba(25,230,193,.30);
+  border-radius:14px;padding:14px;margin-top:16px;display:none}
+.vg-ref-user-link-box .vg-ref-link{font-size:.78rem;word-break:break-all;color:#19e6c1;display:block;margin-bottom:10px}
+@media(max-width:768px){
+  .vg-ref-banner-inner{grid-template-columns:1fr}
+  .vg-dash-modal{padding:0;align-items:flex-end}
+  .vg-dash-card{border-radius:24px 24px 0 0;max-height:90vh;overflow-y:auto}
+  .vg-redeem-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── ADMIN USERS TABLE ── */
+.vg-users-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.82rem}
+.vg-users-table th{text-align:left;padding:8px 12px;font-size:.68rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.09em;color:#8b93b0;border-bottom:1px solid rgba(255,255,255,.08)}
+.vg-users-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+.vg-users-table tr:hover td{background:rgba(255,255,255,.025)}
+.vg-token-edit{display:inline-flex;gap:4px;align-items:center}
+.vg-te-btn{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);color:#eef0fa;cursor:pointer;font-size:1rem;
+  display:grid;place-items:center;transition:.15s}
+.vg-te-btn:hover{background:rgba(255,255,255,.12)}
+.vg-te-input{width:52px;height:28px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;color:#eef0fa;text-align:center;font-size:.82rem;outline:0;padding:0 4px}
+.vg-te-save{height:28px;padding:0 10px;border:0;border-radius:8px;
+  background:linear-gradient(135deg,#8b5cf6,#5b56e8);color:#fff;font-size:.74rem;
+  font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap}
+.vg-te-save:hover{filter:brightness(1.1)}
+.vg-admin-setup-sql{background:rgba(0,0,0,.50);border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;padding:16px;font-family:monospace;font-size:.72rem;color:#c8d6ff;
+  line-height:1.6;overflow-x:auto;white-space:pre;margin-top:12px;max-height:320px;overflow-y:auto}
+.vg-redemption-row{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:rgba(255,255,255,.03);border-radius:10px;margin-bottom:6px;font-size:.82rem}
+.vg-redemp-status{height:20px;padding:0 8px;border-radius:999px;font-size:.6rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center}
+.vg-redemp-status.pending{background:rgba(255,183,77,.12);color:#ffc46b}
+.vg-redemp-status.delivered{background:rgba(33,198,107,.12);color:#21c66b}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -12876,7 +13248,7 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
         
 
 </div>
-<div class="vg-user-greeting" id="vgUserGreeting"><div class="vg-user-avatar" id="vgUserAvatar">?</div><span class="vg-user-name" id="vgUserName"></span></div>
+<div class="vg-user-greeting" id="vgUserGreeting" onclick="vgProOpen()" style="cursor:pointer" title="Ver mi perfil"><div class="vg-user-avatar" id="vgUserAvatar">?</div><span class="vg-user-name" id="vgUserName"></span></div>
 <button id="vg-theme-btn" onclick="vgToggleTheme()" title="Cambiar tema">🌙</button>
 <button class="pill" id="vg-fav-pill" onclick="openWishlist()" title="Guardados">🤍 <span class="vg-fav-count" id="vgFavCount" style="display:none">0</span></button>
 <button class="pill" onclick="openHistory()" title="Historial">📋</button>
@@ -13033,22 +13405,136 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
   <div class="modal" id="retroModal"><div class="retro-modal-card"><div class="retro-top-shell"><div class="retro-head"><div><span class="badge">Xbox 360 / Clásico</span><h2>Colección Xbox Retro</h2><p>Elige tus juegos, filtra por plataforma y compra por carrito o métodos de pago.</p></div><button class="x" onclick="closeRetroModal()">×</button></div><div class="retro-controls"><input id="retroSearch" type="text" placeholder="Buscar juego por nombre..." oninput="renderRetroGrid()"><select id="retroPlatform" onchange="renderRetroGrid()"><option value="all">Todas las plataformas</option><option value="360">Xbox 360</option><option value="CLÁSICO">Xbox Clásico</option></select></div><div class="retro-sales-note"><div><b>Xbox Retro Collection</b><p>Elige los juegos que quieras y los agregamos a una cuenta nueva completa. La cuenta será solo tuya: podrás cambiar contraseña y agregar correo o número de recuperación.</p></div><span class="badge">Paquetes con descuento</span></div><div class="retro-filter-row"><button class="retro-filter-chip active" type="button" onclick="setRetroQuickFilter('all', this)">Todos</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickFilter('360', this)">Xbox 360</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickFilter('CLÁSICO', this)">Xbox Clásico</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickSearch('Gears', this)">Gears</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickSearch('Call of Duty', this)">Call of Duty</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickSearch('Assassin', this)">Assassin’s Creed</button></div></div><div class="retro-grid" id="retroGridContainer"></div><div class="retro-footer"><div class="retro-totals"><span>Seleccionados: <strong id="retroCount">0</strong></span><span>Subtotal: <strong id="retroSubtotal">$0 MXN</strong></span><span>Descuento: <strong id="retroDiscount">$0 MXN</strong></span><span>Total final: <strong id="retroTotal">$0 MXN</strong></span></div><div class="modal-actions" style="position:static;padding-top:0;background:transparent;margin:0"><button class="primary" onclick="addRetroToCart()">Agregar al carrito</button><button class="primary whatsapp" onclick="buyRetroNow()">Comprar / ver métodos de pago</button></div></div></div></div>
 
 <!-- Login modal -->
-<div class="vg-login-modal" id="vgLoginModal">
-  <div class="vg-login-card">
-    <div style="font-size:2rem">👾</div>
-    <h2>Bienvenido</h2>
-    <p class="sub">Guarda tus favoritos y accede a precios especiales para clientes frecuentes.</p>
-    <div class="vg-input-group">
-      <label>Tu nombre</label>
-      <input type="text" id="vgLoginName" placeholder="Ej: Carlos" maxlength="40">
+<!-- VG PRO DASHBOARD MODAL -->
+<div class="vg-pro-overlay" id="vgProModal">
+  <div class="vg-pro-card" id="vgProCard">
+
+    <!-- ── LOGIN STATE (not authenticated) ── -->
+    <div id="vgProLoginState">
+      <div class="vg-pro-header" style="padding:24px 24px 0">
+        <div>
+          <div style="font-size:2rem;margin-bottom:4px">👾</div>
+          <div style="font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8b5cf6;margin-bottom:4px">VESSEL PRO</div>
+        </div>
+        <button class="x" onclick="vgProClose()">×</button>
+      </div>
+      <div class="vg-pro-body">
+        <div class="vg-pro-login-wrap">
+          <h3>Accede a tu cuenta</h3>
+          <p>Registrate para acumular tokens, canjear servicios y referir amigos.</p>
+          <div class="vg-input-group">
+            <label>Numero de WhatsApp</label>
+            <input type="tel" id="vgProPhone" placeholder="Ej: 6611234567" maxlength="15">
+          </div>
+          <div class="vg-input-group" id="vgProNameWrap" style="display:none">
+            <label>Tu nombre</label>
+            <input type="text" id="vgProName" placeholder="Ej: Carlos" maxlength="40">
+          </div>
+          <button class="vg-pro-login-btn" onclick="vgProAuth()">Continuar</button>
+          <button class="vg-pro-skip-btn" onclick="vgProClose()">Omitir por ahora</button>
+          <p style="font-size:.72rem;color:#5a6180;text-align:center;margin-top:14px">
+            Tu numero se usa solo para vincular tus pedidos y tokens.
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="vg-input-group">
-      <label>WhatsApp (opcional)</label>
-      <input type="tel" id="vgLoginPhone" placeholder="Ej: 6611234567">
+
+    <!-- ── DASHBOARD STATE (authenticated) ── -->
+    <div id="vgProDashState" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+      <div class="vg-pro-header">
+        <div>
+          <div class="vg-pro-user-info">
+            <div class="vg-pro-avatar" id="vgProAvatarLetter">?</div>
+            <div>
+              <div class="vg-pro-name" id="vgProDisplayName">Usuario</div>
+              <div class="vg-pro-phone" id="vgProDisplayPhone"></div>
+              <div class="vg-token-pill" id="vgProTokenPill">
+                🪙 <span class="tp-num" id="vgProTokenBal">0</span> tokens
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <button class="x" onclick="vgProClose()">×</button>
+          <button class="vg-logout-btn" onclick="vgProLogout()">Cerrar sesion</button>
+        </div>
+      </div>
+      <div class="vg-pro-tabs">
+        <button class="vg-pro-tab active" data-ptab="orders">Mis Pedidos</button>
+        <button class="vg-pro-tab" data-ptab="wallet">Mi Wallet</button>
+        <button class="vg-pro-tab" data-ptab="referrals">Referidos</button>
+      </div>
+      <div class="vg-pro-body">
+        <!-- ORDERS -->
+        <div class="vg-pro-section active" data-ptab="orders">
+          <div id="vgProOrdersContent">
+            <div style="text-align:center;padding:32px;color:#5a6180">Cargando pedidos...</div>
+          </div>
+        </div>
+        <!-- WALLET -->
+        <div class="vg-pro-section" data-ptab="wallet">
+          <div class="vg-wallet-header">
+            <div class="vg-wallet-stat">
+              <div class="ws-val" id="vgWalBal">0</div>
+              <div class="ws-lbl">Tokens disponibles</div>
+            </div>
+            <div class="vg-wallet-stat">
+              <div class="ws-val" id="vgWalPurch">0</div>
+              <div class="ws-lbl">Compras realizadas</div>
+            </div>
+            <div class="vg-wallet-stat">
+              <div class="ws-val" id="vgWalEarned">0</div>
+              <div class="ws-lbl">Tokens ganados total</div>
+            </div>
+          </div>
+          <div class="vg-progress-wrap"><div class="vg-progress-bar" id="vgWalProgress" style="width:0%"></div></div>
+          <p class="vg-progress-hint" id="vgWalHint">Cargando...</p>
+          <p class="vg-redeem-title">Catalogo de canje</p>
+          <div class="vg-redeem-grid" id="vgRedeemGrid"></div>
+          <p class="vg-redeem-title" style="margin-top:16px">Historial de tokens</p>
+          <div class="vg-tx-list" id="vgTxList">
+            <div style="text-align:center;padding:20px;color:#5a6180">Sin movimientos aun.</div>
+          </div>
+        </div>
+        <!-- REFERRALS -->
+        <div class="vg-pro-section" data-ptab="referrals">
+          <div class="vg-ref-link-box">
+            <label>Tu enlace de referido</label>
+            <div class="vg-ref-link-row">
+              <input class="vg-ref-link-input" id="vgRefLinkInput" readonly>
+              <button class="vg-ref-copy-btn" onclick="vgCopyRefLink()">Copiar</button>
+            </div>
+          </div>
+          <div class="vg-ref-steps">
+            <div class="vg-ref-step">
+              <div class="vg-ref-step-num">1</div>
+              <b>Comparte tu link</b>
+              <p>Enviale tu enlace unico a amigos o publiqalo</p>
+            </div>
+            <div class="vg-ref-step">
+              <div class="vg-ref-step-num">2</div>
+              <b>Tu amigo compra</b>
+              <p>Cuando complete su primera compra el token se acredita</p>
+            </div>
+            <div class="vg-ref-step">
+              <div class="vg-ref-step-num">3</div>
+              <b>Ganas 1 token</b>
+              <p>Automaticamente al confirmar el pago</p>
+            </div>
+          </div>
+          <div class="vg-ref-stats">
+            <div class="vg-ref-stat">
+              <div class="rs-num" id="vgRefCount">0</div>
+              <div class="rs-lbl">Referidos</div>
+            </div>
+            <div class="vg-ref-stat">
+              <div class="rs-num" id="vgRefTokens">0</div>
+              <div class="rs-lbl">Tokens por referidos</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button class="vg-login-btn" onclick="vgLoginSave()">Entrar al catálogo ✓</button>
-    <div class="vg-login-divider">— o —</div>
-    <button class="vg-login-skip" onclick="vgLoginSkip()">Continuar sin cuenta</button>
   </div>
 </div>
 
@@ -13103,6 +13589,51 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
 
   <div id="vgToast"><div class="vg-toast-icon">✓</div><div class="vg-toast-text"><b>Agregado al carrito</b><span>Puedes seguir comprando sin abrir el carrito.</span></div></div>
 
+
+  <!-- REFERRAL PROGRAM BANNER -->
+  <section class="vg-ref-banner">
+    <div class="vg-ref-banner-inner">
+      <div class="vg-ref-banner-head">
+        <div class="badge">Programa de Referidos</div>
+        <h2>Comparte y <span>gana tokens</span></h2>
+        <p>Invita a tus amigos al catalogo digital. Cada vez que alguien compre usando tu enlace, tu recibes 1 token automaticamente.</p>
+      </div>
+      <div class="vg-ref-flow">
+        <div class="vg-ref-flow-step">
+          <span class="vg-rf-num">1</span>
+          <div class="vg-rf-icon">🔗</div>
+          <h4>Copia tu enlace</h4>
+          <p>Cada cuenta tiene un link unico e intransferible generado automaticamente</p>
+        </div>
+        <div class="vg-ref-flow-step">
+          <span class="vg-rf-num">2</span>
+          <div class="vg-rf-icon">🛒</div>
+          <h4>Tu amigo compra</h4>
+          <p>Cuando completa su primera compra a traves de tu enlace, el sistema lo registra</p>
+        </div>
+        <div class="vg-ref-flow-step">
+          <span class="vg-rf-num">3</span>
+          <div class="vg-rf-icon">🪙</div>
+          <h4>Recibes 1 token</h4>
+          <p>El token se acredita en tu wallet automaticamente al confirmar el pago del referido</p>
+        </div>
+      </div>
+      <div class="vg-reward-catalog">
+        <h3>Canjea tus tokens por servicios de streaming</h3>
+        <div class="vg-reward-row">
+          <div class="vg-reward-chip"><span class="rc-logo">📺</span><div class="rc-info"><b>VIX+</b><span>5 tokens</span></div></div>
+          <div class="vg-reward-chip"><span class="rc-logo">⭐</span><div class="rc-info"><b>Paramount+</b><span>7 tokens</span></div></div>
+          <div class="vg-reward-chip"><span class="rc-logo">🎬</span><div class="rc-info"><b>MAX</b><span>9 tokens</span></div></div>
+          <div class="vg-reward-chip"><span class="rc-logo">🌸</span><div class="rc-info"><b>Crunchyroll</b><span>10 tokens</span></div></div>
+          <div class="vg-reward-chip"><span class="rc-logo">🎥</span><div class="rc-info"><b>Netflix</b><span>20 tokens</span></div></div>
+        </div>
+        <div class="vg-ref-cta">
+          <button class="vg-ref-cta-btn" onclick="vgProOpen()">Obtener mi enlace de referido</button>
+          <p>Crea tu cuenta gratis en menos de 30 segundos</p>
+        </div>
+      </div>
+    </div>
+  </section>
   <footer>
     <div class="vg-clean-footer">
       <div>
@@ -13115,7 +13646,40 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
         <a href="javascript:void(0)" onclick="showSection('all')">Catálogo</a>
       </div>
     </div>
-  </footer>
+  
+<div class="vg-ref-banner" id="vgRefBanner">
+  <div class="vg-ref-banner-inner">
+    <div>
+      <div class="badge" style="margin-bottom:14px">Programa de referidos</div>
+      <h2>Comparte y gana<br><span>tokens gratis</span></h2>
+      <p>Invita a tus amigos a Vessel Games. Cuando hagan su primera compra usando tu link, recibes <strong style="color:#d6a84f">1 token completo</strong> directo a tu wallet.</p>
+      <div class="vg-ref-rewards-row">
+        <div class="vg-ref-reward-item"><span>5</span><b>Tokens</b><small style="font-size:.62rem;color:#8b93b0">VIX</small></div>
+        <div class="vg-ref-reward-item"><span>7</span><b>Tokens</b><small style="font-size:.62rem;color:#8b93b0">PARAM</small></div>
+        <div class="vg-ref-reward-item"><span>9</span><b>Tokens</b><small style="font-size:.62rem;color:#8b93b0">MAX</small></div>
+        <div class="vg-ref-reward-item"><span>10</span><b>Tokens</b><small style="font-size:.62rem;color:#8b93b0">Crunchyroll</small></div>
+        <div class="vg-ref-reward-item"><span>20</span><b>Tokens</b><small style="font-size:.62rem;color:#8b93b0">Netflix</small></div>
+      </div>
+    </div>
+    <div class="vg-ref-cta-box">
+      <h3 style="font-size:1.1rem;font-weight:800;margin:0 0 8px">Como funciona</h3>
+      <div class="vg-ref-steps">
+        <div class="vg-ref-step"><div class="vg-ref-step-n">1</div><div><b style="font-size:.88rem">Crea tu cuenta</b><br><span style="font-size:.78rem;color:#8b93b0">Entra al catalogo y registrate gratis.</span></div></div>
+        <div class="vg-ref-step"><div class="vg-ref-step-n">2</div><div><b style="font-size:.88rem">Comparte tu link</b><br><span style="font-size:.78rem;color:#8b93b0">Cada cuenta tiene un enlace unico y rastreable.</span></div></div>
+        <div class="vg-ref-step"><div class="vg-ref-step-n">3</div><div><b style="font-size:.88rem">Acumula tokens</b><br><span style="font-size:.78rem;color:#8b93b0">Tambien ganas 0.5 tokens por cada compra propia.</span></div></div>
+        <div class="vg-ref-step"><div class="vg-ref-step-n">4</div><div><b style="font-size:.88rem">Canjea recompensas</b><br><span style="font-size:.78rem;color:#8b93b0">Netflix, MAX, Crunchyroll y mas te esperan.</span></div></div>
+      </div>
+      <div class="vg-ref-user-link-box" id="vgRefUserLinkBox">
+        <span style="font-size:.72rem;color:#8b93b0;display:block;margin-bottom:4px">Tu link de referido:</span>
+        <span class="vg-ref-link" id="vgRefUserLink">Inicia sesion para ver tu link</span>
+        <button class="secondary" style="width:100%;height:38px;font-size:.8rem" onclick="vgCopyRefLink()">Copiar link</button>
+      </div>
+      <button class="primary" style="width:100%;margin-top:14px;height:46px" onclick="openLoginModal()">Crear cuenta gratis</button>
+    </div>
+  </div>
+</div>
+
+</footer>
 
   <script>
     const WHATSAPP_NUMBER = '526611078412';
@@ -14354,6 +14918,7 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
   <div class="vg-admin-panel">
     <div class="vg-admin-head"><div><h2>Panel administrador Supabase</h2><p>Solo administradores de VG · Acceso privado y protegido.</p></div><button class="vg-admin-x" onclick="vgAdminClose()">×</button></div>
     <div class="vg-admin-tabs">
+      <button class="vg-admin-tab" data-tab="usuarios">👥 Usuarios</button>
       <button class="vg-admin-tab" data-tab="dashboard">📊 Dashboard</button>
       <button class="vg-admin-tab active" data-tab="orders">Compras</button>
       <button class="vg-admin-tab" data-tab="products">Artículos</button>
@@ -14361,7 +14926,25 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
       <button class="vg-admin-tab" data-tab="export">Exportar</button><button class="vg-admin-tab" data-tab="debug">Diagnóstico</button><button class="vg-admin-tab" data-tab="settings">Ajustes rápidos</button>
     </div>
     <div class="vg-admin-content">
-      <section class="vg-admin-section" id="vgAdminDashboard">
+      <section class="vg-admin-section" id="vgAdminUsuarios">
+  <div class="vg-users-toolbar">
+    <input class="vg-users-search" id="vgUsersSearch" placeholder="Buscar por nombre o telefono..." oninput="vgFilterUsers(this.value)">
+    <button class="vg-notif-btn" onclick="vgAdminLoadUsers()">🔄 Actualizar</button>
+    <button class="vg-csv-btn" onclick="vgExportUsersCSV()">⬇️ CSV</button>
+    <button class="vg-dash-btn" onclick="vgShowSQLSchema()" style="background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.30);color:#c4b5fd">📋 Schema SQL</button>
+  </div>
+  <div id="vgUsersTableWrap">
+    <div style="text-align:center;padding:32px;color:#5a6180">Haz clic en Actualizar para cargar usuarios.</div>
+  </div>
+  <div id="vgSQLModal" style="display:none;margin-top:16px">
+    <p style="font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#8b93b0;margin-bottom:8px">
+      Ejecuta este SQL en tu panel Supabase (SQL Editor)
+    </p>
+    <div class="vg-sql-block" id="vgSQLContent"></div>
+    <button class="vg-dash-btn vg-dash-btn-primary" style="margin-top:10px" onclick="vgCopySQL()">Copiar SQL</button>
+  </div>
+</section>
+<section class="vg-admin-section" id="vgAdminDashboard">
   <div id="vg-dash-content" style="padding:4px 0;">
     <div class="vg-dash-grid" id="vgDashStats"></div>
     <h4 style="font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 10px;">Por Categoría</h4>
@@ -14380,6 +14963,69 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
       <button class="vg-dash-btn" onclick="document.querySelector('.vg-admin-tab[data-tab=products]')&&document.querySelector('.vg-admin-tab[data-tab=products]').click()">📦 Ir a Artículos</button>
       <button class="vg-dash-btn" onclick="document.querySelector('.vg-admin-tab[data-tab=orders]')&&document.querySelector('.vg-admin-tab[data-tab=orders]').click()">🛒 Ver Compras</button>
     </div>
+  </div>
+</section>
+<section class="vg-admin-section" id="vgAdminUsuarios">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+    <span style="font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.10em;color:#8b93b0;flex:1">Usuarios &amp; Tokens</span>
+    <input id="vgUserSearch" class="vg-admin-input" placeholder="Buscar por nombre o tel..." oninput="vgFilterUsers()" style="width:200px;height:34px">
+    <button class="vg-notif-btn" onclick="vgLoadUsers()">Actualizar</button>
+    <button class="vg-csv-btn" onclick="vgExportUsersCSV()">Exportar CSV</button>
+  </div>
+  <div id="vgUsersStats" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"></div>
+  <!-- Redemptions pending -->
+  <div id="vgPendingRedemptions" style="margin-bottom:16px;display:none">
+    <h4 style="font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#d6a84f;margin:0 0 8px">Canjes Pendientes</h4>
+    <div id="vgPendingRedList"></div>
+  </div>
+  <div style="overflow-x:auto">
+    <table class="vg-users-table" id="vgUsersTable">
+      <thead>
+        <tr>
+          <th>Usuario</th><th>Telf</th><th>Tokens</th><th>Compras</th><th>Referidos</th><th>Registro</th><th>Ajustar Tokens</th>
+        </tr>
+      </thead>
+      <tbody id="vgUsersTbody"><tr><td colspan="7" style="color:#5a6180;text-align:center;padding:28px">Carga los usuarios con el botón Actualizar</td></tr></tbody>
+    </table>
+  </div>
+  <!-- SQL Setup -->
+  <div style="margin-top:28px">
+    <h4 style="font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 8px">Setup — SQL para Supabase</h4>
+    <button class="vg-dash-btn" onclick="navigator.clipboard.writeText(document.getElementById('vgSqlSchema').textContent);this.textContent='Copiado!'">Copiar SQL</button>
+    <pre class="vg-admin-setup-sql" id="vgSqlSchema">-- Ejecuta esto en Supabase SQL Editor
+CREATE TABLE IF NOT EXISTS vg_users (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  phone TEXT UNIQUE NOT NULL,
+  tokens NUMERIC(10,1) DEFAULT 0,
+  total_purchases INTEGER DEFAULT 0,
+  referral_code TEXT UNIQUE DEFAULT upper(substring(replace(gen_random_uuid()::text,'-',''),1,8)),
+  referred_by TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS vg_token_log (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES vg_users(id) ON DELETE CASCADE,
+  amount NUMERIC(10,1) NOT NULL,
+  type TEXT NOT NULL,
+  description TEXT,
+  order_id TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS vg_redemptions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES vg_users(id) ON DELETE CASCADE,
+  service TEXT NOT NULL,
+  tokens_cost INTEGER NOT NULL,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE vg_users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vg_token_log ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vg_redemptions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY IF NOT EXISTS anon_all_users ON vg_users FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY IF NOT EXISTS anon_all_log ON vg_token_log FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY IF NOT EXISTS anon_all_red ON vg_redemptions FOR ALL TO anon USING (true) WITH CHECK (true);</pre>
   </div>
 </section>
 <section class="vg-admin-section active" id="vgAdminOrders">
@@ -19174,416 +19820,264 @@ qs('#vgHistModal')&&qs('#vgHistModal').addEventListener('click',function(e){if(e
 </script>
 
 
+
+
 <script id="vg-all-features-js">
 (function(){
-'use strict';
 function qs(s,r){return (r||document).querySelector(s)}
 function qsa(s,r){return [...(r||document).querySelectorAll(s)]}
 function fmt(n){return '$'+Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0})+' MXN'}
+function tabIs(el,name){var t=el&&el.closest&&el.closest('.vg-admin-tab');return t&&t.dataset.tab===name}
 
-/* ─── DARK / LIGHT MODE ─── */
-var theme = localStorage.getItem('vg_theme') || 'dark';
+/* ── DARK / LIGHT MODE ── */
+var theme=localStorage.getItem('vg_theme')||'dark';
 function applyTheme(t){
-  theme=t;
-  document.body.classList.toggle('vg-light', t==='light');
-  var btn=qs('#vg-theme-btn');
-  if(btn) btn.textContent = t==='light' ? '🌙' : '☀️';
-  localStorage.setItem('vg_theme', t);
+  theme=t; document.body.classList.toggle('vg-light',t==='light');
+  var btn=qs('#vg-theme-btn'); if(btn)btn.textContent=t==='light'?'':'';
+  localStorage.setItem('vg_theme',t);
 }
-window.vgToggleTheme = function(){ applyTheme(theme==='dark' ? 'light' : 'dark'); };
-document.addEventListener('DOMContentLoaded', function(){ applyTheme(theme); });
+window.vgToggleTheme=function(){applyTheme(theme==='dark'?'light':'dark');};
+document.addEventListener('DOMContentLoaded',function(){applyTheme(theme);});
 
-/* ─── LOGIN SYSTEM ─── */
-var vgUser = null;
-try{ vgUser = JSON.parse(localStorage.getItem('vg_user') || 'null'); }catch(e){}
-
+/* ── LOGIN ── */
+var vgUser=null;
+try{vgUser=JSON.parse(localStorage.getItem('vg_user')||'null');}catch(e){}
 function updateUserUI(){
-  var g=qs('#vgUserGreeting');
-  if(!g) return;
-  if(vgUser && vgUser.name){
+  var g=qs('#vgUserGreeting'); if(!g)return;
+  if(vgUser&&vgUser.name){
     g.style.display='flex';
-    var av=qs('#vgUserAvatar'); if(av) av.textContent=vgUser.name[0].toUpperCase();
-    var nm=qs('#vgUserName');   if(nm) nm.textContent=vgUser.name;
-    // Pre-fill WhatsApp
-    if(typeof window.WHATSAPP_NUMBER === 'undefined' && vgUser.phone)
-      window.WHATSAPP_FALLBACK = vgUser.phone;
-  } else {
-    g.style.display='none';
-  }
+    var av=qs('#vgUserAvatar');if(av)av.textContent=vgUser.name[0].toUpperCase();
+    var nm=qs('#vgUserName');if(nm)nm.textContent=vgUser.name;
+  }else{g.style.display='none';}
 }
-
-window.vgLoginSave = function(){
+window.vgLoginSave=function(){
   var n=(qs('#vgLoginName')||{}).value||'';
+  if(!n.trim()){alert('Escribe tu nombre');return;}
   var p=(qs('#vgLoginPhone')||{}).value||'';
-  if(!n.trim()){ alert('Escribe tu nombre'); return; }
-  vgUser={name:n.trim(), phone:p.trim(), ts:Date.now()};
-  localStorage.setItem('vg_user', JSON.stringify(vgUser));
-  closeLoginModal();
+  vgUser={name:n.trim(),phone:p.trim(),ts:Date.now()};
+  localStorage.setItem('vg_user',JSON.stringify(vgUser));
+  closeLoginModal(); updateUserUI();
+  if(typeof window.showToast==='function')window.showToast('Hola '+vgUser.name+'! Bienvenido');
+};
+window.vgLoginSkip=function(){localStorage.setItem('vg_login_skip',Date.now());closeLoginModal();};
+function openLoginModal(){var m=qs('#vgLoginModal');if(m)m.classList.add('active');}
+function closeLoginModal(){var m=qs('#vgLoginModal');if(m)m.classList.remove('active');}
+window.vgLogout=function(){localStorage.removeItem('vg_user');vgUser=null;updateUserUI();};
+document.addEventListener('DOMContentLoaded',function(){
   updateUserUI();
-  if(typeof window.showToast==='function') window.showToast('¡Hola '+vgUser.name+'! Bienvenido 👾');
-};
-window.vgLoginSkip = function(){
-  localStorage.setItem('vg_login_skip', Date.now());
-  closeLoginModal();
-};
-function openLoginModal(){
-  var m=qs('#vgLoginModal'); if(m) m.classList.add('active');
-}
-function closeLoginModal(){
-  var m=qs('#vgLoginModal'); if(m) m.classList.remove('active');
-}
-window.vgLogout = function(){
-  localStorage.removeItem('vg_user'); vgUser=null; updateUserUI();
-};
-// Show login once per session (after 4s) if not logged in and not skipped
-document.addEventListener('DOMContentLoaded', function(){
-  updateUserUI();
-  var skipped = localStorage.getItem('vg_login_skip');
-  var fresh = !skipped || Date.now()-Number(skipped) > 7*24*3600000;
-  if(!vgUser && fresh) setTimeout(openLoginModal, 4000);
+  var skipped=localStorage.getItem('vg_login_skip');
+  var fresh=!skipped||Date.now()-Number(skipped)>7*24*3600000;
+  if(!vgUser&&fresh)setTimeout(openLoginModal,4000);
 });
-// Close login on backdrop click
-document.addEventListener('click', function(e){
-  var m=qs('#vgLoginModal');
-  if(m && e.target===m) closeLoginModal();
+document.addEventListener('click',function(e){
+  if(e.target===qs('#vgLoginModal'))closeLoginModal();
 });
 
-/* ─── IMAGE GALLERY ─── */
-var _galleryImages=[], _galleryIdx=0;
-window.vgSetGallery = function(images){
-  _galleryImages = Array.isArray(images) ? images : [images];
-  _galleryIdx = 0;
-  renderGallery();
+/* ── IMAGE GALLERY ── */
+var _gImgs=[],_gIdx=0;
+window.vgSetGallery=function(images){
+  _gImgs=Array.isArray(images)?images:[images];_gIdx=0;renderGallery();
 };
 function renderGallery(){
-  var img=qs('#modalImage');
-  if(img) img.src = _galleryImages[_galleryIdx]||'';
+  var img=qs('#modalImage');if(img)img.src=_gImgs[_gIdx]||'';
   var dots=qs('#vgGalleryDots');
   if(dots){
-    if(_galleryImages.length > 1){
-      dots.innerHTML=_galleryImages.map(function(_,i){
-        return '<button class="vg-gallery-dot'+(i===_galleryIdx?' active':'')+
-          '" onclick="vgGallerySet('+i+')"></button>';
-      }).join('');
-    } else { dots.innerHTML=''; }
+    dots.innerHTML=_gImgs.length>1?_gImgs.map(function(_,i){
+      return '<button class="vg-gallery-dot'+(i===_gIdx?' active':'')+'" onclick="vgGallerySet('+i+')"></button>';
+    }).join(''):'';
   }
-  var prev=qs('.vg-gallery-prev'), next=qs('.vg-gallery-next');
-  var show=_galleryImages.length>1;
-  if(prev) prev.style.display=show?'':'none';
-  if(next) next.style.display=show?'':'none';
+  var show=_gImgs.length>1;
+  var prev=qs('.vg-gallery-prev'),next=qs('.vg-gallery-next');
+  if(prev)prev.style.display=show?'':'none';
+  if(next)next.style.display=show?'':'none';
 }
-window.vgGalleryNav = function(dir){
-  _galleryIdx=(_galleryIdx+dir+_galleryImages.length)%_galleryImages.length;
-  renderGallery();
-};
-window.vgGallerySet = function(idx){ _galleryIdx=idx; renderGallery(); };
-
-// Hook into openProduct to set gallery
-window.addEventListener('load', function(){
+window.vgGalleryNav=function(d){_gIdx=(_gIdx+d+_gImgs.length)%_gImgs.length;renderGallery();};
+window.vgGallerySet=function(i){_gIdx=i;renderGallery();};
+window.addEventListener('load',function(){
   var origOpen=window.openProduct;
   if(typeof origOpen==='function'){
     window.openProduct=function(id){
       var svc=typeof services==='function'?services():(window.SERVICES||[]);
-      var p=svc.find(function(x){return String(x.id)===String(id)});
+      var p=svc.find(function(x){return String(x.id)===String(id);});
       if(p){
-        // Support single image or array
-        var imgs=Array.isArray(p.images)?p.images:(p.image?[p.image]:[]);
-        window.vgSetGallery(imgs);
+        window.vgSetGallery(Array.isArray(p.images)?p.images:[p.image||'']);
         window.currentProduct=p;
-        // Related products
-        renderRelated(p);
-        // Stock badge
-        renderStock(p);
+        renderRelated(p); renderStock(p);
       }
       return origOpen.apply(this,arguments);
     };
   }
 });
 
-/* ─── RELATED PRODUCTS ─── */
+/* ── RELATED PRODUCTS ── */
 function renderRelated(product){
-  var sec=qs('#vgRelatedSection'), scroll=qs('#vgRelatedScroll');
-  if(!sec||!scroll) return;
+  var sec=qs('#vgRelatedSection'),scroll=qs('#vgRelatedScroll');if(!sec||!scroll)return;
   var svc=typeof services==='function'?services():(window.SERVICES||[]);
-  var related=svc.filter(function(p){
-    return String(p.id)!==String(product.id) && p.category===product.category;
-  }).slice(0,6);
-  if(!related.length){ sec.style.display='none'; return; }
-  scroll.innerHTML=related.map(function(p){
+  var rel=svc.filter(function(p){return String(p.id)!==String(product.id)&&p.category===product.category;}).slice(0,6);
+  if(!rel.length){sec.style.display='none';return;}
+  scroll.innerHTML=rel.map(function(p){
     var opts=Array.isArray(p.options)?p.options:(Array.isArray(p.packages)?p.packages:[]);
-    var min=opts.length?Math.min.apply(null,opts.map(function(o){return Number(o.price||0)})):0;
+    var min=opts.length?Math.min.apply(null,opts.map(function(o){return Number(o.price||0);})):0;
     return '<div class="vg-related-chip" onclick="closeModal();setTimeout(function(){openProduct('+p.id+')},200)">'
-      +'<img src="'+p.image+'" alt="" loading="lazy" onerror="this.style.display='none'">'
-      +'<div class="vg-related-chip-info"><b>'+p.title+'</b>'
-      +'<span>'+(min?fmt(min):'Ver')+'</span></div></div>';
+      +'<img src="'+p.image+'" alt="" loading="lazy">'
+      +'<div class="vg-related-chip-info"><b>'+p.title+'</b><span>'+(min?fmt(min):'Ver')+'</span></div></div>';
   }).join('');
   sec.style.display='block';
 }
 
-/* ─── STOCK BADGE ─── */
+/* ── STOCK BADGE ── */
 function renderStock(product){
-  var badge=qs('#vgStockBadge');
-  if(!badge) return;
+  var badge=qs('#vgStockBadge');if(!badge)return;
   var id=Number(product.id);
-  var msgs=['¡Solo quedan 2 disponibles!','Últimas unidades','Stock limitado — apura tu pedido'];
-  if(id % 4 === 0){ badge.textContent='⚠️ '+msgs[id%3]; badge.style.display='flex'; }
+  var msgs=['Solo quedan 2 disponibles','Ultimas unidades','Stock limitado'];
+  if(id%4===0){badge.textContent=msgs[id%3];badge.style.display='flex';}
   else badge.style.display='none';
 }
 
-/* ─── COUPON SYSTEM ─── */
-var COUPONS = {
-  'VESSEL10': {pct:10, label:'10% de descuento aplicado'},
-  'VESSEL20': {pct:20, label:'20% de descuento aplicado'},
-  'NUEVO15':  {pct:15, label:'15% para nuevo cliente'},
-  'GAMER5':   {pct:5,  label:'5% descuento gamer'}
-};
-var _activeCoupon = null;
-window.vgApplyCoupon = function(){
-  var inp=qs('#vgCouponInput'); if(!inp) return;
+/* ── COUPON ── */
+var COUPONS={'VESSEL10':{pct:10},'VESSEL20':{pct:20},'NUEVO15':{pct:15},'GAMER5':{pct:5}};
+var _activeCoupon=null;
+window.vgApplyCoupon=function(){
+  var inp=qs('#vgCouponInput');if(!inp)return;
   var code=(inp.value||'').trim().toUpperCase();
   var msg=qs('#vgCouponMsg');
-  if(!code){ if(msg){msg.textContent='Escribe un código';msg.className='vg-coupon-msg err';msg.style.display='block';} return; }
+  if(!code){if(msg){msg.textContent='Escribe un codigo';msg.className='vg-coupon-msg err';msg.style.display='block';}return;}
   var c=COUPONS[code];
   if(c){
     _activeCoupon={code:code,pct:c.pct};
-    if(msg){msg.textContent='✓ '+c.label;msg.className='vg-coupon-msg ok';msg.style.display='block';}
-    vgUpdateDiscountedTotal();
-  } else {
+    if(msg){msg.textContent=c.pct+'% de descuento aplicado';msg.className='vg-coupon-msg ok';msg.style.display='block';}
+  }else{
     _activeCoupon=null;
-    if(msg){msg.textContent='Código inválido o expirado';msg.className='vg-coupon-msg err';msg.style.display='block';}
-    vgUpdateDiscountedTotal();
+    if(msg){msg.textContent='Codigo invalido';msg.className='vg-coupon-msg err';msg.style.display='block';}
   }
 };
-function vgUpdateDiscountedTotal(){
-  var totalEl=qs('#payModalTotal'); if(!totalEl) return;
-  var base=window._vgBaseTotal||0;
-  if(!base){
-    var txt=(totalEl.textContent||'').replace(/[^0-9]/g,'');
-    base=Number(txt)||0;
-    window._vgBaseTotal=base;
-  }
-  if(_activeCoupon && base){
-    var disc=Math.round(base*_activeCoupon.pct/100);
-    var final=base-disc;
-    totalEl.textContent=fmt(final)+' ('+_activeCoupon.pct+'% off)';
-  } else if(base){
-    totalEl.textContent=fmt(base);
-  }
-}
-// Reset coupon when payment modal opens
-window.addEventListener('load', function(){
-  var origOpen=window.openPaymentForCart||window.openPaymentModal;
-  ['openPaymentForCart','openPaymentModal','buySelectedNow'].forEach(function(n){
+window.addEventListener('load',function(){
+  var fns=['openPaymentForCart','openPaymentModal','buySelectedNow'];
+  fns.forEach(function(n){
     var orig=window[n];
     if(typeof orig==='function'){
       window[n]=function(){
-        _activeCoupon=null;
-        window._vgBaseTotal=0;
+        _activeCoupon=null;window._vgBaseTotal=0;
         var inp=qs('#vgCouponInput');if(inp)inp.value='';
         var msg=qs('#vgCouponMsg');if(msg)msg.style.display='none';
-        var r=orig.apply(this,arguments);
-        setTimeout(vgUpdateDiscountedTotal,200);
-        return r;
+        return orig.apply(this,arguments);
       };
     }
   });
 });
 
-/* ─── CARD ENTRANCE ANIMATION (IntersectionObserver) ─── */
+/* ── CARD ENTRANCE ANIMATION ── */
 (function(){
-  if(!window.IntersectionObserver) return;
+  if(!window.IntersectionObserver)return;
   var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        entry.target.classList.add('vg-animate-in');
-        obs.unobserve(entry.target);
-      }
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('vg-animate-in');obs.unobserve(e.target);}
     });
   },{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
-
-  function observeCards(){
+  function watchCards(){
     qsa('.card').forEach(function(c){
-      if(!c.classList.contains('vg-animate-in')&&!c.dataset.observed){
-        c.style.opacity='0';
-        c.dataset.observed='1';
-        obs.observe(c);
+      if(!c.classList.contains('vg-animate-in')&&!c.dataset.obs){
+        c.style.opacity='0';c.dataset.obs='1';obs.observe(c);
       }
     });
   }
-  var obsCards=new MutationObserver(function(){setTimeout(observeCards,80)});
+  var mo=new MutationObserver(function(){setTimeout(watchCards,80);});
   document.addEventListener('DOMContentLoaded',function(){
-    obsCards.observe(document.body,{childList:true,subtree:true});
-    observeCards();
+    mo.observe(document.body,{childList:true,subtree:true});watchCards();
   });
 })();
 
-/* ─── SALES CHART ─── */
-window.vgRenderSalesChart = function(ordersData){
-  var svg=qs('#vgSalesChartSvg'), labels=qs('#vgChartLabels');
-  if(!svg) return;
-  // Build 7-day buckets
-  var days=[], counts=[];
+/* ── SALES CHART ── */
+window.vgRenderSalesChart=function(ordersData){
+  var svg=qs('#vgSalesChartSvg'),labels=qs('#vgChartLabels');if(!svg)return;
+  var days=[],counts=[];
   for(var i=6;i>=0;i--){
-    var d=new Date(); d.setDate(d.getDate()-i);
+    var d=new Date();d.setDate(d.getDate()-i);
     days.push(d.toLocaleDateString('es-MX',{weekday:'short'}));
     var ds=d.toISOString().split('T')[0];
-    var cnt=(ordersData||[]).filter(function(o){
-      return (o.created_at||o.date||'').startsWith(ds);
-    }).length;
-    counts.push(cnt);
+    counts.push((ordersData||[]).filter(function(o){return (o.created_at||'').startsWith(ds);}).length);
   }
-  // Demo data if no orders
-  if(counts.every(function(c){return c===0;})){
-    counts=[2,5,3,8,4,11,6];
-  }
+  if(counts.every(function(c){return c===0;}))counts=[2,5,3,8,4,11,6];
   var max=Math.max.apply(null,counts)||1;
-  var W=560,H=110,barW=50,gap=30,startX=20;
   var bars=counts.map(function(c,i){
-    var bh=Math.round((c/max)*(H-20));
-    var x=startX+i*(barW+gap);
-    var y=H-bh;
-    return '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+bh+
-      '" rx="8" fill="url(#vgBarGrad)" opacity=".85"/>'
-      +'<text x="'+(x+barW/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="10" fill="#8b93b0">'+c+'</text>';
+    var bh=Math.round((c/max)*100);var x=20+i*80;var y=110-bh;
+    return '<rect x="'+x+'" y="'+y+'" width="52" height="'+bh+'" rx="8" fill="url(#vgBG)" opacity=".85"/>'
+      +'<text x="'+(x+26)+'" y="'+(y-5)+'" text-anchor="middle" font-size="10" fill="#8b93b0">'+c+'</text>';
   }).join('');
-  svg.innerHTML='<defs><linearGradient id="vgBarGrad" x1="0" y1="0" x2="0" y2="1">'
+  svg.innerHTML='<defs><linearGradient id="vgBG" x1="0" y1="0" x2="0" y2="1">'
     +'<stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#19e6c1"/>'
     +'</linearGradient></defs>'+bars;
-  if(labels) labels.innerHTML=days.map(function(d){return '<span>'+d+'</span>'}).join('');
+  if(labels)labels.innerHTML=days.map(function(d){return '<span>'+d+'</span>';}).join('');
 };
 
-// Render chart when dashboard opens
-document.addEventListener('click',function(e){
-  if(e.target.closest && e.target.closest('.vg-admin-tab[data-tab="dashboard"]')){
-    setTimeout(function(){
-      var orders=window.vgAdminOrdersCache||[];
-      window.vgRenderSalesChart(orders);
-    },200);
-  }
-});
-// Also render after orders load
-window.addEventListener('vgOrdersLoaded',function(e){
-  window.vgAdminOrdersCache=(e.detail||{}).orders||[];
-  window.vgRenderSalesChart(window.vgAdminOrdersCache);
-});
-
-/* ─── PUSH NOTIFICATIONS ─── */
-window.vgRequestNotifications = function(){
-  if(!('Notification' in window)){
-    alert('Tu navegador no soporta notificaciones push.'); return;
-  }
-  Notification.requestPermission().then(function(perm){
-    if(perm==='granted'){
-      new Notification('Vessel Games — Alertas activadas',{
-        body:'Recibirás una notificación cuando llegue un nuevo pedido.',
-        icon:'/favicon.ico'
-      });
+/* ── PUSH NOTIFICATIONS ── */
+window.vgRequestNotifications=function(){
+  if(!('Notification'in window)){alert('Tu navegador no soporta notificaciones.');return;}
+  Notification.requestPermission().then(function(p){
+    if(p==='granted'){
+      new Notification('Vessel Games — Alertas activadas',{body:'Te avisaremos cuando llegue un pedido.'});
       localStorage.setItem('vg_notif','1');
-      if(typeof window.showToast==='function') window.showToast('✅ Notificaciones activadas');
+      if(typeof window.showToast==='function')window.showToast('Notificaciones activadas');
     }
   });
 };
 
-function vgCheckNewOrders(){
-  if(Notification.permission!=='granted') return;
-  var last=Number(localStorage.getItem('vg_last_order_ts')||0);
+/* ── CSV EXPORT ── */
+window.vgExportCSV=function(){
   var orders=window.vgAdminOrdersCache||[];
-  orders.forEach(function(o){
-    var ts=new Date(o.created_at||0).getTime();
-    if(ts>last && ts>Date.now()-300000){
-      new Notification('🛒 Nuevo pedido — Vessel Games',{
-        body:'Cliente: '+(o.client_name||'desconocido')+' · $'+(o.total||0)+' MXN',
-        icon:'/favicon.ico'
-      });
-      localStorage.setItem('vg_last_order_ts',ts);
-    }
-  });
-}
-setInterval(vgCheckNewOrders, 60000);
-
-/* ─── CSV EXPORT ─── */
-window.vgExportCSV = function(){
-  var orders=window.vgAdminOrdersCache||[];
-  if(!orders.length){ alert('No hay pedidos para exportar.'); return; }
-  var header=['ID','Fecha','Cliente','WhatsApp','Total','Estado','Producto','Opción'];
+  if(!orders.length){alert('No hay pedidos para exportar.');return;}
+  var header=['ID','Fecha','Cliente','WhatsApp','Total','Estado','Producto','Opcion'];
   var rows=orders.map(function(o){
-    return [
-      o.id||'',
+    return [o.id||'',
       (o.created_at||'').split('T')[0],
       o.client_name||o.customer_name||'',
       o.client_phone||o.customer_phone||'',
-      o.total||0,
-      o.status||'',
-      o.product_name||'',
-      o.product_option||''
-    ].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',');
+      o.total||0,o.status||'',o.product_name||'',o.product_option||''
+    ].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
   });
-  var csv='﻿'+header.join(',')+'
-'+rows.join('
-');
+  var csv='\uFEFF'+header.join(',')+'\n'+rows.join('\n');
   var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url; a.download='vessel-games-pedidos-'+new Date().toISOString().split('T')[0]+'.csv';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  a.href=url;a.download='vessel-pedidos-'+new Date().toISOString().split('T')[0]+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  if(typeof window.showToast==='function') window.showToast('📥 CSV descargado');
+  if(typeof window.showToast==='function')window.showToast('CSV descargado');
 };
 
-/* ─── PATCH ADMIN ORDERS to cache for chart/CSV/notifications ─── */
-window.addEventListener('load',function(){
-  var origLoad=window.vgAdminLoadOrders;
-  if(typeof origLoad==='function'){
-    window.vgAdminLoadOrders=function(){
-      var result=origLoad.apply(this,arguments);
-      if(result&&typeof result.then==='function'){
-        result.then(function(){
-          // Try to grab cached orders from DOM
-          setTimeout(function(){
-            if(window._vgOrdersData) window.vgAdminOrdersCache=window._vgOrdersData;
-          },500);
-        });
-      }
-      return result;
-    };
-  }
-});
-
-/* ─── ADMIN COUPON MANAGEMENT ─── */
-window.vgRenderCouponAdmin = function(){
-  var sec=qs('#vgAdminSettings .vg-settings-grid')||qs('#vgAdminSettings');
-  if(!sec||qs('#vg-coupon-admin')) return;
-  var div=document.createElement('div');
-  div.id='vg-coupon-admin';
-  div.style.cssText='margin-top:20px';
+/* ── COUPON ADMIN ── */
+window.vgRenderCouponAdmin=function(){
+  var sec=qs('#vgAdminSettings');if(!sec||qs('#vg-coupon-admin'))return;
   var saved=JSON.parse(localStorage.getItem('vg_custom_coupons')||'{}');
   Object.assign(COUPONS,saved);
-  div.innerHTML='<h4 style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 12px">🎟️ Cupones de descuento</h4>'
+  var div=document.createElement('div');
+  div.id='vg-coupon-admin';div.style.cssText='margin-top:20px';
+  div.innerHTML='<h4 style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;margin:0 0 12px">Cupones de descuento</h4>'
     +'<div style="display:flex;flex-direction:column;gap:8px" id="vgCouponList"></div>'
     +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'
-    +'<input id="vgNewCouponCode" placeholder="Código (ej: PROMO30)" style="flex:1;height:36px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:10px;color:#eef0fa;padding:0 12px;font-size:.82rem;outline:0">'
+    +'<input id="vgNewCouponCode" placeholder="Codigo (ej: PROMO30)" style="flex:1;height:36px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:10px;color:#eef0fa;padding:0 12px;font-size:.82rem;outline:0">'
     +'<input id="vgNewCouponPct" type="number" placeholder="%" min="1" max="90" style="width:70px;height:36px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:10px;color:#eef0fa;padding:0 10px;font-size:.82rem;outline:0">'
     +'<button class="vg-dash-btn vg-dash-btn-primary" onclick="vgAddCoupon()" style="height:36px">+ Agregar</button></div>';
   sec.appendChild(div);
   vgRefreshCouponList();
 };
 function vgRefreshCouponList(){
-  var list=qs('#vgCouponList'); if(!list) return;
+  var list=qs('#vgCouponList');if(!list)return;
   list.innerHTML=Object.entries(COUPONS).map(function(e){
     return '<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 14px">'
       +'<span style="font-weight:700;font-size:.88rem">'+e[0]+'</span>'
       +'<span style="color:#19e6c1;font-size:.84rem">'+e[1].pct+'% descuento</span>'
-      +'<button onclick="vgRemoveCoupon(''+e[0]+'')" style="background:rgba(255,77,125,.12);border:1px solid rgba(255,77,125,.25);border-radius:8px;color:#ff7090;cursor:pointer;height:28px;padding:0 10px;font-size:.74rem">Quitar</button>'
+      +'<button data-code="'+e[0]+'" onclick="vgRemoveCoupon(this.dataset.code)" style="background:rgba(255,77,125,.12);border:1px solid rgba(255,77,125,.25);border-radius:8px;color:#ff7090;cursor:pointer;height:28px;padding:0 10px;font-size:.74rem">Quitar</button>'
       +'</div>';
   }).join('');
 }
 window.vgAddCoupon=function(){
   var code=(qs('#vgNewCouponCode')||{}).value||'';
   var pct=Number((qs('#vgNewCouponPct')||{}).value||0);
-  if(!code||!pct||pct<1||pct>90){alert('Código y % válido requeridos');return;}
-  COUPONS[code.toUpperCase().trim()]={pct:pct,label:pct+'% de descuento aplicado'};
+  if(!code||!pct||pct<1||pct>90){alert('Codigo y % valido requeridos');return;}
+  COUPONS[code.toUpperCase().trim()]={pct:pct};
   var saved=JSON.parse(localStorage.getItem('vg_custom_coupons')||'{}');
-  saved[code.toUpperCase().trim()]={pct:pct,label:pct+'% de descuento'};
+  saved[code.toUpperCase().trim()]={pct:pct};
   localStorage.setItem('vg_custom_coupons',JSON.stringify(saved));
   vgRefreshCouponList();
 };
@@ -19594,10 +20088,1289 @@ window.vgRemoveCoupon=function(code){
   localStorage.setItem('vg_custom_coupons',JSON.stringify(saved));
   vgRefreshCouponList();
 };
-// Trigger coupon admin render when settings tab opens
+
+/* ── ADMIN TAB HOOKS ── */
 document.addEventListener('click',function(e){
-  if(e.target.closest && e.target.closest('.vg-admin-tab[data-tab="settings"]'))
-    setTimeout(window.vgRenderCouponAdmin,120);
+  if(tabIs(e.target,'settings'))setTimeout(window.vgRenderCouponAdmin,120);
+  if(tabIs(e.target,'dashboard')){
+    setTimeout(function(){
+      if(window.renderDashboard)window.renderDashboard();
+      window.vgRenderSalesChart(window.vgAdminOrdersCache||[]);
+    },100);
+  }
+});
+
+/* ── TRUST BADGES ── */
+(function(){
+  try{
+    var v=Number(localStorage.getItem('vg_visits')||0)+1;
+    localStorage.setItem('vg_visits',v);
+    var el=qs('#vgBadgeOrders');
+    if(el)el.textContent=347+Math.floor(v*0.7);
+  }catch(e){}
+})();
+
+})();
+</script>
+
+<script id="vg-pro-system-js">
+(function(){
+'use strict';
+
+/* ─── SQL SCHEMA ─── */
+var VG_SQL_SCHEMA = [
+'-- EJECUTAR EN SUPABASE > SQL EDITOR',
+'',
+'CREATE TABLE IF NOT EXISTS vg_users (',
+'  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,',
+'  name TEXT NOT NULL,',
+'  phone TEXT UNIQUE NOT NULL,',
+'  referral_code TEXT UNIQUE NOT NULL DEFAULT substr(md5(random()::text),1,8),',
+'  referred_by UUID REFERENCES vg_users(id),',
+'  created_at TIMESTAMPTZ DEFAULT NOW()',
+');',
+'',
+'CREATE TABLE IF NOT EXISTS vg_token_wallet (',
+'  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,',
+'  user_id UUID UNIQUE REFERENCES vg_users(id) ON DELETE CASCADE,',
+'  balance DECIMAL(10,2) DEFAULT 0,',
+'  total_purchases INTEGER DEFAULT 0,',
+'  total_earned DECIMAL(10,2) DEFAULT 0,',
+'  updated_at TIMESTAMPTZ DEFAULT NOW()',
+');',
+'',
+'CREATE TABLE IF NOT EXISTS vg_token_tx (',
+'  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,',
+'  user_id UUID REFERENCES vg_users(id) ON DELETE CASCADE,',
+'  amount DECIMAL(10,2) NOT NULL,',
+'  type TEXT NOT NULL,',
+'  description TEXT,',
+'  order_id TEXT,',
+'  created_at TIMESTAMPTZ DEFAULT NOW()',
+');',
+'',
+'CREATE TABLE IF NOT EXISTS vg_redemptions (',
+'  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,',
+'  user_id UUID REFERENCES vg_users(id) ON DELETE CASCADE,',
+'  product TEXT NOT NULL,',
+'  tokens_cost DECIMAL(10,2) NOT NULL,',
+'  status TEXT DEFAULT (\'pending\'),',
+'  created_at TIMESTAMPTZ DEFAULT NOW()',
+');',
+'',
+'ALTER TABLE orders ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES vg_users(id);',
+'ALTER TABLE orders ADD COLUMN IF NOT EXISTS ref_code TEXT;',
+'',
+'-- RLS (opcional pero recomendado)',
+'ALTER TABLE vg_users ENABLE ROW LEVEL SECURITY;',
+'ALTER TABLE vg_token_wallet ENABLE ROW LEVEL SECURITY;',
+'ALTER TABLE vg_token_tx ENABLE ROW LEVEL SECURITY;',
+'ALTER TABLE vg_redemptions ENABLE ROW LEVEL SECURITY;'
+].join('\n');
+
+/* ─── CATALOG ─── */
+var REDEEM_CATALOG = [
+  {id:'VIX',       name:'VIX+',        cost:5,  icon:'📺'},
+  {id:'PARAMOUNT', name:'Paramount+',  cost:7,  icon:'⭐'},
+  {id:'MAX',       name:'MAX',         cost:9,  icon:'🎬'},
+  {id:'CRUNCHYROLL',name:'Crunchyroll',cost:10, icon:'🌸'},
+  {id:'NETFLIX',   name:'Netflix',     cost:20, icon:'🎥'}
+];
+
+/* ─── SESSION ─── */
+var session = null;
+try { session = JSON.parse(localStorage.getItem('vg_pro_session') || 'null'); } catch(e){}
+
+function saveSession(s) {
+  session = s;
+  localStorage.setItem('vg_pro_session', s ? JSON.stringify(s) : 'null');
+}
+
+/* ─── SUPABASE CLIENT ─── */
+function getClient() {
+  try {
+    var cfg = JSON.parse(localStorage.getItem('vg_supabase_cfg_v1') || '{}');
+    if (!cfg.url || !cfg.key) return null;
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+      return supabase.createClient(cfg.url, cfg.key);
+    }
+  } catch(e) {}
+  return null;
+}
+
+/* ─── REFERRAL CODE FROM URL ─── */
+function checkURLRef() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get('ref');
+    if (code) {
+      localStorage.setItem('vg_pending_ref', code);
+    }
+  } catch(e) {}
+}
+checkURLRef();
+
+/* ─── MODAL OPEN / CLOSE ─── */
+window.vgProOpen = function() {
+  var m = document.getElementById('vgProModal');
+  if (!m) return;
+  m.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (session) {
+    showDashState();
+    loadProData();
+  } else {
+    showLoginState();
+    setTimeout(function() {
+      var ph = document.getElementById('vgProPhone');
+      if (ph) ph.focus();
+    }, 100);
+  }
+};
+window.vgProClose = function() {
+  var m = document.getElementById('vgProModal');
+  if (m) m.classList.remove('active');
+  document.body.style.overflow = '';
+};
+document.addEventListener('click', function(e) {
+  var m = document.getElementById('vgProModal');
+  if (m && e.target === m) window.vgProClose();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') window.vgProClose();
+});
+
+function showLoginState() {
+  var ls = document.getElementById('vgProLoginState');
+  var ds = document.getElementById('vgProDashState');
+  if (ls) ls.style.display = 'block';
+  if (ds) ds.style.display = 'none';
+}
+function showDashState() {
+  var ls = document.getElementById('vgProLoginState');
+  var ds = document.getElementById('vgProDashState');
+  if (ls) ls.style.display = 'none';
+  if (ds) { ds.style.display = 'flex'; updateDashHeader(); }
+}
+
+function updateDashHeader() {
+  if (!session) return;
+  var el;
+  el = document.getElementById('vgProAvatarLetter'); if (el) el.textContent = session.name.charAt(0).toUpperCase();
+  el = document.getElementById('vgProDisplayName');  if (el) el.textContent = session.name;
+  el = document.getElementById('vgProDisplayPhone'); if (el) el.textContent = session.phone;
+  el = document.getElementById('vgProTokenBal');     if (el) el.textContent = session.tokens || '0';
+  el = document.getElementById('vgWalBal');          if (el) el.textContent = session.tokens || '0';
+}
+
+/* ─── TABS inside pro modal ─── */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.vg-pro-tab');
+  if (!btn) return;
+  var tab = btn.dataset.ptab; if (!tab) return;
+  document.querySelectorAll('.vg-pro-tab').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.ptab === tab);
+  });
+  document.querySelectorAll('.vg-pro-section').forEach(function(s) {
+    s.classList.toggle('active', s.dataset.ptab === tab);
+  });
+  if (tab === 'wallet') renderWallet();
+  if (tab === 'referrals') renderReferralTab();
+});
+
+/* ─── AUTH ─── */
+window.vgProAuth = async function() {
+  var phoneEl = document.getElementById('vgProPhone');
+  var nameEl  = document.getElementById('vgProName');
+  var nameWrap= document.getElementById('vgProNameWrap');
+  if (!phoneEl) return;
+  var phone = (phoneEl.value || '').replace(/\D/g, '').trim();
+  if (!phone || phone.length < 8) { phoneEl.style.borderColor = 'rgba(255,77,125,.55)'; return; }
+  phoneEl.style.borderColor = '';
+  var client = getClient();
+  if (client) {
+    try {
+      var res = await client.from('vg_users').select('id,name,phone,referral_code').eq('phone', phone).single();
+      if (res.data) {
+        /* existing user */
+        var wr = await client.from('vg_token_wallet').select('balance,total_purchases,total_earned').eq('user_id', res.data.id).single();
+        var bal = wr.data ? wr.data.balance : 0;
+        saveSession({ id: res.data.id, name: res.data.name, phone: phone, refCode: res.data.referral_code, tokens: bal });
+        syncNav(); showDashState(); loadProData();
+        return;
+      }
+    } catch(e) {}
+    /* new user — need name */
+    if (!nameWrap || nameWrap.style.display !== 'none') {} else {
+      nameWrap.style.display = 'block';
+      var btn = document.querySelector('#vgProLoginState .vg-pro-login-btn');
+      if (btn) btn.textContent = 'Crear cuenta';
+      return;
+    }
+  } else {
+    /* Offline / no Supabase — use localStorage only */
+    if (!nameWrap || nameWrap.style.display !== 'none') {} else {
+      nameWrap.style.display = 'block';
+      var btn2 = document.querySelector('#vgProLoginState .vg-pro-login-btn');
+      if (btn2) btn2.textContent = 'Crear cuenta';
+      return;
+    }
+  }
+  /* register */
+  var name = nameEl ? (nameEl.value || '').trim() : '';
+  if (!name) { if (nameEl) nameEl.style.borderColor = 'rgba(255,77,125,.55)'; return; }
+  await vgProRegister(name, phone, client);
+};
+
+async function vgProRegister(name, phone, client) {
+  var refCode = genCode(phone);
+  var pendingRef = localStorage.getItem('vg_pending_ref') || null;
+  if (client) {
+    try {
+      /* find referrer */
+      var referrerId = null;
+      if (pendingRef) {
+        var refRes = await client.from('vg_users').select('id').eq('referral_code', pendingRef).single();
+        if (refRes.data) referrerId = refRes.data.id;
+      }
+      var ins = await client.from('vg_users').insert({
+        name: name, phone: phone, referral_code: refCode, referred_by: referrerId
+      }).select('id,referral_code').single();
+      if (ins.data) {
+        await client.from('vg_token_wallet').insert({ user_id: ins.data.id, balance: 0, total_purchases: 0, total_earned: 0 });
+        refCode = ins.data.referral_code || refCode;
+        var newId = ins.data.id;
+        saveSession({ id: newId, name: name, phone: phone, refCode: refCode, tokens: 0, referredBy: referrerId });
+        localStorage.removeItem('vg_pending_ref');
+        syncNav(); showDashState(); loadProData();
+        if (typeof window.showToast === 'function') window.showToast('Bienvenido ' + name + '! Cuenta creada.');
+        return;
+      }
+    } catch(e) { console.warn('Supabase register error:', e); }
+  }
+  /* localStorage fallback */
+  saveSession({ id: 'local_' + Date.now(), name: name, phone: phone, refCode: refCode, tokens: 0 });
+  localStorage.removeItem('vg_pending_ref');
+  syncNav(); showDashState(); loadProData();
+  if (typeof window.showToast === 'function') window.showToast('Bienvenido ' + name + '!');
+}
+
+function genCode(phone) {
+  var s = phone.slice(-4) + Math.random().toString(36).slice(2,6);
+  return s.toUpperCase().slice(0, 8);
+}
+
+window.vgProLogout = function() {
+  saveSession(null);
+  syncNav();
+  showLoginState();
+  var ph = document.getElementById('vgProPhone'); if (ph) ph.value = '';
+  var nm = document.getElementById('vgProName');  if (nm) nm.value = '';
+  var nw = document.getElementById('vgProNameWrap'); if (nw) nw.style.display = 'none';
+  var btn = document.querySelector('#vgProLoginState .vg-pro-login-btn');
+  if (btn) btn.textContent = 'Continuar';
+};
+
+/* ─── SYNC NAV (greeting + fav pill) ─── */
+function syncNav() {
+  var g = document.getElementById('vgUserGreeting');
+  if (!g) return;
+  if (session && session.name) {
+    g.style.display = 'flex';
+    var av = document.getElementById('vgUserAvatar');
+    var nm = document.getElementById('vgUserName');
+    if (av) av.textContent = session.name.charAt(0).toUpperCase();
+    if (nm) nm.textContent = session.name;
+    g.title = 'Mi perfil · ' + session.tokens + ' tokens';
+  } else {
+    g.style.display = 'none';
+  }
+}
+document.addEventListener('DOMContentLoaded', syncNav);
+window.addEventListener('load', syncNav);
+
+/* ─── LOAD PRO DATA ─── */
+async function loadProData() {
+  if (!session) return;
+  loadOrders();
+  loadWalletData();
+}
+
+/* ─── ORDERS ─── */
+async function loadOrders() {
+  var c = document.getElementById('vgProOrdersContent');
+  if (!c) return;
+  c.innerHTML = '<div style="text-align:center;padding:32px;color:#5a6180">Cargando pedidos...</div>';
+  var orders = [];
+  var client = getClient();
+  if (client) {
+    try {
+      var res = await client.from('orders')
+        .select('id,created_at,product_name,product_option,total,status,items')
+        .or('client_phone.eq.' + session.phone + ',user_id.eq.' + session.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      if (res.data) orders = res.data;
+    } catch(e) {}
+  }
+  /* also check localStorage history */
+  try {
+    var lh = JSON.parse(localStorage.getItem('vg_purchase_history') || '[]');
+    if (!orders.length && lh.length) {
+      orders = lh.map(function(x) {
+        return { id: x.ts, created_at: x.date, product_name: x.title, product_option: x.option,
+          total: x.price, status: 'delivered', _local: true };
+      });
+    }
+  } catch(e) {}
+  if (!orders.length) {
+    c.innerHTML = '<div style="text-align:center;padding:40px;color:#5a6180"><div style="font-size:2rem;margin-bottom:8px">🛒</div>Aun no tienes pedidos registrados.</div>';
+    return;
+  }
+  var statusLabel = { pending: 'Pendiente', delivered: 'Entregado', processing: 'En proceso', review: 'En revision' };
+  var statusClass = { pending: 'pending', delivered: 'delivered', processing: 'review', review: 'review' };
+  c.innerHTML = '<div class="vg-order-list">' + orders.map(function(o) {
+    var svc = typeof services === 'function' ? services() : (window.SERVICES || []);
+    var p = svc.find(function(s) { return s.title === o.product_name; });
+    var img = p ? p.image : '';
+    var dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' }) : '';
+    var st = o.status || 'pending';
+    return '<div class="vg-order-item">'
+      + '<div class="vg-order-thumb"><img src="' + img + '" alt="" onerror="this.style.display=\'none\'"></div>'
+      + '<div class="vg-order-info"><b>' + (o.product_name || 'Pedido') + '</b>'
+      + '<small>' + (o.product_option || '') + (o.product_option ? ' &nbsp;·&nbsp; ' : '') + dateStr + '</small></div>'
+      + '<div class="vg-order-meta"><div class="vg-order-price">$' + Number(o.total || 0).toLocaleString('es-MX') + ' MXN</div>'
+      + '<span class="vg-order-status ' + (statusClass[st] || 'pending') + '">' + (statusLabel[st] || st) + '</span></div>'
+      + '</div>';
+  }).join('') + '</div>';
+}
+
+/* ─── WALLET DATA ─── */
+async function loadWalletData() {
+  if (!session) return;
+  var bal = session.tokens || 0, purchases = 0, earned = 0;
+  var txList = [];
+  var client = getClient();
+  if (client && session.id && !session.id.startsWith('local_')) {
+    try {
+      var wr = await client.from('vg_token_wallet')
+        .select('balance,total_purchases,total_earned')
+        .eq('user_id', session.id).single();
+      if (wr.data) { bal = wr.data.balance; purchases = wr.data.total_purchases; earned = wr.data.total_earned; }
+      var tr = await client.from('vg_token_tx')
+        .select('amount,type,description,created_at')
+        .eq('user_id', session.id)
+        .order('created_at', { ascending: false })
+        .limit(15);
+      if (tr.data) txList = tr.data;
+    } catch(e) {}
+    /* check referral stats */
+    try {
+      var refs = await client.from('vg_users').select('id,name', { count: 'exact' }).eq('referred_by', session.id);
+      var refCount = refs.count || 0;
+      var refTokens = txList.filter(function(t) { return t.type === 'referral'; }).length;
+      var rcEl = document.getElementById('vgRefCount');    if (rcEl) rcEl.textContent = refCount;
+      var rtEl = document.getElementById('vgRefTokens');   if (rtEl) rtEl.textContent = refTokens;
+    } catch(e) {}
+  }
+  session.tokens = bal;
+  session.purchases = purchases;
+  saveSession(session);
+  syncNav();
+  renderWalletData(bal, purchases, earned, txList);
+}
+
+function renderWalletData(bal, purchases, earned, txList) {
+  var elBal  = document.getElementById('vgWalBal');      if (elBal)    elBal.textContent    = Number(bal).toFixed(1);
+  var elP    = document.getElementById('vgWalPurch');    if (elP)      elP.textContent      = purchases;
+  var elE    = document.getElementById('vgWalEarned');   if (elE)      elE.textContent      = Number(earned).toFixed(1);
+  var elTkn  = document.getElementById('vgProTokenBal'); if (elTkn)    elTkn.textContent    = Number(bal).toFixed(1);
+  /* Progress bar: next 0.5 milestone */
+  var progress = ((bal % 1) / 0.5) * 50 + (bal >= 1 ? 50 : 0);
+  var prog = document.getElementById('vgWalProgress');
+  var hint = document.getElementById('vgWalHint');
+  if (prog) prog.style.width = Math.min(progress, 100) + '%';
+  var needed = Math.ceil(bal * 2) / 2 + 0.5 - bal;
+  if (hint) hint.textContent = 'Cada compra suma 0.5 tokens. Te faltan ' + needed.toFixed(1) + ' tokens para el siguiente nivel.';
+  renderRedeemGrid(bal);
+  renderTxList(txList);
+}
+
+function renderWallet() {
+  var bal = session ? (session.tokens || 0) : 0;
+  renderWalletData(bal, session ? (session.purchases || 0) : 0, bal, []);
+  loadWalletData();
+}
+
+function renderRedeemGrid(bal) {
+  var grid = document.getElementById('vgRedeemGrid'); if (!grid) return;
+  grid.innerHTML = REDEEM_CATALOG.map(function(item) {
+    var canRedeem = Number(bal) >= item.cost;
+    return '<div class="vg-redeem-card' + (canRedeem ? '' : ' locked') + '">'
+      + '<div class="vg-redeem-logo">' + item.icon + '</div>'
+      + '<div class="vg-redeem-service">' + item.name + '</div>'
+      + '<div class="vg-redeem-cost">🪙 ' + item.cost + '</div>'
+      + '<button class="vg-redeem-btn" ' + (canRedeem ? '' : 'disabled') + ' onclick="vgRedeem(\'' + item.id + '\',' + item.cost + ',\'' + item.name + '\')">'
+      + (canRedeem ? 'Canjear' : item.cost - Number(bal) + ' mas') + '</button>'
+      + '</div>';
+  }).join('');
+}
+
+function renderTxList(txList) {
+  var list = document.getElementById('vgTxList'); if (!list) return;
+  if (!txList || !txList.length) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:#5a6180">Sin movimientos aun.</div>';
+    return;
+  }
+  var typeLabel = { purchase: 'Compra completada', referral: 'Referido', redemption: 'Canje', manual_add: 'Ajuste manual', manual_sub: 'Ajuste manual' };
+  list.innerHTML = txList.map(function(tx) {
+    var plus = Number(tx.amount) > 0;
+    var d = tx.created_at ? new Date(tx.created_at).toLocaleDateString('es-MX') : '';
+    return '<div class="vg-tx-item"><div><div class="vg-tx-desc">' + (typeLabel[tx.type] || tx.type) + (tx.description ? ': ' + tx.description : '') + '</div>'
+      + '<div class="vg-tx-date">' + d + '</div></div>'
+      + '<div class="vg-tx-amount ' + (plus ? 'plus' : 'minus') + '">' + (plus ? '+' : '') + Number(tx.amount).toFixed(1) + ' 🪙</div></div>';
+  }).join('');
+}
+
+/* ─── REDEEM ─── */
+window.vgRedeem = async function(productId, cost, productName) {
+  if (!session) return;
+  var bal = session.tokens || 0;
+  if (Number(bal) < cost) { alert('Tokens insuficientes.'); return; }
+  if (!confirm('Canjear ' + productName + ' por ' + cost + ' tokens?')) return;
+  var client = getClient();
+  if (client && !session.id.startsWith('local_')) {
+    try {
+      await client.from('vg_redemptions').insert({ user_id: session.id, product: productId, tokens_cost: cost, status: 'pending' });
+      await client.from('vg_token_wallet').update({ balance: Number(bal) - cost }).eq('user_id', session.id);
+      await client.from('vg_token_tx').insert({ user_id: session.id, amount: -cost, type: 'redemption', description: productName });
+    } catch(e) {}
+  }
+  session.tokens = Math.max(0, Number(bal) - cost);
+  saveSession(session);
+  syncNav();
+  renderWalletData(session.tokens, session.purchases || 0, session.tokens, []);
+  loadWalletData();
+  if (typeof window.showToast === 'function') window.showToast('Canje solicitado: ' + productName + '. Te contactaremos por WhatsApp.');
+};
+
+/* ─── AWARD TOKENS on purchase ─── */
+window.vgAwardTokens = async function(orderId, orderTotal) {
+  if (!session) return;
+  var client = getClient();
+  var newBal = Number(session.tokens || 0) + 0.5;
+  var newP   = (session.purchases || 0) + 1;
+  if (client && !session.id.startsWith('local_')) {
+    try {
+      await client.from('vg_token_wallet').update({ balance: newBal, total_purchases: newP, total_earned: (Number(session.tokens || 0) + 0.5) }).eq('user_id', session.id);
+      await client.from('vg_token_tx').insert({ user_id: session.id, amount: 0.5, type: 'purchase', description: 'Compra completada', order_id: String(orderId) });
+      /* Award referral token if applicable */
+      await checkAndAwardReferral(session.id, orderId, newP);
+    } catch(e) {}
+  }
+  session.tokens = newBal;
+  session.purchases = newP;
+  saveSession(session);
+  syncNav();
+  if (typeof window.showToast === 'function') window.showToast('+0.5 tokens acreditados! Total: ' + newBal.toFixed(1));
+};
+
+async function checkAndAwardReferral(userId, orderId, totalPurchases) {
+  if (totalPurchases !== 1) return; /* only on FIRST purchase */
+  var client = getClient();
+  if (!client) return;
+  try {
+    var userRes = await client.from('vg_users').select('referred_by').eq('id', userId).single();
+    if (!userRes.data || !userRes.data.referred_by) return;
+    var referrerId = userRes.data.referred_by;
+    /* Award 1 token to referrer */
+    var walRes = await client.from('vg_token_wallet').select('balance,total_earned').eq('user_id', referrerId).single();
+    if (!walRes.data) return;
+    var newBal = Number(walRes.data.balance) + 1;
+    await client.from('vg_token_wallet').update({ balance: newBal, total_earned: Number(walRes.data.total_earned || 0) + 1 }).eq('user_id', referrerId);
+    await client.from('vg_token_tx').insert({ user_id: referrerId, amount: 1, type: 'referral', description: 'Referido realizo su primera compra', order_id: String(orderId) });
+  } catch(e) {}
+}
+
+/* ─── HOOK PURCHASE COMPLETE ─── */
+window.addEventListener('load', function() {
+  var origSendWA = window.sendPaymentWhatsApp;
+  if (typeof origSendWA === 'function') {
+    window.sendPaymentWhatsApp = async function() {
+      var r = await origSendWA.apply(this, arguments);
+      if (session) {
+        var order = window.pendingPaymentOrder || window._vgCurrentOrder || {};
+        var orderId = order.id || Date.now();
+        setTimeout(function() { window.vgAwardTokens(orderId, order.total || 0); }, 2000);
+      }
+      return r;
+    };
+  }
+});
+
+/* ─── REFERRAL TAB ─── */
+function renderReferralTab() {
+  if (!session) return;
+  var base = window.location.origin + window.location.pathname;
+  var link = base + '?ref=' + (session.refCode || genCode(session.phone));
+  var inp = document.getElementById('vgRefLinkInput'); if (inp) inp.value = link;
+}
+
+window.vgCopyRefLink = function() {
+  var inp = document.getElementById('vgRefLinkInput');
+  if (!inp) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(inp.value).then(function() {
+      if (typeof window.showToast === 'function') window.showToast('Enlace copiado!');
+    });
+  } else {
+    inp.select(); document.execCommand('copy');
+    if (typeof window.showToast === 'function') window.showToast('Enlace copiado!');
+  }
+};
+
+/* ─── ADMIN USERS ─── */
+var _allUsers = [];
+window.vgAdminLoadUsers = async function() {
+  var wrap = document.getElementById('vgUsersTableWrap'); if (!wrap) return;
+  wrap.innerHTML = '<div style="text-align:center;padding:32px;color:#5a6180">Cargando usuarios...</div>';
+  var client = getClient();
+  if (!client) { wrap.innerHTML = '<div style="padding:20px;color:#ff7090">Supabase no configurado. Ve a Admin > Config primero.</div>'; return; }
+  try {
+    var res = await client.from('vg_users')
+      .select('id,name,phone,referral_code,created_at, vg_token_wallet(balance,total_purchases,total_earned)')
+      .order('created_at', { ascending: false })
+      .limit(200);
+    _allUsers = res.data || [];
+    renderUsersTable(_allUsers);
+  } catch(e) {
+    wrap.innerHTML = '<div style="padding:20px;color:#ff7090">Error: ' + e.message + '</div>';
+  }
+};
+
+function renderUsersTable(users) {
+  var wrap = document.getElementById('vgUsersTableWrap'); if (!wrap) return;
+  if (!users.length) { wrap.innerHTML = '<div style="padding:20px;color:#5a6180">No hay usuarios registrados aun.</div>'; return; }
+  var rows = users.map(function(u) {
+    var w = u.vg_token_wallet || {};
+    var bal = w.balance || 0;
+    var purch = w.total_purchases || 0;
+    var d = u.created_at ? new Date(u.created_at).toLocaleDateString('es-MX') : '';
+    return '<tr>'
+      + '<td><div class="vg-ut-avatar">' + u.name.charAt(0).toUpperCase() + '</div></td>'
+      + '<td><b style="font-size:.86rem">' + u.name + '</b></td>'
+      + '<td style="color:#8b93b0">' + u.phone + '</td>'
+      + '<td><b style="color:#19e6c1">' + Number(bal).toFixed(1) + '</b></td>'
+      + '<td style="color:#8b93b0">' + purch + '</td>'
+      + '<td style="color:#5a6180;font-size:.76rem">' + d + '</td>'
+      + '<td><div class="vg-token-edit-row">'
+      + '<input class="vg-token-edit-input" type="number" step="0.5" value="' + Number(bal).toFixed(1) + '" data-uid="' + u.id + '" id="te_' + u.id.replace(/-/g,'') + '">'
+      + '<button class="vg-token-edit-save" onclick="vgAdminSaveTokens(\'' + u.id + '\')">Guardar</button>'
+      + '</div></td>'
+      + '</tr>';
+  }).join('');
+  wrap.innerHTML = '<div class="vg-users-table-wrap"><table class="vg-users-table">'
+    + '<thead><tr><th></th><th>Nombre</th><th>WhatsApp</th><th>Tokens</th><th>Compras</th><th>Registro</th><th>Editar tokens</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table></div>';
+}
+
+window.vgFilterUsers = function(q) {
+  if (!q) { renderUsersTable(_allUsers); return; }
+  var lower = q.toLowerCase();
+  renderUsersTable(_allUsers.filter(function(u) {
+    return u.name.toLowerCase().includes(lower) || u.phone.includes(lower);
+  }));
+};
+
+window.vgAdminSaveTokens = async function(userId) {
+  var safe = userId.replace(/-/g, '');
+  var input = document.getElementById('te_' + safe); if (!input) return;
+  var newBal = parseFloat(input.value);
+  if (isNaN(newBal) || newBal < 0) { alert('Valor invalido'); return; }
+  var client = getClient(); if (!client) return;
+  try {
+    var cur = await client.from('vg_token_wallet').select('balance').eq('user_id', userId).single();
+    var oldBal = cur.data ? cur.data.balance : 0;
+    var delta = newBal - Number(oldBal);
+    await client.from('vg_token_wallet').update({ balance: newBal }).eq('user_id', userId);
+    await client.from('vg_token_tx').insert({ user_id: userId, amount: delta, type: delta >= 0 ? 'manual_add' : 'manual_sub', description: 'Ajuste manual por admin' });
+    if (typeof window.showToast === 'function') window.showToast('Tokens actualizados: ' + newBal.toFixed(1));
+    /* refresh if current user */
+    if (session && session.id === userId) { session.tokens = newBal; saveSession(session); syncNav(); }
+  } catch(e) { alert('Error: ' + e.message); }
+};
+
+window.vgExportUsersCSV = function() {
+  if (!_allUsers.length) { alert('Carga los usuarios primero.'); return; }
+  var header = ['Nombre','Telefono','Tokens','Compras','Codigo Referido','Fecha Registro'];
+  var rows = _allUsers.map(function(u) {
+    var w = u.vg_token_wallet || {};
+    return [u.name, u.phone, Number(w.balance||0).toFixed(1), w.total_purchases||0, u.referral_code||'', (u.created_at||'').split('T')[0]]
+      .map(function(v) { return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
+  });
+  var csv = '\uFEFF' + header.join(',') + '\n' + rows.join('\n');
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'vessel-usuarios-' + new Date().toISOString().split('T')[0] + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+};
+
+/* ─── SQL SCHEMA HELPER ─── */
+window.vgShowSQLSchema = function() {
+  var m = document.getElementById('vgSQLModal'); if (!m) return;
+  var c = document.getElementById('vgSQLContent'); if (c) c.textContent = VG_SQL_SCHEMA;
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+};
+window.vgCopySQL = function() {
+  if (navigator.clipboard) navigator.clipboard.writeText(VG_SQL_SCHEMA).then(function() {
+    if (typeof window.showToast === 'function') window.showToast('SQL copiado!');
+  });
+};
+
+/* ─── HOOK admin tab ─── */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.vg-admin-tab'); if (!btn) return;
+  if (btn.dataset.tab === 'usuarios') setTimeout(function() {}, 0);
+});
+
+/* ─── NAV PILL CLICK ─── */
+window.addEventListener('load', function() {
+  var g = document.getElementById('vgUserGreeting');
+  if (g) g.onclick = window.vgProOpen;
+  /* show promo auto-open after 5s if no session */
+  var skipped = localStorage.getItem('vg_login_skip');
+  var fresh = !skipped || Date.now() - Number(skipped) > 7 * 24 * 3600000;
+  if (!session && fresh) setTimeout(window.vgProOpen, 5000);
+});
+
+})();
+</script>
+
+
+<!-- User Dashboard -->
+<div class="vg-dash-modal" id="vgUserDashModal">
+  <div class="vg-dash-card">
+    <!-- Header -->
+    <div class="vg-dh">
+      <div class="vg-dh-avatar" id="vgDashAvatar">?</div>
+      <div class="vg-dh-info">
+        <h3 class="vg-dh-name" id="vgDashName">Cargando...</h3>
+        <p class="vg-dh-phone" id="vgDashPhone"></p>
+        <div class="vg-dh-badges">
+          <span class="vg-dh-badge tokens"><span id="vgDashTokensBadge">0</span> tokens</span>
+          <span class="vg-dh-badge ref">Codigo: <span id="vgDashRefCode">—</span></span>
+        </div>
+      </div>
+      <div class="vg-dh-token-box">
+        <div class="vg-token-big" id="vgDashTokensBig">0</div>
+        <div style="font-size:.66rem;color:#8b93b0;text-transform:uppercase;letter-spacing:.08em">Tokens</div>
+      </div>
+      <button class="x" onclick="closeDashboard()" style="align-self:flex-start">x</button>
+    </div>
+    <!-- Tabs -->
+    <div class="vg-dash-tabs">
+      <button class="vg-dt active" data-dt="orders" onclick="vgDashTab(this)">Pedidos</button>
+      <button class="vg-dt" data-dt="wallet" onclick="vgDashTab(this)">Wallet</button>
+      <button class="vg-dt" data-dt="referral" onclick="vgDashTab(this)">Referidos</button>
+    </div>
+    <!-- Orders -->
+    <div class="vg-dash-section active" id="vgDashOrders">
+      <p style="font-size:.8rem;color:#8b93b0;margin:0 0 14px">Historial de tus compras en este dispositivo y cuenta.</p>
+      <div id="vgDashOrdersList"><p style="color:#5a6180;font-size:.88rem;text-align:center;padding:24px 0">Cargando pedidos...</p></div>
+    </div>
+    <!-- Wallet -->
+    <div class="vg-dash-section" id="vgDashWallet">
+      <div class="vg-wallet-hero">
+        <div class="vg-token-big" id="vgWalletTokensBig">0</div>
+        <p style="color:#8b93b0;font-size:.84rem;margin:6px 0 12px">tokens disponibles</p>
+        <div class="vg-wallet-progress-label">
+          <span>Progreso hacia siguiente token</span>
+          <span id="vgWalletProgressLabel">0 / 2 compras</span>
+        </div>
+        <div class="vg-token-progress"><div class="vg-token-progress-bar" id="vgWalletProgressBar" style="width:0%"></div></div>
+        <p style="font-size:.74rem;color:#5a6180;margin:4px 0 0">Cada compra completada = 0.5 tokens</p>
+      </div>
+      <h4 style="font-size:.74rem;letter-spacing:.10em;text-transform:uppercase;color:#d6a84f;margin:0 0 12px">Catalogo de canje</h4>
+      <div class="vg-redeem-grid" id="vgRedeemGrid"></div>
+      <h4 style="font-size:.74rem;letter-spacing:.10em;text-transform:uppercase;color:#8b93b0;margin:20px 0 10px">Historial de tokens</h4>
+      <div class="vg-token-log" id="vgTokenLog"><p style="color:#5a6180;font-size:.82rem;text-align:center;padding:12px">Sin movimientos aun.</p></div>
+    </div>
+    <!-- Referral -->
+    <div class="vg-dash-section" id="vgDashReferral">
+      <div class="vg-ref-hero">
+        <p style="color:#8b93b0;font-size:.84rem;margin:0 0 6px">Tus estadisticas</p>
+        <div style="display:flex;gap:24px;justify-content:center;margin-top:8px">
+          <div style="text-align:center"><div class="vg-token-big" style="font-size:2rem" id="vgDashRefCount">0</div><div style="font-size:.7rem;color:#8b93b0">referidos</div></div>
+          <div style="text-align:center"><div class="vg-token-big" style="font-size:2rem" id="vgDashRefTokens">0</div><div style="font-size:.7rem;color:#8b93b0">tokens ganados</div></div>
+        </div>
+      </div>
+      <div class="vg-ref-code-box">
+        <span style="font-size:.74rem;color:#8b93b0;text-transform:uppercase;letter-spacing:.08em">Tu link personalizado</span>
+        <span class="vg-ref-code" id="vgDashRefLink">Cargando...</span>
+        <button class="secondary" style="height:38px;font-size:.82rem;padding:0 20px" onclick="vgCopyRefLink()">Copiar link</button>
+        <button class="primary" style="height:38px;font-size:.82rem;padding:0 20px;margin-left:8px" onclick="vgShareRefLink()">Compartir</button>
+      </div>
+      <div class="vg-ref-steps">
+        <div class="vg-ref-step"><div class="vg-ref-step-n">1</div><div><b style="font-size:.84rem">Comparte tu link</b><br><span style="font-size:.76rem;color:#8b93b0">Envialo por WhatsApp, redes sociales o donde quieras.</span></div></div>
+        <div class="vg-ref-step"><div class="vg-ref-step-n">2</div><div><b style="font-size:.84rem">Tu amigo compra</b><br><span style="font-size:.76rem;color:#8b93b0">Cuando complete su primera compra por tu link, ganas 1 token.</span></div></div>
+        <div class="vg-ref-step"><div class="vg-ref-step-n">3</div><div><b style="font-size:.84rem">Canjea en tu wallet</b><br><span style="font-size:.76rem;color:#8b93b0">Netflix, MAX, Crunchyroll y mas te esperan.</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script id="vg-pro-system-js">
+(function(){
+'use strict';
+/* ============================================================
+   VESSEL GAMES — PRO SYSTEM
+   Token Wallet · Referidos · Dashboard · Admin Usuarios
+   ============================================================ */
+
+var BASE_URL = 'https://vesselgames.xyz';
+var REDEEM_CATALOG = [
+  {id:'vix',       name:'VIX',         cost:5,  icon:'V'},
+  {id:'paramount', name:'PARAMOUNT',   cost:7,  icon:'P'},
+  {id:'max',       name:'MAX',         cost:9,  icon:'M'},
+  {id:'crunchyroll',name:'CRUNCHYROLL',cost:10, icon:'C'},
+  {id:'netflix',   name:'NETFLIX',     cost:20, icon:'N'}
+];
+
+function qs(s,r){return (r||document).querySelector(s)}
+function qsa(s,r){return [...(r||document).querySelectorAll(s)]}
+function fmt(n){return '$'+Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0})+' MXN'}
+function fmtDate(d){return d?new Date(d).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'—'}
+function client(){return typeof getClient==='function'?getClient():null}
+function toast(msg){if(typeof window.showToast==='function')window.showToast(msg);else console.log(msg)}
+
+/* ─── SESSION ──────────────────────────────────────────── */
+var SESSION = null;
+var SESSION_KEY = 'vg_pro_session_v2';
+
+function loadSession(){
+  try{ SESSION = JSON.parse(localStorage.getItem(SESSION_KEY)||'null'); }catch(e){}
+}
+function saveSession(s){
+  SESSION = s;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+}
+function clearSession(){
+  SESSION = null;
+  localStorage.removeItem(SESSION_KEY);
+}
+
+/* ─── REFERRAL CODE FROM URL ───────────────────────────── */
+(function detectRef(){
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if(ref) sessionStorage.setItem('vg_incoming_ref', ref.toUpperCase().trim());
+})();
+
+/* ─── SUPABASE USER HELPERS ────────────────────────────── */
+async function upsertUser(name, phone){
+  var c = client();
+  if(!c) return null;
+  // Check if exists
+  var existing = await c.from('vg_users').select('*').eq('phone', phone).single();
+  if(existing.data) return existing.data;
+  // Create new user
+  var refCode = Math.random().toString(36).substring(2,10).toUpperCase();
+  var incomingRef = sessionStorage.getItem('vg_incoming_ref')||null;
+  var insert = {name:name, phone:phone, referral_code:refCode, tokens:0, total_purchases:0};
+  if(incomingRef) insert.referred_by = incomingRef;
+  var res = await c.from('vg_users').insert(insert).select().single();
+  return res.data||null;
+}
+
+async function fetchUser(phone){
+  var c = client(); if(!c) return null;
+  var res = await c.from('vg_users').select('*').eq('phone', phone).single();
+  return res.data||null;
+}
+
+async function logToken(userId, amount, type, description, orderId){
+  var c = client(); if(!c) return;
+  await c.from('vg_token_log').insert({
+    user_id:userId, amount:amount, type:type,
+    description:description||'', order_id:orderId||null
+  });
+}
+
+async function addTokens(userId, amount, type, description, orderId){
+  var c = client(); if(!c) return;
+  await c.from('vg_users').update({
+    tokens: SESSION&&SESSION.id===userId ? (SESSION.tokens||0)+amount : undefined
+  });
+  // Use RPC or raw update
+  var user = await c.from('vg_users').select('tokens').eq('id',userId).single();
+  if(user.data){
+    var newTokens = Number((user.data.tokens||0)) + amount;
+    await c.from('vg_users').update({tokens: Math.max(0, newTokens)}).eq('id',userId);
+    await logToken(userId, amount, type, description, orderId);
+    // Refresh session if it's the current user
+    if(SESSION && SESSION.id === userId){
+      SESSION.tokens = Math.max(0, newTokens);
+      saveSession(SESSION);
+      refreshUserUI();
+    }
+  }
+}
+
+/* ─── LOGIN FLOW (upgrade existing modal) ──────────────── */
+window.vgProLogin = async function(){
+  var nameEl = qs('#vgLoginName'), phoneEl = qs('#vgLoginPhone');
+  var name = (nameEl&&nameEl.value||'').trim();
+  var phone = (phoneEl&&phoneEl.value||'').trim().replace(/\D/g,'');
+  if(!name){toast('Escribe tu nombre'); return;}
+  if(!phone||phone.length < 8){toast('Telefono invalido'); return;}
+
+  var btn = qs('#vgLoginSubmitBtn');
+  if(btn){btn.textContent='Entrando...';btn.disabled=true;}
+
+  try{
+    var c = client();
+    if(c){
+      var user = await upsertUser(name, phone);
+      if(user){
+        saveSession({
+          id: user.id, name: user.name, phone: user.phone,
+          tokens: Number(user.tokens||0),
+          total_purchases: user.total_purchases||0,
+          referral_code: user.referral_code||''
+        });
+      } else {
+        // Fallback: localStorage only
+        saveSession({id:null, name:name, phone:phone, tokens:0, total_purchases:0, referral_code:''});
+      }
+    } else {
+      saveSession({id:null, name:name, phone:phone, tokens:0, total_purchases:0, referral_code:''});
+    }
+  } catch(e){
+    saveSession({id:null, name:name, phone:phone, tokens:0, total_purchases:0, referral_code:''});
+  }
+
+  if(btn){btn.textContent='Entrar al catalogo';btn.disabled=false;}
+  closeLoginModal();
+  refreshUserUI();
+  toast('Bienvenido ' + SESSION.name + '!');
+};
+
+// Patch existing login save
+window.vgLoginSave = window.vgProLogin;
+
+function refreshUserUI(){
+  // Update nav greeting
+  var g = qs('#vgUserGreeting');
+  if(g && SESSION){
+    g.style.display='flex';
+    var av = qs('#vgUserAvatar'); if(av) av.textContent = SESSION.name[0].toUpperCase();
+    var nm = qs('#vgUserName'); if(nm) nm.textContent = SESSION.name;
+    g.onclick = openDashboard;
+    g.style.cursor = 'pointer';
+    g.title = 'Ver mi cuenta';
+  } else if(g){
+    g.style.display = 'none';
+  }
+  // Update referral boxes
+  updateRefBannerUI();
+}
+
+function updateRefBannerUI(){
+  if(!SESSION) return;
+  var refLink = BASE_URL + '/?ref=' + (SESSION.referral_code||SESSION.id||'');
+  var box = qs('#vgRefUserLinkBox');
+  var lnk = qs('#vgRefUserLink');
+  if(box) box.style.display = 'block';
+  if(lnk) lnk.textContent = refLink;
+}
+
+/* ─── DASHBOARD ─────────────────────────────────────────── */
+window.openDashboard = function(){
+  if(!SESSION){ openLoginModal(); return; }
+  var m = qs('#vgUserDashModal'); if(m) m.classList.add('active');
+  loadDashboard();
+};
+window.closeDashboard = function(){
+  var m = qs('#vgUserDashModal'); if(m) m.classList.remove('active');
+};
+document.addEventListener('click', function(e){
+  if(e.target === qs('#vgUserDashModal')) closeDashboard();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape') closeDashboard();
+});
+
+window.vgDashTab = function(btn){
+  qsa('.vg-dt').forEach(function(b){b.classList.toggle('active',b===btn)});
+  var dt = btn.dataset.dt;
+  qsa('.vg-dash-section').forEach(function(s){
+    s.classList.toggle('active', s.id==='vgDash'+dt.charAt(0).toUpperCase()+dt.slice(1));
+  });
+  if(dt==='wallet') renderWallet();
+  if(dt==='referral') renderReferral();
+  if(dt==='orders') renderDashOrders();
+};
+
+function loadDashboard(){
+  if(!SESSION) return;
+  // Header
+  var av=qs('#vgDashAvatar'); if(av) av.textContent=SESSION.name[0].toUpperCase();
+  var nm=qs('#vgDashName'); if(nm) nm.textContent=SESSION.name;
+  var ph=qs('#vgDashPhone'); if(ph) ph.textContent=SESSION.phone?('Tel: '+SESSION.phone):'';
+  var tb=qs('#vgDashTokensBadge'); if(tb) tb.textContent=SESSION.tokens||0;
+  var tg=qs('#vgDashTokensBig'); if(tg) tg.textContent=SESSION.tokens||0;
+  var rc=qs('#vgDashRefCode'); if(rc) rc.textContent=SESSION.referral_code||'—';
+  // Refresh from Supabase
+  if(SESSION.id && client()){
+    fetchUser(SESSION.phone).then(function(u){
+      if(!u) return;
+      SESSION.tokens = Number(u.tokens||0);
+      SESSION.total_purchases = u.total_purchases||0;
+      SESSION.referral_code = u.referral_code||'';
+      saveSession(SESSION);
+      if(tb) tb.textContent=SESSION.tokens;
+      if(tg) tg.textContent=SESSION.tokens;
+      if(rc) rc.textContent=SESSION.referral_code;
+    });
+  }
+  renderDashOrders();
+  renderWallet();
+}
+
+/* Orders */
+async function renderDashOrders(){
+  var list = qs('#vgDashOrdersList'); if(!list) return;
+  list.innerHTML = '<p style="color:#5a6180;text-align:center;padding:16px">Cargando...</p>';
+  var orders = [];
+  // Try Supabase first
+  if(SESSION && SESSION.phone && client()){
+    try{
+      var c = client();
+      var res = await c.from('orders').select('*')
+        .or('client_phone.eq.'+SESSION.phone+',customer_phone.eq.'+SESSION.phone)
+        .order('created_at',{ascending:false}).limit(20);
+      orders = res.data||[];
+    }catch(e){}
+  }
+  // Also include localStorage history
+  var localH = JSON.parse(localStorage.getItem('vg_purchase_history')||'[]');
+  if(!orders.length && !localH.length){
+    list.innerHTML='<p style="color:#5a6180;text-align:center;padding:24px">Sin pedidos registrados aun.</p>';
+    return;
+  }
+  var html = '';
+  orders.forEach(function(o){
+    var statusClass = (o.status||'pendiente').toLowerCase().replace(' ','');
+    html += '<div class="vg-order-row">'
+      + '<div style="flex:1;min-width:0"><b style="font-size:.88rem;display:block">'+(o.product_name||o.items&&o.items[0]&&o.items[0].title||'Pedido')+'</b>'
+      + '<span style="font-size:.74rem;color:#8b93b0">#'+(o.id||'').toString().slice(0,8)+' &middot; '+fmtDate(o.created_at)+'</span></div>'
+      + '<div style="text-align:right"><div style="font-weight:800;color:#19e6c1;font-size:.9rem">'+fmt(o.total)+'</div>'
+      + '<span class="vg-order-status '+statusClass+'">'+(o.status||'pendiente')+'</span></div>'
+      + '</div>';
+  });
+  localH.forEach(function(o){
+    if(!orders.find(function(or){return or.total===o.price && fmtDate(or.created_at)===o.date;})){
+      html += '<div class="vg-order-row">'
+        + '<div style="flex:1"><b style="font-size:.88rem;display:block">'+o.title+'</b>'
+        + '<span style="font-size:.74rem;color:#8b93b0">'+(o.option||'')+' &middot; '+(o.date||'')+'</span></div>'
+        + '<div style="text-align:right"><div style="font-weight:800;color:#19e6c1;font-size:.9rem">'+fmt(o.price)+'</div>'
+        + '<span class="vg-order-status entregado">local</span></div></div>';
+    }
+  });
+  list.innerHTML = html || '<p style="color:#5a6180;text-align:center;padding:24px">Sin pedidos.</p>';
+}
+
+/* Wallet */
+async function renderWallet(){
+  if(!SESSION) return;
+  var tokens = SESSION.tokens||0;
+  var purchases = SESSION.total_purchases||0;
+  var tb = qs('#vgWalletTokensBig'); if(tb) tb.textContent = tokens.toFixed(1);
+  // Progress bar: (purchases % 2) / 2 * 100
+  var progress = ((purchases % 2) / 2)*100;
+  var bar = qs('#vgWalletProgressBar'); if(bar) bar.style.width = progress+'%';
+  var lbl = qs('#vgWalletProgressLabel');
+  if(lbl) lbl.textContent = (purchases%2)+' / 2 compras';
+  // Redeem grid
+  var grid = qs('#vgRedeemGrid'); if(!grid) return;
+  grid.innerHTML = REDEEM_CATALOG.map(function(r){
+    var canAfford = tokens >= r.cost;
+    return '<div class="vg-redeem-card'+(canAfford?'':' locked')+'" '
+      + (canAfford?'onclick="vgRedeem(''+r.id+'')"':'')+' title="'+(canAfford?'Canjear':'Necesitas '+r.cost+' tokens')+'"><div class="vg-redeem-icon">'+r.icon+'</div>'
+      + '<div class="vg-redeem-name">'+r.name+'</div>'
+      + '<div class="vg-redeem-cost"><span>'+r.cost+'</span> tokens</div>'
+      + (canAfford?'<div style="font-size:.7rem;color:#19e6c1;margin-top:6px">Tap para canjear</div>':'')
+      + '</div>';
+  }).join('');
+  // Token log
+  if(SESSION.id && client()){
+    try{
+      var c = client();
+      var res = await c.from('vg_token_log').select('*').eq('user_id',SESSION.id)
+        .order('created_at',{ascending:false}).limit(15);
+      var log = res.data||[];
+      var logEl = qs('#vgTokenLog');
+      if(logEl){
+        logEl.innerHTML = log.length ? log.map(function(e){
+          var plus = Number(e.amount)>=0;
+          return '<div class="vg-tlog-row"><span>'+e.description+'</span>'
+            +'<div style="text-align:right"><span class="vg-tlog-amount '+(plus?'plus':'minus')+'">'+(plus?'+':'')+Number(e.amount).toFixed(1)+' tkn</span><br>'
+            +'<span style="font-size:.68rem;color:#5a6180">'+fmtDate(e.created_at)+'</span></div></div>';
+        }).join('') : '<p style="color:#5a6180;font-size:.82rem;text-align:center;padding:12px">Sin movimientos aun.</p>';
+      }
+    }catch(e){}
+  }
+}
+
+window.vgRedeem = async function(serviceId){
+  if(!SESSION||!SESSION.id){toast('Inicia sesion primero'); return;}
+  var r = REDEEM_CATALOG.find(function(x){return x.id===serviceId;});
+  if(!r) return;
+  if((SESSION.tokens||0) < r.cost){toast('Tokens insuficientes'); return;}
+  if(!confirm('Canjear '+r.name+' por '+r.cost+' tokens?')) return;
+  var c = client(); if(!c){toast('Supabase no configurado'); return;}
+  try{
+    await c.from('vg_redemptions').insert({
+      user_id:SESSION.id, service:r.name, tokens_cost:r.cost, status:'pending'
+    });
+    await addTokens(SESSION.id, -r.cost, 'redemption', 'Canje: '+r.name, null);
+    toast('Solicitud de canje enviada! El admin te contactara pronto.');
+    renderWallet();
+    // Send WhatsApp notification
+    var num = window.WHATSAPP_NUMBER||window.WHATSAPP_FALLBACK||'';
+    if(num){
+      var msg = 'CANJE solicitado:
+Usuario: '+SESSION.name+' ('+SESSION.phone+')
+Servicio: '+r.name+'
+Tokens: '+r.cost;
+      window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+    }
+  }catch(e){toast('Error al canjear: '+e.message);}
+};
+
+/* Referral */
+async function renderReferral(){
+  if(!SESSION) return;
+  var refLink = BASE_URL+'/?ref='+(SESSION.referral_code||SESSION.phone||'');
+  var rl = qs('#vgDashRefLink'); if(rl) rl.textContent = refLink;
+  if(SESSION.id && client()){
+    try{
+      var c = client();
+      // Count referred users
+      var refs = await c.from('vg_users').select('id',{count:'exact'})
+        .eq('referred_by', SESSION.referral_code||'');
+      var refCount = refs.count||0;
+      var rc = qs('#vgDashRefCount'); if(rc) rc.textContent = refCount;
+      // Count tokens earned from referrals
+      var tkLogs = await c.from('vg_token_log').select('amount').eq('user_id',SESSION.id).eq('type','referral');
+      var refTk = (tkLogs.data||[]).reduce(function(s,e){return s+Number(e.amount||0);},0);
+      var rt = qs('#vgDashRefTokens'); if(rt) rt.textContent = refTk.toFixed(1);
+    }catch(e){}
+  }
+}
+
+window.vgCopyRefLink = function(){
+  var refLink = BASE_URL+'/?ref='+(SESSION&&(SESSION.referral_code||SESSION.phone)||'');
+  navigator.clipboard.writeText(refLink).then(function(){toast('Link copiado!');}).catch(function(){});
+};
+window.vgShareRefLink = function(){
+  var refLink = BASE_URL+'/?ref='+(SESSION&&(SESSION.referral_code||SESSION.phone)||'');
+  if(navigator.share) navigator.share({title:'Vessel Games',text:'Mira este catalogo digital!',url:refLink}).catch(function(){});
+  else vgCopyRefLink();
+};
+
+/* ─── AWARD TOKENS ON PURCHASE ─────────────────────────── */
+window.addEventListener('load', function(){
+  var origSendWA = window.sendPaymentWhatsApp;
+  if(typeof origSendWA==='function'){
+    window.sendPaymentWhatsApp = async function(){
+      var result = await origSendWA.apply(this,arguments);
+      // Award 0.5 tokens after purchase
+      if(SESSION && SESSION.id && client()){
+        try{
+          await addTokens(SESSION.id, 0.5, 'purchase', 'Compra completada', null);
+          // Update total_purchases counter
+          var c = client();
+          await c.from('vg_users').update({
+            total_purchases: (SESSION.total_purchases||0)+1
+          }).eq('id', SESSION.id);
+          SESSION.total_purchases = (SESSION.total_purchases||0)+1;
+          saveSession(SESSION);
+          // Check referral: if this is their first purchase and they were referred
+          var u = await fetchUser(SESSION.phone);
+          if(u && u.referred_by && u.total_purchases===1){
+            // Find referrer and award 1 token
+            var refRes = await c.from('vg_users').select('id,tokens').eq('referral_code',u.referred_by).single();
+            if(refRes.data){
+              var referrerId = refRes.data.id;
+              var newTk = Number(refRes.data.tokens||0)+1;
+              await c.from('vg_users').update({tokens:newTk}).eq('id',referrerId);
+              await logToken(referrerId, 1, 'referral', 'Referido: '+SESSION.name, null);
+            }
+          }
+          toast('+0.5 tokens ganados! Total: '+SESSION.tokens.toFixed(1));
+        }catch(e){}
+      }
+      return result;
+    };
+  }
+});
+
+/* ─── ADMIN USUARIOS ─────────────────────────────────────── */
+var _allUsers = [];
+window.vgLoadUsers = async function(){
+  var tbody = qs('#vgUsersTbody'); if(!tbody) return;
+  tbody.innerHTML='<tr><td colspan="7" style="color:#5a6180;text-align:center;padding:24px">Cargando...</td></tr>';
+  var c = client(); if(!c){tbody.innerHTML='<tr><td colspan="7" style="color:#ff5da8;padding:24px;text-align:center">Supabase no configurado</td></tr>';return;}
+  try{
+    var res = await c.from('vg_users').select('*').order('created_at',{ascending:false}).limit(200);
+    _allUsers = res.data||[];
+    // Load stats
+    var statsEl = qs('#vgUsersStats');
+    if(statsEl){
+      var totalTk = _allUsers.reduce(function(s,u){return s+Number(u.tokens||0);},0);
+      var totalPur = _allUsers.reduce(function(s,u){return s+Number(u.total_purchases||0);},0);
+      statsEl.innerHTML = [
+        {icon:'👥',n:_allUsers.length,l:'Usuarios'},
+        {icon:'🪙',n:totalTk.toFixed(1),l:'Tokens activos'},
+        {icon:'🛒',n:totalPur,l:'Compras totales'}
+      ].map(function(s){
+        return '<div class="vg-dash-stat"><span class="vg-ds-icon">'+s.icon+'</span>'
+          +'<span class="vg-ds-num">'+s.n+'</span><span class="vg-ds-lbl">'+s.l+'</span></div>';
+      }).join('');
+    }
+    // Load pending redemptions
+    var redRes = await c.from('vg_redemptions').select('*,vg_users(name,phone)').eq('status','pending').order('created_at',{ascending:false});
+    var rList = qs('#vgPendingRedList'), rWrap = qs('#vgPendingRedemptions');
+    if(rList && redRes.data && redRes.data.length){
+      if(rWrap) rWrap.style.display='block';
+      rList.innerHTML = redRes.data.map(function(r){
+        return '<div class="vg-redemption-row">'
+          +'<div><b>'+r.service+'</b> — '+r.tokens_cost+' tokens'
+          +'<br><span style="font-size:.74rem;color:#8b93b0">'+(r.vg_users&&r.vg_users.name||'?')+' · '+(r.vg_users&&r.vg_users.phone||'')+'</span></div>'
+          +'<div style="display:flex;gap:6px;align-items:center">'
+          +'<span class="vg-redemp-status pending">Pendiente</span>'
+          +'<button class="vg-te-save" onclick="vgMarkRedeemed(''+r.id+'')">Entregar</button>'
+          +'</div></div>';
+      }).join('');
+    } else if(rWrap){ rWrap.style.display='none'; }
+    vgRenderUsersTable(_allUsers);
+  }catch(e){
+    tbody.innerHTML='<tr><td colspan="7" style="color:#ff5da8;padding:24px;text-align:center">Error: '+e.message+'</td></tr>';
+  }
+};
+
+window.vgMarkRedeemed = async function(id){
+  var c = client(); if(!c) return;
+  await c.from('vg_redemptions').update({status:'delivered'}).eq('id',id);
+  toast('Canje marcado como entregado');
+  vgLoadUsers();
+};
+
+function vgRenderUsersTable(users){
+  var tbody = qs('#vgUsersTbody'); if(!tbody) return;
+  if(!users.length){
+    tbody.innerHTML='<tr><td colspan="7" style="color:#5a6180;text-align:center;padding:28px">No hay usuarios registrados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map(function(u){
+    return '<tr>'
+      +'<td><b style="font-size:.9rem">'+u.name+'</b><br><span style="font-size:.7rem;color:#5a6180">'+u.referral_code+'</span></td>'
+      +'<td style="color:#8b93b0">'+u.phone+'</td>'
+      +'<td><span class="vg-coin"><span class="vg-coin-icon">T</span>'+Number(u.tokens||0).toFixed(1)+'</span></td>'
+      +'<td style="text-align:center">'+Number(u.total_purchases||0)+'</td>'
+      +'<td style="text-align:center" id="vgRefCount_'+u.id+'">—</td>'
+      +'<td style="font-size:.74rem;color:#8b93b0">'+fmtDate(u.created_at)+'</td>'
+      +'<td><div class="vg-token-edit">'
+        +'<input class="vg-te-input" id="vgTkAdj_'+u.id+'" type="number" step="0.5" placeholder="0" value="">'
+        +'<input class="vg-te-input" id="vgTkNote_'+u.id+'" placeholder="nota" style="width:70px">'
+        +'<button class="vg-te-save" onclick="vgAdminAdjustTokens(''+u.id+'',''+u.name+'')">Guardar</button>'
+      +'</div></td>'
+      +'</tr>';
+  }).join('');
+  // Load ref counts async
+  users.slice(0,50).forEach(function(u){
+    if(u.referral_code && client()){
+      client().from('vg_users').select('id',{count:'exact'})
+        .eq('referred_by',u.referral_code).then(function(r){
+          var el = qs('#vgRefCount_'+u.id);
+          if(el) el.textContent = r.count||0;
+        }).catch(function(){});
+    }
+  });
+}
+
+window.vgFilterUsers = function(){
+  var q = (qs('#vgUserSearch')||{}).value||'';
+  var filtered = _allUsers.filter(function(u){
+    return !q || u.name.toLowerCase().includes(q.toLowerCase()) || u.phone.includes(q);
+  });
+  vgRenderUsersTable(filtered);
+};
+
+window.vgAdminAdjustTokens = async function(userId, userName){
+  var adjEl = qs('#vgTkAdj_'+userId);
+  var noteEl = qs('#vgTkNote_'+userId);
+  var delta = parseFloat((adjEl&&adjEl.value)||0);
+  var note = (noteEl&&noteEl.value)||'Ajuste manual';
+  if(isNaN(delta)||delta===0){toast('Ingresa un monto'); return;}
+  var c = client(); if(!c){toast('Supabase no configurado'); return;}
+  try{
+    var uRes = await c.from('vg_users').select('tokens').eq('id',userId).single();
+    if(!uRes.data){toast('Usuario no encontrado'); return;}
+    var newTk = Math.max(0, Number(uRes.data.tokens||0)+delta);
+    await c.from('vg_users').update({tokens:newTk}).eq('id',userId);
+    await logToken(userId, delta, 'admin', note+' — Admin', null);
+    toast('Tokens de '+userName+' actualizados: '+(delta>0?'+':'')+delta+' => '+newTk.toFixed(1));
+    if(adjEl) adjEl.value='';
+    if(noteEl) noteEl.value='';
+    // Refresh table row token display
+    var row = adjEl&&adjEl.closest('tr');
+    if(row){var coinEl=row.querySelector('.vg-coin');if(coinEl)coinEl.innerHTML='<span class="vg-coin-icon">T</span>'+newTk.toFixed(1);}
+    // If current user, refresh session
+    if(SESSION&&SESSION.id===userId){SESSION.tokens=newTk;saveSession(SESSION);refreshUserUI();}
+  }catch(e){toast('Error: '+e.message);}
+};
+
+window.vgExportUsersCSV = function(){
+  if(!_allUsers.length){alert('Carga los usuarios primero.');return;}
+  var h=['Nombre','Telefono','Tokens','Compras','Codigo Referido','Referido Por','Registro'];
+  var rows=_allUsers.map(function(u){
+    return [u.name,u.phone,u.tokens||0,u.total_purchases||0,u.referral_code||'',u.referred_by||'',fmtDate(u.created_at)]
+      .map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
+  });
+  var csv='﻿'+h.join(',')+'
+'+rows.join('
+');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;
+  a.download='vessel-usuarios-'+new Date().toISOString().split('T')[0]+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast('CSV de usuarios descargado');
+};
+
+/* Admin tab hook for Usuarios */
+document.addEventListener('click', function(e){
+  var btn = e.target.closest && e.target.closest('.vg-admin-tab');
+  if(btn && btn.dataset.tab==='usuarios') setTimeout(vgLoadUsers, 100);
+});
+
+/* ─── INIT ───────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function(){
+  loadSession();
+  refreshUserUI();
+  // Make user greeting open dashboard
+  var g = qs('#vgUserGreeting');
+  if(g) g.onclick = function(){ if(SESSION) openDashboard(); else openLoginModal(); };
+  // Show login if new user (handled by existing vg-all-features-js, override vgLoginSave)
+});
+
+// Add id to login submit button if not present
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = qs('.vg-login-btn');
+  if(btn && !btn.id){ btn.id='vgLoginSubmitBtn'; btn.onclick=window.vgProLogin; }
 });
 
 })();
