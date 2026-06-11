@@ -13235,311 +13235,6 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
 .vg-redemp-status.pending{background:rgba(255,183,77,.12);color:#ffc46b}
 .vg-redemp-status.delivered{background:rgba(33,198,107,.12);color:#21c66b}
 </style>
-<style id="vg-ux-audit-css">
-/* ── ORDER TRACKING TIMELINE ── */
-.vg-tracking-timeline{display:flex;align-items:flex-start;gap:0;margin:14px 0;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.vg-tracking-timeline::-webkit-scrollbar{display:none}
-.vg-tt-step{flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
-.vg-tt-step::before{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:rgba(255,255,255,.10);z-index:0}
-.vg-tt-step:last-child::before{display:none}
-.vg-tt-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.15);
-  background:#0d0f1a;display:grid;place-items:center;font-size:.8rem;z-index:1;flex-shrink:0}
-.vg-tt-step.done .vg-tt-dot{background:linear-gradient(135deg,#19e6c1,#8b5cf6);border-color:transparent}
-.vg-tt-step.done::before{background:linear-gradient(90deg,#19e6c1,#8b5cf6)}
-.vg-tt-step.active .vg-tt-dot{background:rgba(25,230,193,.15);border-color:#19e6c1;
-  box-shadow:0 0 0 4px rgba(25,230,193,.12);animation:vg-pulse-ring 1.5s ease infinite}
-@keyframes vg-pulse-ring{0%,100%{box-shadow:0 0 0 4px rgba(25,230,193,.12)}50%{box-shadow:0 0 0 8px rgba(25,230,193,.06)}}
-.vg-tt-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-  color:#5a6180;text-align:center;white-space:nowrap}
-.vg-tt-step.done .vg-tt-label,.vg-tt-step.active .vg-tt-label{color:#aab2c8}
-
-/* ── EXPRESS CHECKOUT (quick-buy for returning users) ── */
-.vg-express-bar{display:none;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(25,230,193,.10));
-  border:1px solid rgba(25,230,193,.20);border-radius:16px;padding:12px 16px;
-  margin-bottom:16px;align-items:center;gap:12px;flex-wrap:wrap}
-.vg-express-bar.show{display:flex}
-.vg-express-bar p{margin:0;font-size:.84rem;flex:1}
-.vg-express-btn{height:36px;padding:0 16px;border:0;border-radius:10px;
-  background:linear-gradient(135deg,#8b5cf6,#19e6c1);color:#07080f;
-  font-weight:800;font-size:.8rem;cursor:pointer;white-space:nowrap}
-
-/* ── MOBILE UX FIXES ── */
-@media(max-width:768px){
-  /* Bigger touch targets */
-  .pill{height:44px !important;min-width:44px}
-  .cat-btn{height:40px !important}
-  .x{width:44px !important;height:44px !important}
-  /* Fix nav wrapping */
-  .nav{gap:8px !important;padding:10px 12px !important}
-  .nav-actions{gap:6px !important}
-  /* Modal full height on mobile */
-  .modal-card{border-radius:0 !important;height:100dvh !important;
-    max-height:100dvh !important;grid-template-rows:240px 1fr !important}
-  /* Cart slides from bottom */
-  .cart-panel{border-radius:24px 24px 0 0 !important;border-bottom:0 !important;
-    width:100vw !important;max-height:88dvh !important}
-  /* Product modal options scroll */
-  #modalOptions{max-height:38vh;overflow-y:auto}
-  /* Admin modal full screen */
-  .vg-admin-card{border-radius:0 !important;height:100dvh !important;
-    max-height:100dvh !important;overflow-y:auto}
-  /* Prevent horizontal overflow */
-  body{overflow-x:hidden}
-  .topbar,.category-nav{overflow-x:hidden}
-  /* Better readability on small screens */
-  .vg-users-table{font-size:.74rem}
-  .vg-users-table th,.vg-users-table td{padding:7px 8px}
-}
-
-/* ── CTA IMPROVEMENTS ── */
-/* Primary CTA: stronger gradient, bigger, shadow */
-.primary,.detail-btn{
-  background:linear-gradient(135deg,#8b5cf6 0%,#5b56e8 60%,#19e6c1 100%) !important;
-  background-size:200% 100% !important;
-  transition:all .3s ease, background-position .4s ease !important;
-  box-shadow:0 4px 20px rgba(139,92,246,.35),0 1px 0 rgba(255,255,255,.08) inset !important;
-  letter-spacing:.02em !important;
-  position:relative !important;
-  overflow:hidden !important;
-}
-.primary:hover,.detail-btn:hover{
-  background-position:100% 0 !important;
-  box-shadow:0 8px 32px rgba(139,92,246,.50) !important;
-  transform:translateY(-2px) scale(1.01) !important;
-}
-/* WhatsApp CTA: pulse on first render */
-.floating-whatsapp{animation:vg-wa-pulse 2.5s ease 3s 3 both}
-@keyframes vg-wa-pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.08)}
-  100%{transform:scale(1)}
-}
-/* "Add to cart" button: green glow */
-.quick-add-btn:hover{
-  background:rgba(33,198,107,.20) !important;
-  border-color:rgba(33,198,107,.50) !important;
-  color:#21c66b !important;
-  box-shadow:0 4px 16px rgba(33,198,107,.25) !important;
-}
-/* Urgency label on product card */
-.vg-urgency-label{display:inline-flex;align-items:center;gap:4px;
-  font-size:.66rem;font-weight:800;color:#ffc46b;margin:2px 0 6px;text-transform:uppercase;letter-spacing:.05em}
-.vg-urgency-label::before{content:'';width:6px;height:6px;border-radius:50%;
-  background:#ffc46b;animation:vg-blink 1.4s ease infinite;flex-shrink:0}
-
-/* ── NOTIFICATION BELL ── */
-#vg-notif-bell{position:relative;cursor:pointer}
-.vg-bell-badge{position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;
-  background:#ff5da8;border-radius:999px;font-size:.58rem;font-weight:900;
-  color:#fff;display:none;place-items:center;padding:0 3px;z-index:5}
-.vg-bell-badge.show{display:grid}
-
-/* ── SMART SEARCH SUGGESTIONS ── */
-.vg-search-suggestions{position:absolute;top:calc(100% + 6px);left:0;right:0;
-  background:#10121c;border:1px solid rgba(255,255,255,.10);border-radius:14px;
-  box-shadow:0 16px 40px rgba(0,0,0,.50);z-index:500;overflow:hidden;display:none}
-.vg-search-suggestions.show{display:block}
-.vg-ss-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:.15s}
-.vg-ss-item:hover{background:rgba(255,255,255,.05)}
-.vg-ss-item img{width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0}
-.vg-ss-item b{display:block;font-size:.84rem}
-.vg-ss-item small{color:#8b93b0;font-size:.74rem}
-.searchbar{position:relative}
-
-/* ── SCROLL INDICATOR ── */
-.vg-scroll-indicator{position:fixed;right:16px;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:5px;z-index:200;opacity:0;transition:.3s;pointer-events:none}
-.vg-scroll-indicator.show{opacity:1}
-.vg-si-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.20);transition:.2s}
-.vg-si-dot.active{background:#19e6c1;transform:scale(1.4)}
-@media(max-width:768px){.vg-scroll-indicator{display:none}}
-</style>
-<style id="vg-full-fix-css">
-/* ── FIX: Mobile modal not cut off ─────────────────── */
-@media(max-width:768px){
-  .modal-card{
-    grid-template-columns:1fr !important;
-    grid-template-rows:220px 1fr !important;
-    height:100dvh !important;
-    max-height:100dvh !important;
-    border-radius:0 !important;
-    overflow:hidden !important;
-  }
-  .modal-img{
-    height:220px !important;
-    min-height:0 !important;
-    max-height:220px !important;
-  }
-  .modal-body{
-    overflow-y:auto !important;
-    -webkit-overflow-scrolling:touch !important;
-    padding:14px !important;
-    display:flex !important;
-    flex-direction:column !important;
-  }
-  .modal-actions{
-    position:sticky !important;
-    bottom:0 !important;
-    background:linear-gradient(180deg,transparent,#10121c 40%) !important;
-    padding-top:16px !important;
-    margin-top:auto !important;
-  }
-  .modal-actions .primary,
-  .modal-actions .secondary,
-  .modal-actions .whatsapp{
-    flex:1 !important;
-    height:52px !important;
-    font-size:.9rem !important;
-  }
-  #modalOptions{
-    max-height:32vh !important;
-    overflow-y:auto !important;
-  }
-  .modal,.cart{padding:0 !important;align-items:flex-end !important;}
-  .cart-panel{border-radius:24px 24px 0 0 !important;max-height:88dvh !important;overflow-y:auto !important;}
-}
-
-/* ── FIX: "Mi Cuenta" login button ─────────────────── */
-#vg-account-btn{
-  height:40px;padding:0 14px;
-  border:1px solid rgba(139,92,246,.45);
-  background:rgba(139,92,246,.12);
-  color:#c4b5fd;border-radius:var(--r-md,14px);
-  font-size:.8rem;font-weight:700;cursor:pointer;
-  transition:all .2s;display:inline-flex;align-items:center;gap:6px;
-  white-space:nowrap;
-}
-#vg-account-btn:hover{background:rgba(139,92,246,.25);border-color:rgba(139,92,246,.70);}
-#vg-account-btn .vg-ab-avatar{
-  width:24px;height:24px;border-radius:50%;
-  background:linear-gradient(135deg,#8b5cf6,#19e6c1);
-  display:grid;place-items:center;font-size:.7rem;font-weight:900;
-  color:#07080f;flex-shrink:0;
-}
-
-/* ── NEW: Auth modal (password) ─────────────────────── */
-.vg-auth-modal{
-  position:fixed;inset:0;background:rgba(0,0,0,.80);
-  backdrop-filter:blur(14px);z-index:9400;
-  display:none;align-items:center;justify-content:center;padding:16px;
-}
-.vg-auth-modal.active{display:flex;}
-.vg-auth-card{
-  width:min(440px,calc(100vw - 32px));
-  background:#0d0f1a;border:1px solid rgba(255,255,255,.09);
-  border-radius:26px;padding:32px;box-shadow:0 32px 80px rgba(0,0,0,.70);
-}
-.vg-auth-tabs{display:flex;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:3px;gap:3px;margin-bottom:22px;}
-.vg-auth-tab{flex:1;height:34px;border:0;border-radius:9px;background:transparent;
-  color:#8b93b0;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s;}
-.vg-auth-tab.active{background:rgba(139,92,246,.18);color:#c4b5fd;}
-.vg-auth-field{margin-bottom:14px;}
-.vg-auth-field label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.09em;color:#8b93b0;margin-bottom:6px;}
-.vg-auth-field input{
-  width:100%;height:44px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);border-radius:11px;
-  color:#eef0fa;padding:0 14px;font-size:.94rem;font-family:inherit;
-  outline:0;transition:.2s;box-sizing:border-box;
-}
-.vg-auth-field input:focus{border-color:rgba(139,92,246,.55);box-shadow:0 0 0 3px rgba(139,92,246,.08);}
-.vg-auth-submit{
-  width:100%;height:48px;border:0;border-radius:13px;
-  background:linear-gradient(135deg,#8b5cf6,#5b56e8);
-  color:#fff;font-size:.95rem;font-weight:800;cursor:pointer;
-  transition:all .22s;margin-top:4px;
-}
-.vg-auth-submit:hover{filter:brightness(1.10);transform:translateY(-1px);}
-.vg-auth-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-.vg-auth-error{
-  font-size:.8rem;color:#ff7090;margin:-6px 0 10px;
-  padding:8px 12px;background:rgba(255,77,125,.08);
-  border:1px solid rgba(255,77,125,.20);border-radius:8px;display:none;
-}
-.vg-auth-success{
-  font-size:.8rem;color:#19e6c1;margin:-6px 0 10px;
-  padding:8px 12px;background:rgba(25,230,193,.08);
-  border:1px solid rgba(25,230,193,.20);border-radius:8px;display:none;
-}
-.vg-auth-pass-hint{font-size:.72rem;color:#5a6180;margin-top:4px;}
-.vg-auth-forgot{background:transparent;border:0;color:#8b93b0;font-size:.78rem;
-  cursor:pointer;margin-top:10px;text-decoration:underline;}
-
-/* ── FIX: Payment modal redesign ───────────────────── */
-.vg-pay-modal-new{
-  width:min(860px,calc(100vw - 32px));
-  background:#0d0f1a;border:1px solid rgba(255,255,255,.09);
-  border-radius:26px;padding:28px;
-  box-shadow:0 32px 80px rgba(0,0,0,.70);
-  max-height:90vh;overflow-y:auto;
-}
-.vg-pay-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
-.vg-pay-header h2{font-family:'Barlow Condensed','Montserrat',sans-serif;
-  font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin:0;}
-.vg-pay-total-chip{
-  background:rgba(214,168,79,.12);border:1px solid rgba(214,168,79,.30);
-  border-radius:14px;padding:10px 18px;text-align:right;
-}
-.vg-pay-total-chip small{font-size:.68rem;color:#8b93b0;display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.07em;}
-.vg-pay-total-chip strong{font-size:1.4rem;font-weight:900;color:#d6a84f;display:block;}
-.vg-pay-total-chip del{font-size:.8rem;color:#5a6180;display:none;}
-.vg-pay-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0;}
-.vg-pay-method{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;padding:16px;transition:.2s;cursor:default;
-}
-.vg-pay-method:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.07);}
-.vg-pay-method-icon{font-size:1.5rem;margin-bottom:8px;}
-.vg-pay-method h4{font-size:.84rem;font-weight:800;margin:0 0 10px;color:#eef0fa;}
-.vg-pay-method-row{display:flex;justify-content:space-between;align-items:center;
-  padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);}
-.vg-pay-method-row:last-of-type{border-bottom:0;}
-.vg-pay-method-row span{font-size:.76rem;color:#8b93b0;}
-.vg-pay-method-row code{font-size:.76rem;color:#eef0fa;font-family:monospace;}
-.vg-pay-copy-btn{
-  height:24px;padding:0 8px;border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.06);color:#eef0fa;border-radius:6px;
-  font-size:.66rem;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap;
-}
-.vg-pay-copy-btn:hover{background:rgba(25,230,193,.12);border-color:rgba(25,230,193,.30);color:#19e6c1;}
-.vg-pay-copy-all{
-  width:100%;height:32px;border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.05);color:#eef0fa;border-radius:8px;
-  font-size:.74rem;font-weight:700;cursor:pointer;margin-top:10px;transition:.2s;
-}
-.vg-pay-copy-all:hover{background:rgba(25,230,193,.10);border-color:rgba(25,230,193,.25);color:#19e6c1;}
-/* Coupon section in new payment modal */
-.vg-pay-coupon-row{display:flex;gap:8px;margin:14px 0 4px;}
-.vg-pay-coupon-row input{flex:1;height:40px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);border-radius:10px;color:#eef0fa;
-  padding:0 12px;font-size:.88rem;font-family:inherit;outline:0;transition:.2s;}
-.vg-pay-coupon-row input:focus{border-color:rgba(139,92,246,.40);}
-.vg-pay-coupon-row button{height:40px;padding:0 16px;border:0;border-radius:10px;
-  background:linear-gradient(135deg,#8b5cf6,#5b56e8);color:#fff;
-  font-weight:700;font-size:.84rem;cursor:pointer;white-space:nowrap;}
-.vg-pay-proof{
-  background:rgba(25,230,193,.06);border:1px dashed rgba(25,230,193,.25);
-  border-radius:14px;padding:14px 16px;margin:14px 0;
-}
-.vg-pay-proof p{margin:0 0 8px;font-size:.84rem;color:#aab2c8;}
-.vg-pay-proof label{
-  display:inline-flex;align-items:center;gap:8px;
-  height:38px;padding:0 16px;border:1px solid rgba(25,230,193,.30);
-  background:rgba(25,230,193,.08);border-radius:10px;color:#19e6c1;
-  font-size:.82rem;font-weight:700;cursor:pointer;transition:.2s;
-}
-.vg-pay-proof label:hover{background:rgba(25,230,193,.16);}
-.vg-pay-proof input[type=file]{display:none;}
-.vg-pay-proof-name{font-size:.74rem;color:#8b93b0;margin-top:6px;}
-.vg-pay-actions{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:18px;}
-.vg-pay-actions .primary.whatsapp{height:52px;font-size:.95rem;font-weight:800;}
-.vg-pay-actions .secondary{height:52px;}
-@media(max-width:600px){
-  .vg-pay-methods{grid-template-columns:1fr;}
-  .vg-pay-actions{grid-template-columns:1fr;}
-  .vg-pay-modal-new{padding:20px;border-radius:24px 24px 0 0;max-height:92vh;}
-}
-</style>
 </head>
 <body>
   <header class="topbar">
@@ -13555,7 +13250,8 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
 </div>
 <div class="vg-user-greeting" id="vgUserGreeting" onclick="vgProOpen()" style="cursor:pointer" title="Ver mi perfil"><div class="vg-user-avatar" id="vgUserAvatar">?</div><span class="vg-user-name" id="vgUserName"></span></div>
 <button id="vg-theme-btn" onclick="vgToggleTheme()" title="Cambiar tema">🌙</button>
-<button id="vg-account-btn" onclick="vgOpenAuth()" title="Mi cuenta"><span class="vg-ab-avatar" id="vgAbAvatar">?</span><span id="vgAbLabel">Mi cuenta</span></button>
+<button class="pill" id="vg-fav-pill" onclick="openWishlist()" title="Guardados">🤍 <span class="vg-fav-count" id="vgFavCount" style="display:none">0</span></button>
+<button class="pill" onclick="openHistory()" title="Historial">📋</button>
 <button class="pill cart-pill" onclick="openCart()">🛒 Carrito <span class="cart-count" id="cartCount">0</span></button></div>
     </div>
     <div class="category-nav"><div class="category-row" id="catRow"></div></div>
@@ -13696,76 +13392,15 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
 </div><div class="modal-actions"><button class="primary" onclick="addSelectedToCart()">Agregar al carrito</button><button class="primary whatsapp" onclick="buySelectedNow()">Comprar / ver métodos de pago</button></div></div></div></div>
   <div class="cart" id="cartModal"><div class="cart-panel"><button class="x" onclick="closeCart()">×</button><h2>Carrito</h2><div id="cartItems"></div><div class="cart-total"><span>Total</span><span id="cartTotal">$0 MXN</span></div><div class="modal-actions"><button class="primary whatsapp" onclick="openPaymentForCart()">Comprar / ver métodos de pago</button><button class="secondary" onclick="clearCart()">Vaciar</button></div></div></div>
 
-  <div class="modal" id="paymentModal">
-  <div class="vg-pay-modal-new">
-    <div class="vg-pay-header">
-      <div>
-        <h2>💳 Datos de pago</h2>
-        <p style="color:#8b93b0;font-size:.84rem;margin:4px 0 0">Elige tu método y realiza el pago</p>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-        <div class="vg-pay-total-chip">
-          <small>Total a pagar</small>
-          <del id="payOriginalTotal"></del>
-          <strong id="payModalTotal">$0 MXN</strong>
-        </div>
-        <button class="x" onclick="closePaymentModal()" style="width:36px;height:36px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:50%;color:#eef0fa;cursor:pointer;font-size:1rem;display:grid;place-items:center">×</button>
-      </div>
-    </div>
-
-    <div class="vg-pay-methods">
-      <div class="vg-pay-method">
-        <div class="vg-pay-method-icon">🏦</div>
-        <h4>Transferencia BBVA</h4>
-        <div class="vg-pay-method-row"><span>Banco</span><code>BBVA</code></div>
-        <div class="vg-pay-method-row"><span>Tarjeta</span><code>4152 3145 2671 8708</code></div>
-        <div class="vg-pay-method-row"><span>Titular</span><code>DAHISE PARRA</code></div>
-        <button class="vg-pay-copy-all" onclick="copyPayData('BBVA\nTarjeta: 4152314526718708\nTitular: DAHISE PARRA')">Copiar datos BBVA</button>
-      </div>
-      <div class="vg-pay-method">
-        <div class="vg-pay-method-icon">🏪</div>
-        <h4>Depósito OXXO</h4>
-        <div class="vg-pay-method-row"><span>Banco</span><code>Spin by OXXO</code></div>
-        <div class="vg-pay-method-row"><span>Tarjeta</span><code>4217 4700 2231 6489</code></div>
-        <button class="vg-pay-copy-all" onclick="copyPayData('Spin by OXXO\nTarjeta: 4217470022316489')">Copiar datos OXXO</button>
-      </div>
-      <div class="vg-pay-method">
-        <div class="vg-pay-method-icon">💙</div>
-        <h4>PayPal</h4>
-        <div class="vg-pay-method-row"><span>Correo</span><code>Solicitar por WA</code></div>
-        <button class="vg-pay-copy-all" onclick="openWhatsAppGeneral&&openWhatsAppGeneral()">Pedir por WhatsApp</button>
-      </div>
-      <div class="vg-pay-method">
-        <div class="vg-pay-method-icon">🟡</div>
-        <h4>Binance USDT</h4>
-        <div class="vg-pay-method-row"><span>Pay ID</span><code>000000000</code></div>
-        <button class="vg-pay-copy-all" onclick="copyPayData('Binance Pay ID: 000000000')">Copiar ID Binance</button>
-      </div>
-    </div>
-
-    <!-- Coupon -->
-    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px">
-      <p style="font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#8b93b0;margin:0 0 8px">🎟️ ¿Tienes un código de descuento?</p>
-      <div class="vg-pay-coupon-row">
-        <input id="vgCouponInput" placeholder="Ej: VESSEL10" autocomplete="off">
-        <button onclick="vgApplyCoupon()">Aplicar</button>
-      </div>
-      <div class="vg-coupon-msg" id="vgCouponMsg" style="display:none;margin-top:6px"></div>
-    </div>
-
-    <!-- Proof upload -->
-    <div class="vg-pay-proof">
-      <p>📸 <strong>Después de pagar:</strong> sube el comprobante para validar tu pedido más rápido.</p>
-      <label><span>📎 Subir comprobante</span><input type="file" id="proofInput" accept="image/*" onchange="document.getElementById('vgProofName').textContent=this.files[0]?this.files[0].name:'Ningún archivo'"></label>
-      <div class="vg-pay-proof-name" id="vgProofName">Ningún archivo seleccionado</div>
-    </div>
-
-    <div class="vg-pay-actions">
-      <button class="primary whatsapp" onclick="sendPaymentWhatsApp()">✅ Confirmar y enviar comprobante</button>
-      <button class="secondary" onclick="closePaymentModal()">Cerrar</button>
-    </div>
+  <div class="modal" id="paymentModal"><div class="cart-panel" style="max-width:820px"><button class="x" onclick="closePaymentModal()">×</button><h2>Datos de pago</h2><p class="lead" style="font-size:.95rem;margin-top:0">Monto total a depositar: <strong id="payModalTotal" style="color:var(--brand2)">$0 MXN</strong></p><div class="payment-grid"><div class="pay-card"><b>🏦 Transferencia BBVA</b><div class="pay-row"><p>Banco: <span>BBVA</span></p><button class="copy-pay-btn" onclick="copyPayData('BBVA')">Copiar</button></div><div class="pay-row"><p>Tarjeta: <span>4152314526718708</span></p><button class="copy-pay-btn" onclick="copyPayData('4152314526718708')">Copiar</button></div><div class="pay-row"><p>Titular: <span>DAHISE PARRA</span></p><button class="copy-pay-btn" onclick="copyPayData('DAHISE PARRA')">Copiar</button></div><button class="copy-all-pay" onclick="copyPayData('BBVA\\nTarjeta: 4152314526718708\\nTitular: DAHISE PARRA')">Copiar datos BBVA</button></div><div class="pay-card"><b>🏪 Depósito OXXO</b><div class="pay-row"><p>Banco: <span>Spin by OXXO</span></p><button class="copy-pay-btn" onclick="copyPayData('Spin by OXXO')">Copiar</button></div><div class="pay-row"><p>Tarjeta: <span>4217470022316489</span></p><button class="copy-pay-btn" onclick="copyPayData('4217470022316489')">Copiar</button></div><button class="copy-all-pay" onclick="copyPayData('Spin by OXXO\\nTarjeta: 4217470022316489')">Copiar datos OXXO</button></div><div class="pay-card"><b>💳 PayPal</b><div class="pay-row"><p>Correo: <span>Solicitar por WhatsApp</span></p><button class="copy-pay-btn" onclick="copyPayData('Solicitar PayPal por WhatsApp')">Copiar</button></div></div><div class="pay-card"><b>🔶 Binance USDT</b><div class="pay-row"><p>Pay ID: <span>000000000</span></p><button class="copy-pay-btn" onclick="copyPayData('000000000')">Copiar</button></div></div></div><div style="margin-bottom:14px">
+  <p style="font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b93b0;margin:0 0 8px">🎟️ Código de descuento</p>
+  <div class="vg-coupon-row">
+    <input class="vg-coupon-input" id="vgCouponInput" placeholder="Ej: VESSEL10" autocomplete="off">
+    <button class="vg-coupon-btn" onclick="vgApplyCoupon()">Aplicar</button>
   </div>
+  <div class="vg-coupon-msg" id="vgCouponMsg" style="display:none"></div>
 </div>
+<div class="proof-box"><b>Después de pagar</b><br>Toma captura del comprobante y envíala por WhatsApp con tu pedido para validar la compra.<input type="file" id="proofInput" accept="image/*"></div><div class="modal-actions"><button class="primary whatsapp" onclick="sendPaymentWhatsApp()">Mandar comprobante por WhatsApp</button><button class="secondary" onclick="closePaymentModal()">Cerrar</button></div></div></div>
 
   <div class="modal" id="retroModal"><div class="retro-modal-card"><div class="retro-top-shell"><div class="retro-head"><div><span class="badge">Xbox 360 / Clásico</span><h2>Colección Xbox Retro</h2><p>Elige tus juegos, filtra por plataforma y compra por carrito o métodos de pago.</p></div><button class="x" onclick="closeRetroModal()">×</button></div><div class="retro-controls"><input id="retroSearch" type="text" placeholder="Buscar juego por nombre..." oninput="renderRetroGrid()"><select id="retroPlatform" onchange="renderRetroGrid()"><option value="all">Todas las plataformas</option><option value="360">Xbox 360</option><option value="CLÁSICO">Xbox Clásico</option></select></div><div class="retro-sales-note"><div><b>Xbox Retro Collection</b><p>Elige los juegos que quieras y los agregamos a una cuenta nueva completa. La cuenta será solo tuya: podrás cambiar contraseña y agregar correo o número de recuperación.</p></div><span class="badge">Paquetes con descuento</span></div><div class="retro-filter-row"><button class="retro-filter-chip active" type="button" onclick="setRetroQuickFilter('all', this)">Todos</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickFilter('360', this)">Xbox 360</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickFilter('CLÁSICO', this)">Xbox Clásico</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickSearch('Gears', this)">Gears</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickSearch('Call of Duty', this)">Call of Duty</button><button class="retro-filter-chip" type="button" onclick="setRetroQuickSearch('Assassin', this)">Assassin’s Creed</button></div></div><div class="retro-grid" id="retroGridContainer"></div><div class="retro-footer"><div class="retro-totals"><span>Seleccionados: <strong id="retroCount">0</strong></span><span>Subtotal: <strong id="retroSubtotal">$0 MXN</strong></span><span>Descuento: <strong id="retroDiscount">$0 MXN</strong></span><span>Total final: <strong id="retroTotal">$0 MXN</strong></span></div><div class="modal-actions" style="position:static;padding-top:0;background:transparent;margin:0"><button class="primary" onclick="addRetroToCart()">Agregar al carrito</button><button class="primary whatsapp" onclick="buyRetroNow()">Comprar / ver métodos de pago</button></div></div></div></div>
 
@@ -15739,7 +15374,7 @@ setInterval(()=>{ if($('#retroModal.active')) updateRetroDOMTotals(); },800);
 
 /* Admin orders */
 function orderCard(o){ const active=String(o.id)===String(state.selectedOrderId); const img=proofUrl(o); return `<div class="vg-order-card ${active?'active':''}" data-order-id="${esc(o.id)}"><div class="vg-order-col"><h5>Pedido</h5><div class="vg-order-id-badge">Pedido #${esc(o.id)}</div><div class="vg-order-sub">${esc(new Date(o.created_at).toLocaleString('es-MX'))}</div><div class="vg-order-sub">${esc(cleanSource(o.source))}</div></div><div class="vg-order-col"><h5>Artículo</h5><div class="vg-order-main-title">${esc(orderTitle(o))}</div><div class="vg-order-sub">${orderOptionText(o)||'<span style="opacity:.65">Sin detalle extra</span>'}</div></div><div class="vg-order-col"><h5>Total</h5><div class="vg-order-main-title">${money(deriveTotal(o))}</div></div><div class="vg-order-col"><h5>Comprobante</h5>${img?`<button class="vg-order-proof-btn" onclick="vgAdminSelectOrder('${esc(o.id)}')">Ver imagen</button><div class="vg-order-sub" style="margin-top:8px">${esc(proofName(o))}</div>`:'<div class="vg-order-sub">Sin comprobante</div>'}</div><div class="vg-order-col"><h5>Estado</h5><select class="vg-admin-select vg-order-status" onchange="vgAdminUpdateOrder('${esc(o.id)}',this.value)">${['pendiente','validado','entregado','cancelado'].map(s=>`<option value="${s}" ${String(o.status||'')===s?'selected':''}>${s}</option>`).join('')}</select></div><div class="vg-order-col"><h5>Acciones</h5><div class="vg-order-actions"><button class="vg-order-action-btn" onclick="vgAdminSelectOrder('${esc(o.id)}')">Detalle</button><button class="vg-order-action-btn" onclick="navigator.clipboard.writeText('Pedido #${esc(o.id)}')">Copiar ID</button></div></div></div>`; }
-function renderOrderPreview(){ const box=$('#vgOrderPreview'); if(!box) return; const o=state.orders.find(x=>String(x.id)===String(state.selectedOrderId)); if(!o){box.innerHTML='<div class="vg-empty-state">Selecciona un pedido para ver el comprobante.</div>';return;} const img=proofUrl(o); box.innerHTML=`<h3>Pedido #${esc(o.id)}</h3><div class="vg-preview-grid"><div class="vg-preview-pill"><b>Total</b>${money(deriveTotal(o))}</div><div class="vg-preview-pill"><b>Estado</b>${esc(o.status||'pendiente')}</div><div class="vg-preview-pill"><b>Fuente</b>${esc(cleanSource(o.source))}</div><div class="vg-preview-pill"><b>Fecha</b>${esc(new Date(o.created_at).toLocaleString('es-MX'))}</div></div><p><b>Artículo:</b><br>${esc(orderTitle(o))}</p>${orderOptionText(o)?`<p><b>Opciones:</b><br>${orderOptionText(o)}</p>`:''}${img?`<a class="vg-order-proof-btn" href="${img}" target="_blank">Abrir comprobante completo</a><img class="vg-proof-preview-img" src="${img}" alt="Comprobante" onerror="this.style.display='none'">`:'<div class="vg-empty-state">Este pedido todavía no tiene comprobante.</div>'}`; }
+function renderOrderPreview(){ const box=$('#vgOrderPreview'); if(!box) return; const o=state.orders.find(x=>String(x.id)===String(state.selectedOrderId)); if(!o){box.innerHTML='<div class="vg-empty-state">Selecciona un pedido para ver el comprobante.</div>';return;} const img=proofUrl(o); box.innerHTML=`<h3>Pedido #${esc(o.id)}</h3><div class="vg-preview-grid"><div class="vg-preview-pill"><b>Total</b>${money(deriveTotal(o))}</div><div class="vg-preview-pill"><b>Estado</b>${esc(o.status||'pendiente')}</div><div class="vg-preview-pill"><b>Fuente</b>${esc(cleanSource(o.source))}</div><div class="vg-preview-pill"><b>Fecha</b>${esc(new Date(o.created_at).toLocaleString('es-MX'))}</div></div><p><b>Artículo:</b><br>${esc(orderTitle(o))}</p>${orderOptionText(o)?`<p><b>Opciones:</b><br>${orderOptionText(o)}</p>`:''}${img?`<a class="vg-order-proof-btn" href="${img}" target="_blank">Abrir comprobante completo</a><img class="vg-proof-preview-img" src="${img}" alt="Comprobante" onerror="this.style.display=\'none\'">`:'<div class="vg-empty-state">Este pedido todavía no tiene comprobante.</div>'}`; }
 function dedupeOrders(list){ const map=new Map(); for(const o of list||[]){ const sec=(new Date(o.created_at||0)).toISOString().slice(0,19); const sig=[sec,orderTitle(o),deriveTotal(o),proofName(o)].join('|'); if(!map.has(sig)) map.set(sig,o); } return [...map.values()].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)||Number(b.id||0)-Number(a.id||0)); }
 window.vgAdminSelectOrder=function(id){state.selectedOrderId=String(id); window.vgAdminRenderOrders(); renderOrderPreview();};
 window.vgAdminRenderOrders=function(msg){ const box=$('#vgAdminOrdersList'); if(!box) return; if(msg){box.innerHTML=`<div class="vg-empty-state">${esc(msg)}</div>`;return;} const q=($('#vgOrderSearch')?.value||'').toLowerCase(); const f=$('#vgOrderFilter')?.value||'all'; let arr=state.orders.filter(o=>(f==='all'||o.status===f)&&(!q||[o.id,o.source,o.status,orderTitle(o),proofName(o),JSON.stringify(orderItems(o))].join(' ').toLowerCase().includes(q))); if(!arr.length){box.innerHTML='<div class="vg-empty-state">No encontré pedidos.</div>';renderOrderPreview();return;} if(!arr.some(o=>String(o.id)===String(state.selectedOrderId))) state.selectedOrderId=String(arr[0].id); box.innerHTML=arr.map(orderCard).join(''); renderOrderPreview(); };
@@ -19864,7 +19499,7 @@ window.renderHistory=function(){
     if(!h.length){list.innerHTML='<div class="vg-hist-empty">No hay compras registradas aún.</div>';return;}
     list.innerHTML=h.map(function(i){
       return '<div class="vg-hist-item">'
-        +'<div class="vg-hist-thumb"><img src="'+(i.image||'')+ '" alt="" onerror="this.style.display='none'"></div>'
+        +'<div class="vg-hist-thumb"><img src="'+(i.image||'')+ '" alt="" onerror="this.style.display=\'none\'"></div>'
         +'<div class="vg-hist-info"><b>'+i.title+'</b><small>'+(i.option||'')+(i.option?' · ':'')+(i.date||'')+'</small></div>'
         +'<span class="vg-hist-price">'+fmt(i.price)+'</span>'
         +'</div>';
@@ -20551,17 +20186,13 @@ function saveSession(s) {
   localStorage.setItem('vg_pro_session', s ? JSON.stringify(s) : 'null');
 }
 
-/* ─── SUPABASE CLIENT (fixed: reads cfg.anon like the rest of the admin) ─── */
+/* ─── SUPABASE CLIENT ─── */
 function getClient() {
   try {
-    // 1. Try getSB() — the canonical admin client
-    if (typeof getSB === 'function') { var c = getSB(); if (c) return c; }
-    // 2. Fallback: build from config directly (cfg.anon OR cfg.key for compat)
     var cfg = JSON.parse(localStorage.getItem('vg_supabase_cfg_v1') || '{}');
-    var url  = cfg.url  || window.VG_SUPABASE_URL  || '';
-    var anon = cfg.anon || cfg.key || window.VG_SUPABASE_ANON_KEY || '';
-    if (url && anon && typeof supabase !== 'undefined' && supabase.createClient) {
-      return supabase.createClient(url, anon);
+    if (!cfg.url || !cfg.key) return null;
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+      return supabase.createClient(cfg.url, cfg.key);
     }
   } catch(e) {}
   return null;
@@ -21210,18 +20841,7 @@ function qs(s,r){return (r||document).querySelector(s)}
 function qsa(s,r){return [...(r||document).querySelectorAll(s)]}
 function fmt(n){return '$'+Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0})+' MXN'}
 function fmtDate(d){return d?new Date(d).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'—'}
-function client(){
-  if(typeof getSB==='function'){try{var c2=getSB();if(c2)return c2;}catch(e){}}
-  if(typeof getClient==='function'){try{var c3=getClient();if(c3)return c3;}catch(e){}}
-  try{
-    var cfg=JSON.parse(localStorage.getItem('vg_supabase_cfg_v1')||'{}');
-    var url=cfg.url||window.VG_SUPABASE_URL||'';
-    var anon=cfg.anon||cfg.key||window.VG_SUPABASE_ANON_KEY||'';
-    if(url&&anon&&typeof supabase!=='undefined'&&supabase.createClient)
-      return supabase.createClient(url,anon);
-  }catch(e){}
-  return null;
-}
+function client(){return typeof getClient==='function'?getClient():null}
 function toast(msg){if(typeof window.showToast==='function')window.showToast(msg);else console.log(msg)}
 
 /* ─── SESSION ──────────────────────────────────────────── */
@@ -21477,7 +21097,7 @@ async function renderWallet(){
   grid.innerHTML = REDEEM_CATALOG.map(function(r){
     var canAfford = tokens >= r.cost;
     return '<div class="vg-redeem-card'+(canAfford?'':' locked')+'" '
-      + (canAfford?'onclick="vgRedeem(''+r.id+'')"':'')+' title="'+(canAfford?'Canjear':'Necesitas '+r.cost+' tokens')+'"><div class="vg-redeem-icon">'+r.icon+'</div>'
+      + (canAfford?'onclick="vgRedeem(\''+r.id+'\')"':'')+' title="'+(canAfford?'Canjear':'Necesitas '+r.cost+' tokens')+'"><div class="vg-redeem-icon">'+r.icon+'</div>'
       + '<div class="vg-redeem-name">'+r.name+'</div>'
       + '<div class="vg-redeem-cost"><span>'+r.cost+'</span> tokens</div>'
       + (canAfford?'<div style="font-size:.7rem;color:#19e6c1;margin-top:6px">Tap para canjear</div>':'')
@@ -21560,43 +21180,7 @@ window.vgShareRefLink = function(){
   else vgCopyRefLink();
 };
 
-/* ─── AWARD TOKENS ON PURCHASE ─────────────────────────── */
-window.addEventListener('load', function(){
-  var origSendWA = window.sendPaymentWhatsApp;
-  if(typeof origSendWA==='function'){
-    window.sendPaymentWhatsApp = async function(){
-      var result = await origSendWA.apply(this,arguments);
-      // Award 0.5 tokens after purchase
-      if(SESSION && SESSION.id && client()){
-        try{
-          await addTokens(SESSION.id, 0.5, 'purchase', 'Compra completada', null);
-          // Update total_purchases counter
-          var c = client();
-          await c.from('vg_users').update({
-            total_purchases: (SESSION.total_purchases||0)+1
-          }).eq('id', SESSION.id);
-          SESSION.total_purchases = (SESSION.total_purchases||0)+1;
-          saveSession(SESSION);
-          // Check referral: if this is their first purchase and they were referred
-          var u = await fetchUser(SESSION.phone);
-          if(u && u.referred_by && u.total_purchases===1){
-            // Find referrer and award 1 token
-            var refRes = await c.from('vg_users').select('id,tokens').eq('referral_code',u.referred_by).single();
-            if(refRes.data){
-              var referrerId = refRes.data.id;
-              var newTk = Number(refRes.data.tokens||0)+1;
-              await c.from('vg_users').update({tokens:newTk}).eq('id',referrerId);
-              await logToken(referrerId, 1, 'referral', 'Referido: '+SESSION.name, null);
-            }
-          }
-          toast('+0.5 tokens ganados! Total: '+SESSION.tokens.toFixed(1));
-        }catch(e){}
-      }
-      return result;
-    };
-  }
-});
-
+/* ─── AWARD TOKENS ON PURCHASE — replaced by guarded v110 patch ─── */
 /* ─── ADMIN USUARIOS ─────────────────────────────────────── */
 var _allUsers = [];
 window.vgLoadUsers = async function(){
@@ -21631,7 +21215,7 @@ window.vgLoadUsers = async function(){
           +'<br><span style="font-size:.74rem;color:#8b93b0">'+(r.vg_users&&r.vg_users.name||'?')+' · '+(r.vg_users&&r.vg_users.phone||'')+'</span></div>'
           +'<div style="display:flex;gap:6px;align-items:center">'
           +'<span class="vg-redemp-status pending">Pendiente</span>'
-          +'<button class="vg-te-save" onclick="vgMarkRedeemed(''+r.id+'')">Entregar</button>'
+          +'<button class="vg-te-save" onclick="vgMarkRedeemed(\''+r.id+'\')">Entregar</button>'
           +'</div></div>';
       }).join('');
     } else if(rWrap){ rWrap.style.display='none'; }
@@ -21665,7 +21249,7 @@ function vgRenderUsersTable(users){
       +'<td><div class="vg-token-edit">'
         +'<input class="vg-te-input" id="vgTkAdj_'+u.id+'" type="number" step="0.5" placeholder="0" value="">'
         +'<input class="vg-te-input" id="vgTkNote_'+u.id+'" placeholder="nota" style="width:70px">'
-        +'<button class="vg-te-save" onclick="vgAdminAdjustTokens(''+u.id+'',''+u.name+'')">Guardar</button>'
+        +'<button class="vg-te-save" onclick="vgAdminAdjustTokens(\''+u.id+'\',\''+String(u.name||'').replace(/'/g,\"&apos;\")+'\')">Guardar</button>'
       +'</div></td>'
       +'</tr>';
   }).join('');
@@ -21757,555 +21341,72 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 
-<script id="vg-ux-improvements-js">
+
+<!-- VG CRITICAL FIX v110: auth schema fallback + modal UX + fixed smart navbar + referral de-dup -->
+<style id="vg-critical-fix-v110-css">
+  :root{--vg-nav-height:132px;}
+  html,body{overflow-x:hidden!important;}
+  body{padding-top:var(--vg-nav-height)!important;}
+  .topbar{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:120!important;transform:translateY(0)!important;opacity:1!important;transition:transform .28s cubic-bezier(.4,0,.2,1),opacity .22s ease!important;will-change:transform,opacity!important;}
+  .topbar.vg-nav-hidden{transform:translateY(-112%)!important;opacity:0!important;pointer-events:none!important;}
+  .topbar.vg-nav-visible{transform:translateY(0)!important;opacity:1!important;}
+  .modal,.cart{position:fixed!important;inset:0!important;z-index:500!important;display:none!important;align-items:center!important;justify-content:center!important;padding:clamp(10px,2vw,22px)!important;background:rgba(0,0,0,.76)!important;overflow:hidden!important;}
+  .modal.active,.cart.active{display:flex!important;}
+  .modal-card{width:min(1120px,96vw)!important;max-width:1120px!important;height:auto!important;max-height:calc(100dvh - 28px)!important;min-height:0!important;display:grid!important;grid-template-columns:minmax(320px,430px) minmax(0,1fr)!important;overflow:hidden!important;border-radius:26px!important;background:#0e1220!important;}
+  .modal-img{min-height:0!important;height:auto!important;max-height:calc(100dvh - 28px)!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;}
+  .modal-img img,.vg-gallery-main img,#modalImage{width:100%!important;height:100%!important;max-height:calc(100dvh - 28px)!important;object-fit:contain!important;object-position:center!important;}
+  .modal-body{min-width:0!important;min-height:0!important;max-height:calc(100dvh - 28px)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;padding:22px!important;}
+  .modal-body > .lead,.modal-delivery-note,#modalOptions,#vgRelatedSection{flex:0 0 auto!important;}
+  #modalOptions{max-height:34dvh!important;overflow:auto!important;padding-right:4px!important;}
+  .modal-actions{position:sticky!important;bottom:0!important;z-index:4!important;margin-top:auto!important;padding:14px 0 0!important;background:linear-gradient(180deg,rgba(14,18,32,0),#0e1220 42%)!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;}
+  .modal-actions .primary,.modal-actions .secondary,.modal-actions button{min-height:48px!important;width:100%!important;white-space:normal!important;}
+  .cart-panel,#paymentModal .cart-panel{width:min(860px,96vw)!important;max-width:860px!important;max-height:calc(100dvh - 28px)!important;display:flex!important;flex-direction:column!important;overflow:auto!important;border-radius:26px!important;}
+  #paymentModal .payment-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  @media(max-width:760px){:root{--vg-nav-height:150px;}body{padding-bottom:82px!important;}.nav{grid-template-columns:1fr auto auto!important;padding:10px 12px!important;gap:9px!important;}.brand{min-width:0!important;}.brand span,.brand small{max-width:178px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}.searchbar{grid-column:1/-1!important;height:46px!important;}.category-row{padding:8px 12px!important;gap:8px!important;overflow-x:auto!important;flex-wrap:nowrap!important;}.cat-btn{flex:0 0 auto!important;padding:10px 12px!important;font-size:.72rem!important;}.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important;}.card{min-width:0!important;border-radius:18px!important;}.imgbox{height:124px!important;padding:6px!important;}.imgbox img{object-fit:contain!important;}.info{padding:10px!important;}.card h3{font-size:.84rem!important;line-height:1.18!important;min-height:auto!important;}.desc{display:none!important;}.detail-btn{padding:11px 8px!important;font-size:.82rem!important;}.modal,.cart{padding:0!important;align-items:stretch!important;}.modal-card{width:100vw!important;height:100dvh!important;max-height:100dvh!important;grid-template-columns:1fr!important;grid-template-rows:30dvh 1fr!important;border-radius:0!important;}.modal-img{height:30dvh!important;max-height:30dvh!important;min-height:0!important;}.modal-img img,.vg-gallery-main img,#modalImage{max-height:30dvh!important;object-fit:contain!important;}.modal-body{height:70dvh!important;max-height:70dvh!important;padding:15px!important;}.modal-body h2{font-size:1.55rem!important;line-height:1.04!important;margin:10px 0!important;}.modal-body .lead{font-size:.86rem!important;line-height:1.4!important;max-height:74px!important;overflow:auto!important;}.modal-delivery-note{font-size:.78rem!important;padding:9px!important;}#modalOptions{max-height:30dvh!important;}.option{padding:11px!important;gap:8px!important;}.modal-actions{grid-template-columns:1fr!important;padding-top:10px!important;}.cart-panel,#paymentModal .cart-panel{width:100vw!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important;padding:15px!important;}#paymentModal .payment-grid{grid-template-columns:1fr!important;}}
+</style>
+<script id="vg-critical-fix-v110-js">
 (function(){
 'use strict';
-function qs(s,r){return (r||document).querySelector(s)}
-function qsa(s,r){return [...(r||document).querySelectorAll(s)]}
-
-/* ── ORDER TRACKING TIMELINE ── */
-var ORDER_STEPS=['Recibido','Verificando','En proceso','Entregado'];
-var STATUS_MAP={pendiente:1,validado:2,procesando:2,'en proceso':3,entregado:3,completado:3,cancelado:0};
-window.vgRenderOrderTimeline=function(status){
-  var idx=STATUS_MAP[String(status||'').toLowerCase()]||0;
-  if(!idx)return '';
-  return '<div class="vg-tracking-timeline">'+ORDER_STEPS.map(function(s,i){
-    var c=i<idx?'done':i===idx?'active':'';
-    return '<div class="vg-tt-step '+c+'"><div class="vg-tt-dot">'+(i<idx?'&#10003;':'')+'</div><div class="vg-tt-label">'+s+'</div></div>';
-  }).join('')+'</div>';
-};
-
-/* ── SMART SEARCH SUGGESTIONS ── */
-(function(){
-  document.addEventListener('DOMContentLoaded',function(){
-    var inp=qs('#vgSearchInput')||qs('.searchbar input');
-    if(!inp)return;
-    var wrap=inp.closest('.searchbar');
-    if(!wrap)return;
-    var sugg=document.createElement('div');
-    sugg.className='vg-search-suggestions';
-    wrap.appendChild(sugg);
-    wrap.style.position='relative';
-    var t;
-    inp.addEventListener('input',function(){
-      clearTimeout(t);
-      var q=this.value.trim();
-      if(q.length<2){sugg.classList.remove('show');return;}
-      t=setTimeout(function(){
-        var svc=typeof services==='function'?services():(window.SERVICES||[]);
-        var hits=svc.filter(function(p){return p.title&&p.title.toLowerCase().includes(q.toLowerCase());}).slice(0,6);
-        if(!hits.length){sugg.classList.remove('show');return;}
-        sugg.innerHTML='';
-        hits.forEach(function(p){
-          var opts=Array.isArray(p.options)?p.options:(Array.isArray(p.packages)?p.packages:[]);
-          var min=opts.length?Math.min.apply(null,opts.map(function(o){return Number(o.price||0);})):0;
-          var div=document.createElement('div');
-          div.className='vg-ss-item';
-          div.innerHTML='<img src="'+p.image+'" alt="" style="width:36px;height:36px;border-radius:8px;object-fit:cover">'
-            +'<div><b style="font-size:.84rem;display:block">'+p.title+'</b>'
-            +'<small style="color:#8b93b0;font-size:.74rem">'+p.category+(min?' &middot; $'+min.toLocaleString('es-MX')+' MXN':'')+'</small></div>';
-          div.addEventListener('click',function(){
-            sugg.classList.remove('show');
-            inp.value='';
-            if(typeof openProduct==='function') openProduct(p.id);
-          });
-          sugg.appendChild(div);
-        });
-        sugg.classList.add('show');
-      },200);
-    });
-    document.addEventListener('click',function(e){if(!wrap.contains(e.target))sugg.classList.remove('show');});
-  });
-})();
-
-/* ── URGENCY LABELS ── */
-(function(){
-  function inject(){
-    qsa('.card[data-product-id]').forEach(function(card){
-      if(card.querySelector('.vg-urgency-label'))return;
-      var id=Number(card.getAttribute('data-product-id'));
-      if(id%7!==0&&id%11!==0)return;
-      var info=card.querySelector('.info');if(!info)return;
-      var ul=document.createElement('div');ul.className='vg-urgency-label';ul.textContent='Alta demanda hoy';
-      var tag=info.querySelector('.tag');if(tag)tag.after(ul);else info.prepend(ul);
-    });
-  }
-  var mo=new MutationObserver(function(){setTimeout(inject,100);});
-  document.addEventListener('DOMContentLoaded',function(){mo.observe(document.body,{childList:true,subtree:true});inject();});
-})();
-
-/* ── MOBILE: close on back button ── */
-window.addEventListener('popstate',function(){
-  qsa('.modal.active,.cart.active,.vg-dash-modal.active,.vg-history-modal.active,.vg-wish-modal.active')
-    .forEach(function(m){m.classList.remove('active');});
-});
-
-/* ── PERFORMANCE: lazy images ── */
-(function(){
-  if(!window.IntersectionObserver)return;
-  var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){var img=e.target;if(img.dataset.src){img.src=img.dataset.src;delete img.dataset.src;}obs.unobserve(img);}
-    });
-  },{rootMargin:'200px'});
-  function watch(){qsa('img[data-src]').forEach(function(i){obs.observe(i);});}
-  var mo=new MutationObserver(function(){setTimeout(watch,50);});
-  document.addEventListener('DOMContentLoaded',function(){mo.observe(document.body,{childList:true,subtree:true});watch();});
-})();
-
-/* ── SCROLL SECTION DOTS ── */
-(function(){
-  var SECS=['#homeView','#marketView'];
-  var ind=document.createElement('div');ind.className='vg-scroll-indicator';
-  SECS.forEach(function(_,i){
-    var d=document.createElement('div');d.className='vg-si-dot'+(i===0?' active':'');
-    d.style.cursor='pointer';d.style.pointerEvents='auto';
-    d.addEventListener('click',function(){var el=qs(SECS[i]);if(el)el.scrollIntoView({behavior:'smooth'});});
-    ind.appendChild(d);
-  });
-  document.body.appendChild(ind);
-  window.addEventListener('scroll',function(){
-    var y=window.scrollY;
-    ind.classList.toggle('show',y>300);
-    ind.querySelectorAll('.vg-si-dot').forEach(function(d,i){
-      var el=qs(SECS[i]);if(!el)return;
-      var r=el.getBoundingClientRect();
-      d.classList.toggle('active',r.top<=120&&r.bottom>120);
-    });
-  },{passive:true});
-})();
-
-/* ── ADMIN USERS AUTO-LOAD ── */
-document.addEventListener('click',function(e){
-  var btn=e.target.closest&&e.target.closest('.vg-admin-tab');
-  if(btn&&btn.dataset.tab==='usuarios')setTimeout(function(){if(typeof window.vgLoadUsers==='function')window.vgLoadUsers();},120);
-});
-
-})();
-</script>
-
-
-<!-- Auth modal: Login / Register with password -->
-<div class="vg-auth-modal" id="vgAuthModal">
-  <div class="vg-auth-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div>
-        <div style="font-size:1.5rem;margin-bottom:2px">👾</div>
-        <span style="font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8b5cf6">VESSEL PRO</span>
-      </div>
-      <button class="x" onclick="vgCloseAuth()" style="width:36px;height:36px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:50%;color:#eef0fa;cursor:pointer;font-size:1rem">×</button>
-    </div>
-    <div class="vg-auth-tabs">
-      <button class="vg-auth-tab active" id="vgAuthTabLogin" onclick="vgAuthSwitchTab('login')">Iniciar sesión</button>
-      <button class="vg-auth-tab" id="vgAuthTabReg" onclick="vgAuthSwitchTab('register')">Crear cuenta</button>
-    </div>
-    <div id="vgAuthError" class="vg-auth-error"></div>
-    <div id="vgAuthSuccess" class="vg-auth-success"></div>
-    <!-- LOGIN FORM -->
-    <div id="vgAuthLoginForm">
-      <div class="vg-auth-field">
-        <label>WhatsApp / Teléfono</label>
-        <input type="tel" id="vgAuthLoginPhone" placeholder="Ej: 6611234567" maxlength="15">
-      </div>
-      <div class="vg-auth-field">
-        <label>Contraseña</label>
-        <input type="password" id="vgAuthLoginPass" placeholder="Tu contraseña">
-      </div>
-      <button class="vg-auth-submit" id="vgAuthLoginBtn" onclick="vgAuthLogin()">Entrar a mi cuenta</button>
-      <button class="vg-auth-forgot" onclick="vgAuthSwitchTab('register')">¿No tienes cuenta? Regístrate</button>
-    </div>
-    <!-- REGISTER FORM -->
-    <div id="vgAuthRegForm" style="display:none">
-      <div class="vg-auth-field">
-        <label>Tu nombre</label>
-        <input type="text" id="vgAuthRegName" placeholder="Ej: Carlos" maxlength="40">
-      </div>
-      <div class="vg-auth-field">
-        <label>WhatsApp / Teléfono</label>
-        <input type="tel" id="vgAuthRegPhone" placeholder="Ej: 6611234567" maxlength="15">
-      </div>
-      <div class="vg-auth-field">
-        <label>Contraseña</label>
-        <input type="password" id="vgAuthRegPass" placeholder="Mínimo 6 caracteres">
-        <div class="vg-auth-pass-hint">Usa letras y números. Mínimo 6 caracteres.</div>
-      </div>
-      <div class="vg-auth-field">
-        <label>Confirmar contraseña</label>
-        <input type="password" id="vgAuthRegPass2" placeholder="Repite tu contraseña">
-      </div>
-      <button class="vg-auth-submit" id="vgAuthRegBtn" onclick="vgAuthRegister()">Crear cuenta gratis</button>
-      <p style="font-size:.72rem;color:#5a6180;text-align:center;margin-top:10px">Al registrarte aceptas los Términos de uso. Tu datos solo se usan para vincular tus pedidos y tokens.</p>
-    </div>
-  </div>
-</div>
-
-
-<script id="vg-full-fix-js">
-(function(){
-'use strict';
-var qs=function(s,r){return (r||document).querySelector(s);};
-var qsa=function(s,r){return [...(r||document).querySelectorAll(s)];};
-
-/* ════════════════════════════════════════════════
-   FIX 1 — COUPON: update payModalTotal in real-time
-   ════════════════════════════════════════════════ */
-var _couponDiscount = 0;
-
-function vgGetBaseTotal(){
-  var el = qs('#payModalTotal');
-  if(!el) return 0;
-  // Strip any existing discount suffix to get base value
-  var txt = (el.dataset.base) ? el.dataset.base : el.textContent;
-  return Number(String(txt).replace(/[^0-9.]/g,'')) || 0;
-}
-
-function vgUpdatePayTotal(){
-  var el = qs('#payModalTotal');
-  var delEl = qs('#payOriginalTotal');
-  if(!el) return;
-  var base = Number(el.dataset.base || 0);
-  if(!base) return;
-  if(_couponDiscount > 0){
-    var final = Math.round(base * (1 - _couponDiscount/100));
-    el.textContent = '$' + final.toLocaleString('es-MX') + ' MXN';
-    if(delEl){ delEl.textContent = '$' + base.toLocaleString('es-MX') + ' MXN'; delEl.style.display='block'; }
-  } else {
-    el.textContent = '$' + base.toLocaleString('es-MX') + ' MXN';
-    if(delEl) delEl.style.display = 'none';
-  }
-}
-
-// Override vgApplyCoupon to also update the total
-window.vgApplyCoupon = function(){
-  var inp = qs('#vgCouponInput'); if(!inp) return;
-  var code = inp.value.trim().toUpperCase();
-  var msg  = qs('#vgCouponMsg');
-  var CUPS = window.COUPONS || {'VESSEL10':{pct:10},'VESSEL20':{pct:20},'NUEVO15':{pct:15},'GAMER5':{pct:5}};
-  // Load custom coupons
-  try{ Object.assign(CUPS, JSON.parse(localStorage.getItem('vg_custom_coupons')||'{}')); }catch(e){}
-  if(!code){
-    if(msg){msg.textContent='Escribe un código válido';msg.className='vg-coupon-msg err';msg.style.display='block';}
-    return;
-  }
-  var c = CUPS[code];
-  if(c){
-    _couponDiscount = c.pct;
-    window._activeCoupon = {code:code, pct:c.pct};
-    if(msg){msg.textContent='✓ '+c.pct+'% de descuento aplicado!';msg.className='vg-coupon-msg ok';msg.style.display='block';}
-    vgUpdatePayTotal(); // ← THE FIX: actually update the DOM
-  } else {
-    _couponDiscount = 0;
-    window._activeCoupon = null;
-    if(msg){msg.textContent='Código inválido o expirado';msg.className='vg-coupon-msg err';msg.style.display='block';}
-    vgUpdatePayTotal();
-  }
-};
-
-// Capture base total when payment modal opens
-window.addEventListener('load', function(){
-  var toWatch = ['openPaymentForCart','openPaymentModal','buySelectedNow','openPaymentForRetro'];
-  toWatch.forEach(function(n){
-    var orig = window[n];
-    if(typeof orig === 'function'){
-      window[n] = function(){
-        var r = orig.apply(this, arguments);
-        // Reset coupon UI
-        _couponDiscount = 0;
-        window._activeCoupon = null;
-        var inp = qs('#vgCouponInput'); if(inp) inp.value = '';
-        var msg = qs('#vgCouponMsg'); if(msg) msg.style.display = 'none';
-        var del = qs('#payOriginalTotal'); if(del) del.style.display='none';
-        // Capture base total after a tick so the modal has rendered the value
-        setTimeout(function(){
-          var el = qs('#payModalTotal');
-          if(el && !el.dataset.base){
-            var n = Number(String(el.textContent).replace(/[^0-9.]/g,''));
-            if(n > 0) el.dataset.base = n;
-          }
-        }, 80);
-        return r;
-      };
-    }
-  });
-});
-
-// Also watch payModalTotal for changes and store base
-var payObs = new MutationObserver(function(muts){
-  muts.forEach(function(m){
-    if(m.type==='characterData' || m.type==='childList'){
-      var el = qs('#payModalTotal');
-      if(el){
-        var n = Number(String(el.textContent).replace(/[^0-9.]/g,''));
-        if(n > 0 && _couponDiscount === 0) el.dataset.base = n;
-      }
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function(){
-  var el = qs('#payModalTotal');
-  if(el) payObs.observe(el, {characterData:true, childList:true, subtree:true});
-});
-
-
-/* ════════════════════════════════════════════════
-   FIX 2 — AUTH: password-based login/register
-   ════════════════════════════════════════════════ */
-var AUTH_KEY = 'vg_auth_session_v1';
-var USERS_KEY = 'vg_local_users_v1'; // fallback if Supabase not configured
-
-// Simple but real password hashing using SubtleCrypto
-async function hashPass(pass, salt){
-  var enc = new TextEncoder();
-  var key = await crypto.subtle.importKey('raw', enc.encode(pass+salt), {name:'PBKDF2'}, false, ['deriveBits']);
-  var bits = await crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode(salt),iterations:100000,hash:'SHA-256'}, key, 256);
-  return Array.from(new Uint8Array(bits)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-}
-
-function genSalt(){ return Math.random().toString(36).slice(2)+Date.now().toString(36); }
-function genRefCode(){ return Math.random().toString(36).slice(2,10).toUpperCase(); }
-
-function getClient2(){
-  if(typeof getSB==='function'){try{var c=getSB();if(c)return c;}catch(e){}}
-  if(typeof getClient==='function'){try{var c=getClient();if(c)return c;}catch(e){}}
-  try{
-    var cfg=JSON.parse(localStorage.getItem('vg_supabase_cfg_v1')||'{}');
-    var url=cfg.url||window.VG_SUPABASE_URL||'';
-    var anon=cfg.anon||cfg.key||window.VG_SUPABASE_ANON_KEY||'';
-    if(url&&anon&&typeof supabase!=='undefined'&&supabase.createClient)
-      return supabase.createClient(url,anon);
-  }catch(e){}
-  return null;
-}
-
-// Local users DB (fallback)
-function getLocalUsers(){ try{return JSON.parse(localStorage.getItem(USERS_KEY)||'{}');}catch(e){return {};} }
-function saveLocalUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-
-window.vgOpenAuth = function(){
-  var session = vgGetSession();
-  if(session){
-    // Already logged in — open dashboard instead
-    if(typeof vgProOpen==='function') vgProOpen();
-    else if(typeof openDashboard==='function') openDashboard();
-    return;
-  }
-  var m = qs('#vgAuthModal'); if(m) m.classList.add('active');
-};
-window.vgCloseAuth = function(){
-  var m = qs('#vgAuthModal'); if(m) m.classList.remove('active');
-};
-document.addEventListener('click', function(e){
-  if(e.target === qs('#vgAuthModal')) window.vgCloseAuth();
-});
-
-window.vgAuthSwitchTab = function(tab){
-  qs('#vgAuthLoginForm').style.display = tab==='login' ? '' : 'none';
-  qs('#vgAuthRegForm').style.display   = tab==='register' ? '' : 'none';
-  qsa('.vg-auth-tab').forEach(function(b){ b.classList.toggle('active', b.id==='vgAuthTab'+tab.charAt(0).toUpperCase()+tab.slice(1)); });
-  qs('#vgAuthError').style.display = 'none';
-  qs('#vgAuthSuccess').style.display = 'none';
-};
-
-function showAuthMsg(type, msg){
-  var el = qs(type==='error'?'#vgAuthError':'#vgAuthSuccess');
-  if(el){el.textContent=msg;el.style.display='block';}
-  if(type==='error') setTimeout(function(){if(el)el.style.display='none';},4000);
-}
-
-function vgGetSession(){
-  try{ return JSON.parse(localStorage.getItem(AUTH_KEY)||'null'); }catch(e){return null;}
-}
-function vgSaveSession(s){
-  localStorage.setItem(AUTH_KEY, JSON.stringify(s));
-  // Also update the old session keys for compatibility
-  localStorage.setItem('vg_pro_session_v2', JSON.stringify(s));
-  localStorage.setItem('vg_pro_session', JSON.stringify(s));
-  localStorage.setItem('vg_user', JSON.stringify({name:s.name,phone:s.phone}));
-}
-
-window.vgAuthRegister = async function(){
-  var btn = qs('#vgAuthRegBtn');
-  var name  = (qs('#vgAuthRegName')||{}).value||'';
-  var phone = (qs('#vgAuthRegPhone')||{}).value||'';
-  var pass  = (qs('#vgAuthRegPass')||{}).value||'';
-  var pass2 = (qs('#vgAuthRegPass2')||{}).value||'';
-  // Validation
-  if(!name.trim()){showAuthMsg('error','Escribe tu nombre.');return;}
-  phone = phone.replace(/\D/g,'');
-  if(phone.length < 8){showAuthMsg('error','Teléfono inválido (mínimo 8 dígitos).');return;}
-  if(pass.length < 6){showAuthMsg('error','La contraseña debe tener al menos 6 caracteres.');return;}
-  if(pass !== pass2){showAuthMsg('error','Las contraseñas no coinciden.');return;}
-  if(btn){btn.disabled=true;btn.textContent='Creando cuenta...';}
-  try{
-    var salt = genSalt();
-    var hash = await hashPass(pass, salt);
-    var refCode = genRefCode();
-    var userData = {
-      name:name.trim(), phone:phone, salt:salt, hash:hash,
-      referral_code:refCode, tokens:0, total_purchases:0,
-      referred_by: sessionStorage.getItem('vg_incoming_ref')||localStorage.getItem('vg_pending_ref')||null,
-      created_at: new Date().toISOString()
-    };
-    // Try Supabase first
-    var c = getClient2();
-    var userId = null;
-    if(c){
-      // Check if phone exists
-      var existing = await c.from('vg_users').select('id,phone').eq('phone',phone).maybeSingle();
-      if(existing.data){ showAuthMsg('error','Este teléfono ya tiene una cuenta. Inicia sesión.'); if(btn){btn.disabled=false;btn.textContent='Crear cuenta gratis';}; return; }
-      var ins = await c.from('vg_users').insert({
-        name:userData.name, phone:userData.phone,
-        referral_code:userData.referral_code,
-        tokens:0, total_purchases:0,
-        referred_by:userData.referred_by,
-        password_salt:salt, password_hash:hash
-      }).select().maybeSingle();
-      if(ins.error){ throw new Error(ins.error.message); }
-      userId = ins.data&&ins.data.id;
-    } else {
-      // Fallback: localStorage
-      var locals = getLocalUsers();
-      if(Object.values(locals).find(function(u){return u.phone===phone;})){
-        showAuthMsg('error','Teléfono ya registrado.'); if(btn){btn.disabled=false;btn.textContent='Crear cuenta gratis';}; return;
-      }
-      userId = 'local_'+Date.now();
-      locals[userId] = userData;
-      saveLocalUsers(locals);
-    }
-    var session = {id:userId||'local_'+Date.now(), name:userData.name, phone:phone,
-      tokens:0, total_purchases:0, referral_code:refCode};
-    vgSaveSession(session);
-    showAuthMsg('success','Cuenta creada! Bienvenido '+userData.name+'');
-    setTimeout(function(){ window.vgCloseAuth(); vgRefreshAccountBtn(); }, 1200);
-  } catch(err){
-    showAuthMsg('error', 'Error al registrar: '+(err.message||'Intenta de nuevo.'));
-  }
-  if(btn){btn.disabled=false;btn.textContent='Crear cuenta gratis';}
-};
-
-window.vgAuthLogin = async function(){
-  var btn = qs('#vgAuthLoginBtn');
-  var phone = (qs('#vgAuthLoginPhone')||{}).value||'';
-  var pass  = (qs('#vgAuthLoginPass')||{}).value||'';
-  phone = phone.replace(/\D/g,'');
-  if(phone.length < 8){showAuthMsg('error','Teléfono inválido.');return;}
-  if(!pass){showAuthMsg('error','Escribe tu contraseña.');return;}
-  if(btn){btn.disabled=true;btn.textContent='Verificando...';}
-  try{
-    var c = getClient2();
-    var userData = null;
-    if(c){
-      var res = await c.from('vg_users').select('*').eq('phone',phone).maybeSingle();
-      userData = res.data;
-    }
-    if(!userData){
-      // Try localStorage fallback
-      var locals = getLocalUsers();
-      userData = Object.assign({id:null}, Object.values(locals).find(function(u){return u.phone===phone;}) || {});
-      if(!userData.name){ showAuthMsg('error','No encontramos una cuenta con ese teléfono.'); if(btn){btn.disabled=false;btn.textContent='Entrar a mi cuenta';} return; }
-    }
-    if(!userData.password_salt || !userData.password_hash){
-      // Legacy account without password — auto-migrate
-      showAuthMsg('error','Tu cuenta no tiene contraseña. Crea una cuenta nueva o contacta soporte.');
-      if(btn){btn.disabled=false;btn.textContent='Entrar a mi cuenta';} return;
-    }
-    var hash = await hashPass(pass, userData.password_salt);
-    if(hash !== userData.password_hash){
-      showAuthMsg('error','Contraseña incorrecta. Intenta de nuevo.');
-      if(btn){btn.disabled=false;btn.textContent='Entrar a mi cuenta';} return;
-    }
-    var session = {
-      id:userData.id, name:userData.name, phone:userData.phone,
-      tokens:Number(userData.tokens||0),
-      total_purchases:Number(userData.total_purchases||0),
-      referral_code:userData.referral_code||genRefCode()
-    };
-    vgSaveSession(session);
-    showAuthMsg('success','Bienvenido de vuelta, '+userData.name+'!');
-    setTimeout(function(){ window.vgCloseAuth(); vgRefreshAccountBtn(); }, 1000);
-  } catch(err){
-    showAuthMsg('error','Error al iniciar sesión: '+(err.message||'Intenta de nuevo.'));
-  }
-  if(btn){btn.disabled=false;btn.textContent='Entrar a mi cuenta';}
-};
-
-/* ── Session on load & nav button ── */
-function vgRefreshAccountBtn(){
-  var session = vgGetSession();
-  var btn = qs('#vg-account-btn');
-  var av  = qs('#vgAbAvatar');
-  var lbl = qs('#vgAbLabel');
-  if(!btn) return;
-  if(session && session.name){
-    if(av) av.textContent = session.name[0].toUpperCase();
-    if(lbl) lbl.textContent = session.name;
-    btn.style.borderColor = 'rgba(25,230,193,.45)';
-    btn.style.background  = 'rgba(25,230,193,.10)';
-    btn.style.color       = '#19e6c1';
-    btn.title = 'Ver mi cuenta';
-    // Also update old greeting for compatibility
-    var g=qs('#vgUserGreeting');
-    if(g){g.style.display='flex';var av2=qs('#vgUserAvatar');if(av2)av2.textContent=session.name[0].toUpperCase();var nm=qs('#vgUserName');if(nm)nm.textContent=session.name;}
-  } else {
-    if(av) av.textContent = '?';
-    if(lbl) lbl.textContent = 'Mi cuenta';
-    btn.removeAttribute('style');
-  }
-}
-
-// Expose session for pro-system compatibility
-window.vgGetCurrentSession = vgGetSession;
-window.vgRefreshAccountBtn = vgRefreshAccountBtn;
-
-document.addEventListener('DOMContentLoaded', function(){
-  vgRefreshAccountBtn();
-  // Disable auto-popup of old login modal
-  localStorage.setItem('vg_login_skip', Date.now().toString());
-  // Enter key on login inputs
-  ['vgAuthLoginPass','vgAuthRegPass2'].forEach(function(id){
-    var el = qs('#'+id);
-    if(el) el.addEventListener('keydown', function(e){
-      if(e.key==='Enter'){
-        var isLogin = qs('#vgAuthLoginForm').style.display !== 'none';
-        if(isLogin) window.vgAuthLogin();
-        else window.vgAuthRegister();
-      }
-    });
-  });
-});
-
-
-/* ════════════════════════════════════════════════
-   FIX 3 — REFERRAL: remove duplicate box
-   ════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function(){
-  // The vgRefUserLinkBox in the footer is the canonical one
-  // Remove any secondary ones that duplicate
-  var boxes = qsa('.vg-ref-user-link-box');
-  if(boxes.length > 1){
-    for(var i=1;i<boxes.length;i++) boxes[i].remove();
-  }
-  // Update the single box with current session
-  var session = vgGetSession();
-  if(session){
-    var box = qs('#vgRefUserLinkBox');
-    var lnk = qs('#vgRefUserLink');
-    if(box) box.style.display = 'block';
-    if(lnk) lnk.textContent = 'https://vesselgames.xyz/?ref='+(session.referral_code||session.phone||'');
-  }
-});
-
-/* ════════════════════════════════════════════════
-   FIX 4 — SQL: add password columns to schema
-   ════════════════════════════════════════════════ */
-// Append migration SQL to existing setup block
-window.addEventListener('DOMContentLoaded', function(){
-  var sqlEl = qs('#vgSqlSchema');
-  if(sqlEl && !sqlEl.textContent.includes('password_hash')){
-    sqlEl.textContent += '\n\n-- Columnas de autenticacion con contraseña\nALTER TABLE vg_users ADD COLUMN IF NOT EXISTS password_hash TEXT;\nALTER TABLE vg_users ADD COLUMN IF NOT EXISTS password_salt TEXT;';
-  }
-});
-
+var CFG='vg_supabase_cfg_v1',SESSION_KEY='vg_pro_session_v2',LEGACY_SESSION_KEY='vg_pro_session',AWARD_KEY='vg_awarded_orders_v110',REF_AWARD_KEY='vg_ref_awarded_v110';
+var sbCache={sig:'',client:null};
+function $(s,r){return (r||document).querySelector(s)}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function toast(m){if(window.showToast)window.showToast(m);else console.log(m)}
+function readCfg(){var c={};try{c=JSON.parse(localStorage.getItem(CFG)||'{}')}catch(e){}return{url:c.url||window.VG_SUPABASE_URL||'',anon:c.anon||c.key||c.anon_key||window.VG_SUPABASE_ANON_KEY||''}}
+function getSB(){var c=readCfg();if(!window.supabase||!c.url||!c.anon)return null;var sig=c.url+'|'+String(c.anon).slice(0,18);if(!sbCache.client||sbCache.sig!==sig){sbCache.client=window.supabase.createClient(c.url,c.anon);sbCache.sig=sig}return sbCache.client}
+window.vgGetSB=getSB;window.getClient=getSB;
+function isMissingColumn(err){return err&&/schema cache|could not find|column .* does not exist|PGRST204/i.test(String(err.message||err.details||''))}
+function readJSON(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch(e){return f}}
+function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function loadSession(){return readJSON(SESSION_KEY,null)||readJSON(LEGACY_SESSION_KEY,null)||readJSON('vg_user',null)}
+function saveSession(s){if(!s)return;try{localStorage.setItem(SESSION_KEY,JSON.stringify(s));localStorage.setItem(LEGACY_SESSION_KEY,JSON.stringify(s));localStorage.setItem('vg_user',JSON.stringify(s))}catch(e){}window.vgCurrentUser=s;updateUserUI(s)}
+function updateUserUI(s){var g=$('#vgUserGreeting');if(g&&s&&s.name){g.style.display='flex';g.style.cursor='pointer';g.onclick=function(){if(window.openDashboard)window.openDashboard();else window.vgProOpen&&window.vgProOpen()}}var av=$('#vgUserAvatar');if(av&&s&&s.name)av.textContent=String(s.name).charAt(0).toUpperCase();var nm=$('#vgUserName');if(nm&&s&&s.name)nm.textContent=s.name;var link='https://vesselgames.xyz/?ref='+(s&&(s.referral_code||s.refCode||s.phone)||'');var box=$('#vgRefUserLinkBox'),lnk=$('#vgRefUserLink');if(box&&s)box.style.display='block';if(lnk&&s)lnk.textContent=link}
+function field(ids){for(var i=0;i<ids.length;i++){var el=$(ids[i]);if(el)return el}return null}
+function fieldVal(ids){var el=field(ids);return el?String(el.value||'').trim():''}
+async function sha256(text){if(!text)return '';if(window.crypto&&crypto.subtle){var data=new TextEncoder().encode(text);var buf=await crypto.subtle.digest('SHA-256',data);return Array.prototype.map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0')}).join('')}var h=0;for(var i=0;i<text.length;i++){h=((h<<5)-h)+text.charCodeAt(i);h|=0}return 'fallback_'+Math.abs(h)}
+function genCode(phone){return(String(phone||'').slice(-4)+Math.random().toString(36).slice(2,8)).toUpperCase().slice(0,8)}
+function normalizeUser(u){if(!u)return null;var w=Array.isArray(u.vg_token_wallet)?(u.vg_token_wallet[0]||{}):(u.vg_token_wallet||{});return Object.assign({},u,{tokens:Number(u.tokens!=null?u.tokens:(w.balance||0)),total_purchases:Number(u.total_purchases!=null?u.total_purchases:(w.total_purchases||0))})}
+async function fetchUserByPhone(phone){var sb=getSB();if(!sb)return null;var selects=['id,name,phone,referral_code,referred_by,tokens,total_purchases,password_hash,password_salt,referral_rewarded_at,created_at','id,name,phone,referral_code,referred_by,tokens,total_purchases,created_at','id,name,phone,referral_code,referred_by,created_at,vg_token_wallet(balance,total_purchases,total_earned)','*'];for(var i=0;i<selects.length;i++){var r=await sb.from('vg_users').select(selects[i]).eq('phone',phone).maybeSingle();if(!r.error)return normalizeUser(r.data);if(!isMissingColumn(r.error))throw r.error}return null}
+async function findReferrer(pendingRef){var sb=getSB();if(!sb||!pendingRef)return null;var r=await sb.from('vg_users').select('id,referral_code').eq('referral_code',String(pendingRef).trim()).maybeSingle();return r.data||null}
+async function insertUserVariant(payloads){var sb=getSB();if(!sb)return null;var lastErr=null;for(var i=0;i<payloads.length;i++){var r=await sb.from('vg_users').insert(payloads[i]).select('*').single();if(!r.error)return normalizeUser(r.data);lastErr=r.error;if(/duplicate key|23505/i.test(String(r.error.message||r.error.details||'')))return fetchUserByPhone(payloads[i].phone);if(!isMissingColumn(r.error)&&!/invalid input syntax|violates foreign key|22P02/i.test(String(r.error.message||r.error.details||'')))throw r.error}if(lastErr)throw lastErr;return null}
+async function createUser(name,phone,password){var sb=getSB();if(!sb)return{id:'local_'+Date.now(),name:name,phone:phone,tokens:0,total_purchases:0,referral_code:genCode(phone)};var existing=await fetchUserByPhone(phone);if(existing)return existing;var refCode=genCode(phone),pending=sessionStorage.getItem('vg_incoming_ref')||localStorage.getItem('vg_pending_ref')||'',referrer=await findReferrer(pending),salt=Math.random().toString(36).slice(2,12),pHash=password?await sha256(salt+'|'+password):'',base={name:name,phone:phone,referral_code:refCode},referredValue=referrer?(referrer.id||referrer.referral_code):'',variants=[];var full=Object.assign({},base,{tokens:0,total_purchases:0});if(referredValue)full.referred_by=referredValue;if(pHash){full.password_hash=pHash;full.password_salt=salt}variants.push(full);var noPass=Object.assign({},base,{tokens:0,total_purchases:0});if(referredValue)noPass.referred_by=referredValue;variants.push(noPass);var basic=Object.assign({},base);if(referredValue)basic.referred_by=referredValue;variants.push(basic);variants.push(Object.assign({},base));var user=await insertUserVariant(variants);try{await sb.from('vg_token_wallet').upsert({user_id:user.id,balance:0,total_purchases:0,total_earned:0},{onConflict:'user_id'})}catch(e){}localStorage.removeItem('vg_pending_ref');sessionStorage.removeItem('vg_incoming_ref');return user}
+function setAuthError(msg){var el=$('#vgAuthError')||$('#vgProAuthError')||$('#vgLoginError');if(!el){var host=$('#vgProLoginState .vg-pro-login-wrap')||$('#vgLoginModal .vg-pro-login-wrap')||$('#vgLoginModal .modal-body')||$('#vgProLoginState');if(host){el=document.createElement('div');el.id='vgAuthError';el.style.cssText='margin:10px 0;padding:10px 12px;border:1px solid rgba(255,77,125,.35);background:rgba(255,77,125,.10);color:#ff7090;border-radius:12px;font-size:.88rem';host.insertBefore(el,host.firstChild.nextSibling||host.firstChild)}}if(el){el.style.display=msg?'block':'none';el.textContent=msg||''}}
+async function stableAuth(){var phone=fieldVal(['#vgLoginPhone','#vgProPhone','input[name="phone"]','#phone']).replace(/\D/g,''),name=fieldVal(['#vgLoginName','#vgProName','input[name="name"]','#name']),pass=fieldVal(['#vgLoginPassword','#vgPassword','#vgProPassword','input[name="password"]']),pass2=fieldVal(['#vgLoginPassword2','#vgPasswordConfirm','#vgProPasswordConfirm','input[name="password_confirm"]']);if(!phone||phone.length<8){setAuthError('Ingresa un WhatsApp válido.');return}var nameWrap=$('#vgProNameWrap'),existing=null;try{existing=await fetchUserByPhone(phone)}catch(e){console.warn('fetch user failed',e)}if(existing){if(existing.password_hash&&pass){var h=await sha256((existing.password_salt||'')+'|'+pass);if(h!==existing.password_hash){setAuthError('Contraseña incorrecta.');return}}saveSession({id:existing.id,name:existing.name||name||'Cliente',phone:existing.phone||phone,tokens:Number(existing.tokens||0),total_purchases:Number(existing.total_purchases||0),referral_code:existing.referral_code||'',refCode:existing.referral_code||''});closeLoginModal();if(window.vgProClose)window.vgProClose();setAuthError('');toast('Bienvenido '+(existing.name||''));return}if(!name){if(nameWrap&&nameWrap.style.display==='none'){nameWrap.style.display='block';var b=$('#vgProLoginState .vg-pro-login-btn');if(b)b.textContent='Crear cuenta';return}setAuthError('Escribe tu nombre para crear la cuenta.');return}if(pass2&&pass&&pass!==pass2){setAuthError('Las contraseñas no coinciden.');return}if(pass&&pass.length<6){setAuthError('La contraseña debe tener mínimo 6 caracteres.');return}var btn=$('#vgLoginSubmitBtn')||$('#vgProLoginState .vg-pro-login-btn')||$('.vg-login-btn'),old=btn&&btn.textContent;if(btn){btn.disabled=true;btn.textContent='Creando cuenta...'}try{var user=await createUser(name,phone,pass);saveSession({id:user.id,name:user.name||name,phone:user.phone||phone,tokens:Number(user.tokens||0),total_purchases:Number(user.total_purchases||0),referral_code:user.referral_code||'',refCode:user.referral_code||''});closeLoginModal();if(window.vgProClose)window.vgProClose();setAuthError('');toast('Cuenta creada correctamente.')}catch(e){console.error(e);setAuthError('Error al registrar: '+(e.message||'Revisa el SQL de usuarios en Supabase.'))}finally{if(btn){btn.disabled=false;btn.textContent=old||'Crear cuenta gratis'}}}
+window.vgProLogin=stableAuth;window.vgLoginSave=stableAuth;window.vgProAuth=stableAuth;window.openLoginModal=function(){var m=$('#vgLoginModal')||$('#vgProModal');if(m){m.classList.add('active');document.body.style.overflow='hidden'}};window.closeLoginModal=function(){var m=$('#vgLoginModal')||$('#vgProModal');if(m){m.classList.remove('active');document.body.style.overflow=''}};
+async function safeReadUsers(){var sb=getSB();if(!sb)throw new Error('Supabase no configurado.');var selects=['id,name,phone,referral_code,referred_by,tokens,total_purchases,created_at','id,name,phone,referral_code,referred_by,created_at,vg_token_wallet(balance,total_purchases,total_earned)','*'];for(var i=0;i<selects.length;i++){var r=await sb.from('vg_users').select(selects[i]).order('created_at',{ascending:false}).limit(500);if(!r.error)return(r.data||[]).map(normalizeUser);if(!isMissingColumn(r.error))throw r.error}return[]}
+function renderUsers(users){var wrap=$('#vgUsersTableWrap'),tbody=$('#vgUsersTbody'),stats=$('#vgUsersStats');window.__vgUsersCacheV110=users;if(stats){var tk=users.reduce(function(s,u){return s+Number(u.tokens||0)},0),p=users.reduce(function(s,u){return s+Number(u.total_purchases||0)},0);stats.innerHTML='<div class="vg-dash-stat"><span class="vg-ds-icon">👥</span><span class="vg-ds-num">'+users.length+'</span><span class="vg-ds-lbl">Usuarios</span></div><div class="vg-dash-stat"><span class="vg-ds-icon">🪙</span><span class="vg-ds-num">'+tk.toFixed(1)+'</span><span class="vg-ds-lbl">Tokens</span></div><div class="vg-dash-stat"><span class="vg-ds-icon">🛒</span><span class="vg-ds-num">'+p+'</span><span class="vg-ds-lbl">Compras</span></div>'}if(!users.length){var empty='<div style="padding:26px;text-align:center;color:#8b93b0">No hay usuarios registrados.</div>';if(wrap)wrap.innerHTML=empty;if(tbody)tbody.innerHTML='<tr><td colspan="7" style="padding:26px;text-align:center;color:#8b93b0">No hay usuarios registrados.</td></tr>';return}var rows=users.map(function(u){return '<tr><td><b>'+esc(u.name||'Sin nombre')+'</b><br><small style="color:#8b93b0">'+esc(u.referral_code||'')+'</small></td><td>'+esc(u.phone||'')+'</td><td><b style="color:#19e6c1">'+Number(u.tokens||0).toFixed(1)+'</b></td><td>'+Number(u.total_purchases||0)+'</td><td>'+esc(u.referred_by||'—')+'</td><td>'+esc((u.created_at||'').split('T')[0]||'—')+'</td><td><input class="vg-te-input" id="vgTkAdj_'+esc(u.id)+'" type="number" step="0.5" placeholder="+/-"><button class="vg-te-save" data-uid="'+esc(u.id)+'" onclick="vgAdminAdjustTokensStable(this.dataset.uid)">Guardar</button></td></tr>'}).join('');if(wrap)wrap.innerHTML='<div class="vg-users-table-wrap"><table class="vg-users-table"><thead><tr><th>Usuario</th><th>WhatsApp</th><th>Tokens</th><th>Compras</th><th>Referido por</th><th>Registro</th><th>Ajuste</th></tr></thead><tbody>'+rows+'</tbody></table></div>';if(tbody)tbody.innerHTML=rows}
+window.vgAdminLoadUsers=window.vgLoadUsers=async function(){var wrap=$('#vgUsersTableWrap'),tbody=$('#vgUsersTbody');if(wrap)wrap.innerHTML='<div style="padding:26px;text-align:center;color:#8b93b0">Cargando usuarios...</div>';if(tbody)tbody.innerHTML='<tr><td colspan="7" style="padding:26px;text-align:center;color:#8b93b0">Cargando usuarios...</td></tr>';try{renderUsers(await safeReadUsers())}catch(e){var msg='Error cargando usuarios: '+(e.message||e);if(wrap)wrap.innerHTML='<div style="padding:24px;color:#ff7090">'+esc(msg)+'</div>';if(tbody)tbody.innerHTML='<tr><td colspan="7" style="padding:24px;text-align:center;color:#ff7090">'+esc(msg)+'</td></tr>'}};
+window.vgFilterUsers=function(q){q=String(q||($('#vgUserSearch')&&$('#vgUserSearch').value)||($('#vgUsersSearch')&&$('#vgUsersSearch').value)||'').toLowerCase();var all=window.__vgUsersCacheV110||[];renderUsers(all.filter(function(u){return !q||String(u.name||'').toLowerCase().includes(q)||String(u.phone||'').includes(q)||String(u.referral_code||'').toLowerCase().includes(q)}))};
+window.vgAdminAdjustTokensStable=async function(userId){var sb=getSB();if(!sb)return alert('Supabase no configurado.');var input=$('#vgTkAdj_'+CSS.escape(userId)),delta=Number(input&&input.value||0);if(!delta)return alert('Ingresa tokens a sumar/restar.');var users=window.__vgUsersCacheV110||[],u=users.find(function(x){return String(x.id)===String(userId)}),newTk=Math.max(0,Number(u&&u.tokens||0)+delta);var r=await sb.from('vg_users').update({tokens:newTk}).eq('id',userId);if(r.error&&isMissingColumn(r.error)){r=await sb.from('vg_token_wallet').upsert({user_id:userId,balance:newTk},{onConflict:'user_id'})}if(r.error)return alert(r.error.message);try{await sb.from('vg_token_log').insert({user_id:userId,amount:delta,type:'admin',description:'Ajuste manual admin'})}catch(e){}if(input)input.value='';window.vgAdminLoadUsers()};
+function awardSet(key){var a=readJSON(AWARD_KEY,[]);if(a.indexOf(key)>=0)return false;a.push(key);if(a.length>500)a=a.slice(-500);writeJSON(AWARD_KEY,a);return true}function refSet(key){var a=readJSON(REF_AWARD_KEY,[]);if(a.indexOf(key)>=0)return false;a.push(key);if(a.length>500)a=a.slice(-500);writeJSON(REF_AWARD_KEY,a);return true}
+async function getCurrentUser(){var s=loadSession();if(!s||!s.phone)return s;try{var u=await fetchUserByPhone(s.phone);if(u){s=Object.assign({},s,{id:u.id,name:u.name||s.name,phone:u.phone||s.phone,tokens:Number(u.tokens||0),total_purchases:Number(u.total_purchases||0),referral_code:u.referral_code||s.referral_code||s.refCode||'',refCode:u.referral_code||s.refCode||'',referred_by:u.referred_by});saveSession(s)}}catch(e){}return s}
+window.vgAwardTokens=async function(orderId,orderTotal){var s=await getCurrentUser();if(!s||!s.id)return;var sb=getSB(),orderKey=String(orderId||'manual-'+Date.now()),purchaseKey='purchase:'+s.id+':'+orderKey;if(!awardSet(purchaseKey))return;var old=Number(s.tokens||0),newBal=old+0.5,newP=Number(s.total_purchases||s.purchases||0)+1;if(sb&&!String(s.id).startsWith('local_')){var upd=await sb.from('vg_users').update({tokens:newBal,total_purchases:newP}).eq('id',s.id);if(upd.error&&isMissingColumn(upd.error)){try{await sb.from('vg_token_wallet').upsert({user_id:s.id,balance:newBal,total_purchases:newP,total_earned:newBal},{onConflict:'user_id'})}catch(e){}}try{await sb.from('vg_token_log').insert({user_id:s.id,amount:0.5,type:'purchase',description:'Compra completada',order_id:orderKey})}catch(e){}try{await sb.from('vg_token_tx').insert({user_id:s.id,amount:0.5,type:'purchase',description:'Compra completada',order_id:orderKey})}catch(e){}try{await awardReferralOnce(sb,s,orderKey)}catch(e){console.warn('referral award skipped',e)}}s.tokens=newBal;s.total_purchases=newP;s.purchases=newP;saveSession(s);toast('+0.5 tokens acreditados.')};
+async function awardReferralOnce(sb,s,orderKey){if(!s||!s.id)return;var u=await fetchUserByPhone(s.phone);if(!u||!u.referred_by)return;var refVal=String(u.referred_by),refKey='referral:'+refVal+':'+s.id;if(!refSet(refKey))return;var ref=null;if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(refVal)){var r1=await sb.from('vg_users').select('id,tokens').eq('id',refVal).maybeSingle();ref=r1.data}if(!ref){var r2=await sb.from('vg_users').select('id,tokens').eq('referral_code',refVal).maybeSingle();ref=r2.data}if(!ref||!ref.id)return;var stableOrder='referral:'+s.id;try{var exists=await sb.from('vg_token_log').select('id').eq('user_id',ref.id).eq('type','referral').eq('order_id',stableOrder).limit(1);if(exists.data&&exists.data.length)return}catch(e){}var newTk=Number(ref.tokens||0)+1,upd=await sb.from('vg_users').update({tokens:newTk}).eq('id',ref.id);if(upd.error&&isMissingColumn(upd.error)){try{await sb.from('vg_token_wallet').upsert({user_id:ref.id,balance:newTk},{onConflict:'user_id'})}catch(e){}}try{await sb.from('vg_token_log').insert({user_id:ref.id,amount:1,type:'referral',description:'Referido: '+(s.name||s.phone),order_id:stableOrder})}catch(e){}try{await sb.from('vg_token_tx').insert({user_id:ref.id,amount:1,type:'referral',description:'Referido: '+(s.name||s.phone),order_id:stableOrder})}catch(e){}}
+function updateSchemaSQL(){var sql='-- VG USERS / REFERIDOS / TOKENS — esquema compatible v110\nCREATE TABLE IF NOT EXISTS public.vg_users (\n  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,\n  name TEXT NOT NULL,\n  phone TEXT UNIQUE NOT NULL,\n  referral_code TEXT UNIQUE DEFAULT upper(substring(replace(gen_random_uuid()::text,\'-\',\'\'),1,8)),\n  referred_by TEXT,\n  tokens NUMERIC(10,1) DEFAULT 0,\n  total_purchases INTEGER DEFAULT 0,\n  password_hash TEXT,\n  password_salt TEXT,\n  referral_rewarded_at TIMESTAMPTZ,\n  created_at TIMESTAMPTZ DEFAULT NOW()\n);\n\nALTER TABLE public.vg_users ADD COLUMN IF NOT EXISTS tokens NUMERIC(10,1) DEFAULT 0;\nALTER TABLE public.vg_users ADD COLUMN IF NOT EXISTS total_purchases INTEGER DEFAULT 0;\nALTER TABLE public.vg_users ADD COLUMN IF NOT EXISTS password_hash TEXT;\nALTER TABLE public.vg_users ADD COLUMN IF NOT EXISTS password_salt TEXT;\nALTER TABLE public.vg_users ADD COLUMN IF NOT EXISTS referral_rewarded_at TIMESTAMPTZ;\nALTER TABLE public.vg_users ADD COLUMN IF NOT EXISTS referred_by TEXT;\n\nCREATE TABLE IF NOT EXISTS public.vg_token_log (\n  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,\n  user_id UUID REFERENCES public.vg_users(id) ON DELETE CASCADE,\n  amount NUMERIC(10,1) NOT NULL,\n  type TEXT NOT NULL,\n  description TEXT,\n  order_id TEXT,\n  created_at TIMESTAMPTZ DEFAULT NOW()\n);\nCREATE UNIQUE INDEX IF NOT EXISTS vg_referral_once_per_user ON public.vg_token_log(user_id,type,order_id) WHERE type=\'referral\';\nALTER TABLE public.vg_users ENABLE ROW LEVEL SECURITY;\nALTER TABLE public.vg_token_log ENABLE ROW LEVEL SECURITY;\nDROP POLICY IF EXISTS vg_users_anon_all ON public.vg_users;\nCREATE POLICY vg_users_anon_all ON public.vg_users FOR ALL TO anon USING (true) WITH CHECK (true);\nDROP POLICY IF EXISTS vg_token_log_anon_all ON public.vg_token_log;\nCREATE POLICY vg_token_log_anon_all ON public.vg_token_log FOR ALL TO anon USING (true) WITH CHECK (true);\n';window.VG_USERS_SCHEMA_SQL=sql;var el=$('#vgSqlSchema');if(el)el.textContent=sql}
+function syncNavHeight(){var nav=$('.topbar');if(!nav)return;document.documentElement.style.setProperty('--vg-nav-height',Math.ceil(nav.getBoundingClientRect().height)+'px')}function initSmartNav(){var nav=$('.topbar');if(!nav)return;var last=window.scrollY||0,ticking=false,locked=false;function show(){nav.classList.remove('vg-nav-hidden');nav.classList.add('vg-nav-visible')}function hide(){if(locked)return;nav.classList.add('vg-nav-hidden');nav.classList.remove('vg-nav-visible')}function onScroll(){var y=window.scrollY||0;if(!ticking){requestAnimationFrame(function(){var diff=y-last;if(y<20||diff<-6)show();else if(diff>8&&y>nav.offsetHeight+40)hide();last=y;ticking=false});ticking=true}}window.addEventListener('scroll',onScroll,{passive:true});document.addEventListener('focusin',function(e){if(e.target&&e.target.matches&&e.target.matches('input,textarea,select,.searchbar input')){locked=true;show()}},true);document.addEventListener('focusout',function(){setTimeout(function(){locked=false},180)},true);document.addEventListener('input',function(e){if(e.target&&e.target.matches&&e.target.matches('.searchbar input,#searchInput,input[type="search"]'))show()},true);show();syncNavHeight();window.addEventListener('resize',syncNavHeight,{passive:true});setTimeout(syncNavHeight,700)}
+document.addEventListener('click',function(e){var tab=e.target.closest&&e.target.closest('.vg-admin-tab');if(tab&&tab.dataset.tab==='usuarios')setTimeout(window.vgAdminLoadUsers,120)},true);
+document.addEventListener('DOMContentLoaded',function(){updateUserUI(loadSession());updateSchemaSQL();initSmartNav();var b=$('#vgLoginSubmitBtn')||$('.vg-login-btn')||$('#vgProLoginState .vg-pro-login-btn');if(b)b.onclick=stableAuth});
+window.addEventListener('load',function(){updateUserUI(loadSession());updateSchemaSQL();initSmartNav()});
 })();
 </script>
 
