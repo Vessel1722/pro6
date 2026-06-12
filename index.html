@@ -22944,5 +22944,237 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- VG PATCH: session navbar dedupe + persistent auth guard -->
+<style id="vg-session-navbar-dedupe-css">
+  /* Mantiene la estructura existente, pero evita mostrar dos nombres de usuario en la navbar. */
+  .topbar #vgUserGreeting.vg-legacy-user-hidden,
+  .topbar .vg-user-greeting.vg-legacy-user-hidden{
+    display:none !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+</style>
+<script id="vg-session-navbar-dedupe-js">
+(function(){
+  'use strict';
+  if(window.__vgSessionNavbarDedupeV1) return;
+  window.__vgSessionNavbarDedupeV1 = true;
+
+  var AUTH_KEY = 'vg_auth_session_v1';
+  var PRO_KEY  = 'vg_pro_session_v2';
+  var OLD_PRO  = 'vg_pro_session';
+  var LEGACY   = 'vg_user';
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function readJSON(key){
+    try{
+      var raw = localStorage.getItem(key);
+      if(!raw || raw === 'null' || raw === 'undefined') return null;
+      return JSON.parse(raw);
+    }catch(e){ return null; }
+  }
+  function normalizeSession(s){
+    if(!s || typeof s !== 'object') return null;
+    var name = String(s.name || s.customer_name || s.client_name || '').trim();
+    var phone = String(s.phone || s.customer_phone || s.client_phone || '').replace(/\D/g,'');
+    if(!name && !phone) return null;
+    return {
+      id: s.id || s.user_id || s.uuid || null,
+      name: name || 'Usuario',
+      phone: phone,
+      tokens: Number(s.tokens || s.balance || 0),
+      total_purchases: Number(s.total_purchases || 0),
+      referral_code: s.referral_code || s.ref || phone || '',
+      ts: s.ts || Date.now()
+    };
+  }
+  function getUnifiedSession(){
+    return normalizeSession(readJSON(AUTH_KEY)) ||
+           normalizeSession(readJSON(PRO_KEY))  ||
+           normalizeSession(readJSON(OLD_PRO))  ||
+           normalizeSession(readJSON(LEGACY));
+  }
+  function persistSession(s){
+    s = normalizeSession(s);
+    if(!s) return null;
+    try{
+      localStorage.setItem(AUTH_KEY, JSON.stringify(s));
+      localStorage.setItem(PRO_KEY, JSON.stringify(s));
+      localStorage.setItem(OLD_PRO, JSON.stringify(s));
+      localStorage.setItem(LEGACY, JSON.stringify({ name:s.name, phone:s.phone, ts:s.ts || Date.now() }));
+      localStorage.setItem('vg_login_skip', Date.now().toString());
+    }catch(e){}
+    return s;
+  }
+  function clearAllSessions(){
+    [AUTH_KEY, PRO_KEY, OLD_PRO, LEGACY].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+  }
+
+  function renderSingleAccountUI(){
+    var session = persistSession(getUnifiedSession());
+    var accountBtn = qs('#vg-account-btn');
+    var abAvatar = qs('#vgAbAvatar');
+    var abLabel = qs('#vgAbLabel');
+    var legacy = qs('#vgUserGreeting');
+    var legacyName = qs('#vgUserName');
+    var legacyAvatar = qs('#vgUserAvatar');
+
+    if(accountBtn){
+      if(session){
+        if(abAvatar) abAvatar.textContent = session.name.charAt(0).toUpperCase();
+        if(abLabel) abLabel.textContent = session.name;
+        accountBtn.title = 'Ver mi cuenta';
+        accountBtn.style.borderColor = 'rgba(25,230,193,.45)';
+        accountBtn.style.background = 'rgba(25,230,193,.10)';
+        accountBtn.style.color = '#19e6c1';
+      }else{
+        if(abAvatar) abAvatar.textContent = '?';
+        if(abLabel) abLabel.textContent = 'Mi cuenta';
+        accountBtn.title = 'Mi cuenta';
+        accountBtn.removeAttribute('style');
+      }
+    }
+
+    /* Canonical UI: #vg-account-btn. Legacy greeting remains in DOM for compatibility, but does not render duplicate text. */
+    if(legacy && accountBtn){
+      legacy.classList.add('vg-legacy-user-hidden');
+      legacy.setAttribute('aria-hidden','true');
+      legacy.style.display = 'none';
+      if(legacyName) legacyName.textContent = '';
+      if(legacyAvatar) legacyAvatar.textContent = session ? session.name.charAt(0).toUpperCase() : '?';
+    }else if(legacy){
+      if(session){
+        legacy.classList.remove('vg-legacy-user-hidden');
+        legacy.removeAttribute('aria-hidden');
+        legacy.style.display = 'flex';
+        if(legacyName) legacyName.textContent = session.name;
+        if(legacyAvatar) legacyAvatar.textContent = session.name.charAt(0).toUpperCase();
+      }else{
+        legacy.style.display = 'none';
+      }
+    }
+  }
+
+  function openExistingDashboard(session){
+    session = persistSession(session || getUnifiedSession());
+    if(!session) return false;
+
+    /* Prefer the existing user dashboard if present. Do not call old login fallback when session exists. */
+    var dash = qs('#vgUserDashModal');
+    if(dash){
+      dash.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      var av = qs('#vgDashAvatar'); if(av) av.textContent = session.name.charAt(0).toUpperCase();
+      var nm = qs('#vgDashName'); if(nm) nm.textContent = session.name;
+      var ph = qs('#vgDashPhone'); if(ph) ph.textContent = session.phone ? ('Tel: ' + session.phone) : '';
+      var tk = qs('#vgDashTokensBadge'); if(tk) tk.textContent = session.tokens || 0;
+      var tb = qs('#vgDashTokensBig'); if(tb) tb.textContent = session.tokens || 0;
+      var rc = qs('#vgDashRefCode'); if(rc) rc.textContent = session.referral_code || '—';
+      if(typeof window.loadDashboard === 'function'){
+        try{ window.loadDashboard(); }catch(e){}
+      }
+      return true;
+    }
+
+    if(typeof window.vgProOpen === 'function'){
+      try{ window.vgProOpen(); return true; }catch(e){}
+    }
+    return false;
+  }
+
+  function openAuthIfNeeded(){
+    var session = persistSession(getUnifiedSession());
+    renderSingleAccountUI();
+    if(session){
+      openExistingDashboard(session);
+      return;
+    }
+    var auth = qs('#vgAuthModal');
+    if(auth){ auth.classList.add('active'); return; }
+    var old = qs('#vgLoginModal');
+    if(old) old.classList.add('active');
+  }
+
+  function bindAccountButtons(){
+    var accountBtn = qs('#vg-account-btn');
+    if(accountBtn && !accountBtn.dataset.vgSessionBound){
+      accountBtn.dataset.vgSessionBound = '1';
+      accountBtn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        openAuthIfNeeded();
+      }, true);
+    }
+    var legacy = qs('#vgUserGreeting');
+    if(legacy && !legacy.dataset.vgSessionBound){
+      legacy.dataset.vgSessionBound = '1';
+      legacy.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        openAuthIfNeeded();
+      }, true);
+    }
+  }
+
+  function wrapAfter(fnName){
+    var original = window[fnName];
+    if(typeof original !== 'function' || original.__vgSessionWrapped) return;
+    window[fnName] = function(){
+      var result = original.apply(this, arguments);
+      var finish = function(){ setTimeout(function(){ persistSession(getUnifiedSession()); renderSingleAccountUI(); bindAccountButtons(); }, 80); };
+      if(result && typeof result.then === 'function') result.then(finish).catch(finish);
+      else finish();
+      return result;
+    };
+    window[fnName].__vgSessionWrapped = true;
+  }
+
+  var oldLogout = window.vgLogout;
+  window.vgLogout = function(){
+    clearAllSessions();
+    if(typeof oldLogout === 'function'){
+      try{ oldLogout.apply(this, arguments); }catch(e){}
+    }
+    renderSingleAccountUI();
+  };
+
+  var oldOpenAuth = window.vgOpenAuth;
+  window.vgOpenAuth = function(){
+    var session = persistSession(getUnifiedSession());
+    renderSingleAccountUI();
+    if(session){ openExistingDashboard(session); return; }
+    if(typeof oldOpenAuth === 'function') return oldOpenAuth.apply(this, arguments);
+    openAuthIfNeeded();
+  };
+
+  var oldOpenDashboard = window.openDashboard;
+  window.openDashboard = function(){
+    var session = persistSession(getUnifiedSession());
+    if(session){
+      if(openExistingDashboard(session)) return;
+    }
+    if(typeof oldOpenDashboard === 'function') return oldOpenDashboard.apply(this, arguments);
+    openAuthIfNeeded();
+  };
+
+  function init(){
+    persistSession(getUnifiedSession());
+    renderSingleAccountUI();
+    bindAccountButtons();
+    ['vgAuthRegister','vgAuthLogin','vgLoginSave','vgProLogin','vgRefreshAccountBtn'].forEach(wrapAfter);
+    setTimeout(function(){ renderSingleAccountUI(); bindAccountButtons(); }, 500);
+    setTimeout(function(){ renderSingleAccountUI(); bindAccountButtons(); }, 1500);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.addEventListener('storage', function(e){
+    if([AUTH_KEY,PRO_KEY,OLD_PRO,LEGACY].indexOf(e.key) !== -1) init();
+  });
+  window.vgFixAccountSessionRender = init;
+})();
+</script>
+
 </body>
 </html>
