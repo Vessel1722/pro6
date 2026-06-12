@@ -12748,10 +12748,6 @@ body.vg-light .option{background:rgba(0,0,0,.03) !important;border-color:rgba(0,
 body.vg-light .vg-faq-item{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.08) !important}
 body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-light .condition-card{background:#fff !important;border-color:rgba(0,0,0,.08) !important}
 /* toggle button */
-#vg-theme-btn{height:40px;width:40px;border:1px solid var(--c-border);background:rgba(255,255,255,.055);
-  border-radius:var(--r-md);cursor:pointer;display:grid;place-items:center;font-size:1rem;transition:all .2s;color:var(--c-text)}
-#vg-theme-btn:hover{border-color:var(--c-border-hi);background:var(--c-teal-dim)}
-
 /* ── CARD ENTRANCE ANIMATION ── */
 @keyframes vg-fade-up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 .vg-animate-in{animation:vg-fade-up .45s cubic-bezier(.25,.46,.45,.94) both}
@@ -13846,7 +13842,6 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
 
 </div>
 <div class="vg-user-greeting" id="vgUserGreeting" onclick="vgProOpen()" style="cursor:pointer" title="Ver mi perfil"><div class="vg-user-avatar" id="vgUserAvatar">?</div><span class="vg-user-name" id="vgUserName"></span></div>
-<button id="vg-theme-btn" onclick="vgToggleTheme()" title="Cambiar tema">🌙</button>
 <button id="vg-account-btn" onclick="vgOpenAuth()" title="Mi cuenta"><span class="vg-ab-avatar" id="vgAbAvatar">?</span><span id="vgAbLabel">Mi cuenta</span></button>
 <button class="pill cart-pill" onclick="openCart()">🛒 Carrito <span class="cart-count" id="cartCount">0</span></button></div>
     </div>
@@ -14247,50 +14242,6 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
   <div id="vgToast"><div class="vg-toast-icon">✓</div><div class="vg-toast-text"><b>Agregado al carrito</b><span>Puedes seguir comprando sin abrir el carrito.</span></div></div>
 
 
-  <!-- REFERRAL PROGRAM BANNER -->
-  <section class="vg-ref-banner">
-    <div class="vg-ref-banner-inner">
-      <div class="vg-ref-banner-head">
-        <div class="badge">Programa de Referidos</div>
-        <h2>Comparte y <span>gana tokens</span></h2>
-        <p>Invita a tus amigos al catalogo digital. Cada vez que alguien compre usando tu enlace, tu recibes 1 token automaticamente.</p>
-      </div>
-      <div class="vg-ref-flow">
-        <div class="vg-ref-flow-step">
-          <span class="vg-rf-num">1</span>
-          <div class="vg-rf-icon">🔗</div>
-          <h4>Copia tu enlace</h4>
-          <p>Cada cuenta tiene un link unico e intransferible generado automaticamente</p>
-        </div>
-        <div class="vg-ref-flow-step">
-          <span class="vg-rf-num">2</span>
-          <div class="vg-rf-icon">🛒</div>
-          <h4>Tu amigo compra</h4>
-          <p>Cuando completa su primera compra a traves de tu enlace, el sistema lo registra</p>
-        </div>
-        <div class="vg-ref-flow-step">
-          <span class="vg-rf-num">3</span>
-          <div class="vg-rf-icon">🪙</div>
-          <h4>Recibes 1 token</h4>
-          <p>El token se acredita en tu wallet automaticamente al confirmar el pago del referido</p>
-        </div>
-      </div>
-      <div class="vg-reward-catalog">
-        <h3>Canjea tus tokens por servicios de streaming</h3>
-        <div class="vg-reward-row">
-          <div class="vg-reward-chip"><span class="rc-logo">📺</span><div class="rc-info"><b>VIX+</b><span>5 tokens</span></div></div>
-          <div class="vg-reward-chip"><span class="rc-logo">⭐</span><div class="rc-info"><b>Paramount+</b><span>7 tokens</span></div></div>
-          <div class="vg-reward-chip"><span class="rc-logo">🎬</span><div class="rc-info"><b>MAX</b><span>9 tokens</span></div></div>
-          <div class="vg-reward-chip"><span class="rc-logo">🌸</span><div class="rc-info"><b>Crunchyroll</b><span>10 tokens</span></div></div>
-          <div class="vg-reward-chip"><span class="rc-logo">🎥</span><div class="rc-info"><b>Netflix</b><span>20 tokens</span></div></div>
-        </div>
-        <div class="vg-ref-cta">
-          <button class="vg-ref-cta-btn" onclick="vgProOpen()">Obtener mi enlace de referido</button>
-          <p>Crea tu cuenta gratis en menos de 30 segundos</p>
-        </div>
-      </div>
-    </div>
-  </section>
   <footer>
     <div class="vg-clean-footer">
       <div>
@@ -20479,16 +20430,6 @@ function qsa(s,r){return [...(r||document).querySelectorAll(s)]}
 function fmt(n){return '$'+Number(n||0).toLocaleString('es-MX',{maximumFractionDigits:0})+' MXN'}
 function tabIs(el,name){var t=el&&el.closest&&el.closest('.vg-admin-tab');return t&&t.dataset.tab===name}
 
-/* ── DARK / LIGHT MODE ── */
-var theme=localStorage.getItem('vg_theme')||'dark';
-function applyTheme(t){
-  theme=t; document.body.classList.toggle('vg-light',t==='light');
-  var btn=qs('#vg-theme-btn'); if(btn)btn.textContent=t==='light'?'':'';
-  localStorage.setItem('vg_theme',t);
-}
-window.vgToggleTheme=function(){applyTheme(theme==='dark'?'light':'dark');};
-document.addEventListener('DOMContentLoaded',function(){applyTheme(theme);});
-
 /* ── LOGIN ── */
 var vgUser=null;
 try{vgUser=JSON.parse(localStorage.getItem('vg_user')||'null');}catch(e){}
@@ -23497,5 +23438,301 @@ window.addEventListener('DOMContentLoaded', function(){
   }, true);
 })();
 </script>
+
+
+<!-- VG FINAL PATCH: modal sizing + rewards redeem + footer/theme cleanup -->
+<style id="vg-modal-rewards-footer-final-css">
+  /* Producto: modal más grande, sin cortes y con imagen proporcional */
+  .modal.active{align-items:center!important;justify-content:center!important;padding:18px!important;}
+  .modal-card:not(.retro-modal-card){
+    width:min(1380px,96vw)!important;
+    max-width:min(1380px,96vw)!important;
+    height:min(880px,94dvh)!important;
+    max-height:94dvh!important;
+    display:grid!important;
+    grid-template-columns:minmax(430px,44%) minmax(0,1fr)!important;
+    overflow:hidden!important;
+    border-radius:28px!important;
+  }
+  .modal-img{
+    min-height:0!important;
+    height:100%!important;
+    max-height:94dvh!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:#080b13!important;
+    overflow:hidden!important;
+  }
+  .modal-img img{
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    padding:16px!important;
+  }
+  .modal-body{
+    min-width:0!important;
+    min-height:0!important;
+    height:100%!important;
+    max-height:94dvh!important;
+    overflow-y:auto!important;
+    padding:28px!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  #modalOptions{max-height:none!important;overflow:visible!important;}
+  .modal-actions{
+    position:sticky!important;
+    bottom:0!important;
+    z-index:8!important;
+    margin-top:auto!important;
+    padding:16px 0 0!important;
+    background:linear-gradient(180deg,rgba(14,18,32,0),#0e1220 34%)!important;
+    display:flex!important;
+    gap:12px!important;
+    flex-wrap:wrap!important;
+  }
+  .modal-actions .primary,
+  .modal-actions .secondary,
+  .modal-actions .whatsapp{
+    min-height:48px!important;
+    white-space:normal!important;
+    flex:1 1 190px!important;
+  }
+  @media(max-width:900px){
+    .modal.active{padding:0!important;align-items:stretch!important;}
+    .modal-card:not(.retro-modal-card){
+      width:100vw!important;
+      height:100dvh!important;
+      max-width:100vw!important;
+      max-height:100dvh!important;
+      border-radius:0!important;
+      grid-template-columns:1fr!important;
+      grid-template-rows:minmax(230px,34dvh) 1fr!important;
+    }
+    .modal-img{height:34dvh!important;min-height:230px!important;max-height:34dvh!important;}
+    .modal-img img{padding:10px!important;}
+    .modal-body{height:auto!important;max-height:66dvh!important;padding:16px!important;}
+    .modal-actions{gap:10px!important;padding-top:14px!important;}
+    .modal-actions .primary,.modal-actions .secondary,.modal-actions .whatsapp{flex:1 1 100%!important;width:100%!important;}
+  }
+  @media(max-width:480px){
+    .modal-card:not(.retro-modal-card){grid-template-rows:210px 1fr!important;}
+    .modal-img{height:210px!important;min-height:210px!important;max-height:210px!important;}
+    .modal-body{max-height:calc(100dvh - 210px)!important;}
+  }
+
+  /* Limpieza: cualquier control residual de cambio de tema/color queda fuera de la UI */
+  #vg-theme-btn,
+  [onclick*="vgToggleTheme"],
+  [data-theme-toggle],
+  [data-color-toggle],
+  .theme-toggle,
+  .color-toggle,
+  .palette-toggle{display:none!important;}
+
+  /* Canjear premios en Mi Cuenta */
+  #vgUserDashModal .vg-dash-card{max-height:92dvh!important;overflow:hidden!important;}
+  #vgUserDashModal .vg-dash-section{max-height:calc(92dvh - 210px);overflow-y:auto;}
+  .vg-redeem-summary-final{
+    display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+    padding:16px;border:1px solid rgba(214,168,79,.28);border-radius:20px;
+    background:linear-gradient(135deg,rgba(214,168,79,.14),rgba(25,230,193,.06));
+    margin-bottom:16px;
+  }
+  .vg-redeem-summary-final b{display:block;color:#fff;font-size:1rem;margin-bottom:4px;}
+  .vg-redeem-summary-final span{color:#8b93b0;font-size:.84rem;}
+  .vg-redeem-token-final{font-size:2.4rem;line-height:1;font-weight:950;color:#d6a84f;text-align:center;}
+  .vg-redeem-grid-final{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
+  .vg-redeem-card-final{
+    border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);border-radius:18px;
+    padding:14px;text-align:center;cursor:pointer;transition:.18s ease;min-height:148px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  }
+  .vg-redeem-card-final:hover{transform:translateY(-2px);border-color:rgba(25,230,193,.38);background:rgba(25,230,193,.08);}
+  .vg-redeem-card-final.locked{opacity:.46;cursor:not-allowed;filter:saturate(.65);}
+  .vg-redeem-card-final.locked:hover{transform:none;border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.045);}
+  .vg-redeem-icon-final{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#8b5cf6,#19e6c1);color:#06110f;font-weight:950;font-size:1.1rem;}
+  .vg-redeem-name-final{font-weight:950;color:#fff;font-size:.9rem;line-height:1.15;}
+  .vg-redeem-cost-final{color:#d6a84f;font-weight:950;font-size:.82rem;}
+  .vg-redeem-help-final{margin:14px 0 0;color:#8b93b0;font-size:.82rem;line-height:1.45;}
+  @media(max-width:760px){
+    .vg-redeem-summary-final{grid-template-columns:1fr;}
+    .vg-redeem-token-final{text-align:left;}
+    .vg-redeem-grid-final{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+</style>
+<script id="vg-modal-rewards-footer-final-js">
+(function(){
+  'use strict';
+  if(window.__vgModalRewardsFooterFinal) return;
+  window.__vgModalRewardsFooterFinal = true;
+
+  var SESSION_KEYS = ['vg_auth_session_v1','vg_pro_session_v2','vg_pro_session','vg_user'];
+  var REWARDS = [
+    {id:'vix', name:'VIX', cost:5, icon:'V'},
+    {id:'paramount', name:'Paramount+', cost:7, icon:'P'},
+    {id:'max', name:'MAX', cost:9, icon:'M'},
+    {id:'crunchyroll', name:'Crunchyroll', cost:10, icon:'C'},
+    {id:'netflix', name:'Netflix', cost:20, icon:'N'}
+  ];
+  window.REDEEM_CATALOG = window.REDEEM_CATALOG || REWARDS;
+
+  function qs(sel,root){return (root||document).querySelector(sel);} 
+  function qsa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel));}
+  function esc(v){return String(v == null ? '' : v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
+  function parse(k){try{var raw=localStorage.getItem(k); return raw && raw !== 'undefined' && raw !== 'null' ? JSON.parse(raw) : null;}catch(e){return null;}}
+  function normalize(s){
+    if(!s || typeof s !== 'object') return null;
+    var name = String(s.name || s.customer_name || s.client_name || '').trim();
+    var phone = String(s.phone || s.customer_phone || s.client_phone || '').replace(/\D/g,'');
+    if(!name && !phone) return null;
+    return {
+      id:s.id || s.user_id || s.uuid || null,
+      name:name || 'Usuario',
+      phone:phone || '',
+      tokens:Number(s.tokens != null ? s.tokens : (s.balance || 0)),
+      total_purchases:Number(s.total_purchases != null ? s.total_purchases : (s.purchases || 0)),
+      referral_code:s.referral_code || s.refCode || s.ref || '',
+      ts:s.ts || Date.now()
+    };
+  }
+  function getSession(){for(var i=0;i<SESSION_KEYS.length;i++){var s=normalize(parse(SESSION_KEYS[i])); if(s) return s;} return null;}
+  function saveSession(s){
+    s = normalize(s); if(!s) return null;
+    try{
+      localStorage.setItem('vg_auth_session_v1', JSON.stringify(s));
+      localStorage.setItem('vg_pro_session_v2', JSON.stringify(s));
+      localStorage.setItem('vg_pro_session', JSON.stringify(s));
+      localStorage.setItem('vg_user', JSON.stringify({name:s.name,phone:s.phone,ts:s.ts||Date.now()}));
+    }catch(e){}
+    return s;
+  }
+  function client(){
+    if(typeof window.getSB === 'function'){try{var a=window.getSB(); if(a) return a;}catch(e){}}
+    if(typeof window.getClient === 'function'){try{var b=window.getClient(); if(b) return b;}catch(e){}}
+    try{var cfg=JSON.parse(localStorage.getItem('vg_supabase_cfg_v1')||'{}'); var url=cfg.url||window.VG_SUPABASE_URL||''; var anon=cfg.anon||cfg.key||cfg.anon_key||window.VG_SUPABASE_ANON_KEY||''; if(url&&anon&&window.supabase&&window.supabase.createClient) return window.supabase.createClient(url,anon);}catch(e){}
+    return null;
+  }
+  function toast(msg){ if(typeof window.showToast === 'function') window.showToast(msg); else alert(msg); }
+  function withTimeout(p,ms,label){return new Promise(function(resolve,reject){var done=false;var t=setTimeout(function(){if(!done){done=true;reject(new Error((label||'Operación')+' tardó demasiado'));}},ms||9000);Promise.resolve(p).then(function(v){if(!done){done=true;clearTimeout(t);resolve(v);}},function(e){if(!done){done=true;clearTimeout(t);reject(e);}});});}
+  function updateTokenUI(s){
+    s = saveSession(s || getSession()); if(!s) return;
+    var val = Number(s.tokens||0).toFixed(1).replace('.0','');
+    ['#vgDashTokensBadge','#vgDashTokensBig'].forEach(function(id){var el=qs(id); if(el) el.textContent=val;});
+    var wb=qs('#vgWalletTokensBig'); if(wb) wb.textContent=Number(s.tokens||0).toFixed(1);
+    var rb=qs('#vgRedeemBalanceFinal'); if(rb) rb.textContent=val;
+    var av=qs('#vgAbAvatar'); if(av) av.textContent=(s.name||'U').charAt(0).toUpperCase();
+    var lab=qs('#vgAbLabel'); if(lab) lab.textContent=s.name || 'Mi cuenta';
+  }
+
+  function ensureRedeemSection(){
+    var modal = qs('#vgUserDashModal'); if(!modal) return;
+    var tabs = qs('.vg-dash-tabs', modal);
+    if(tabs && !qs('[data-dt="redeem"]', tabs)){
+      var btn=document.createElement('button');
+      btn.className='vg-dt'; btn.type='button'; btn.setAttribute('data-dt','redeem'); btn.textContent='Canjear Premios';
+      tabs.insertBefore(btn, qs('[data-dt="referral"]', tabs) || null);
+    }
+    if(!qs('#vgDashRedeem', modal)){
+      var sec=document.createElement('div');
+      sec.className='vg-dash-section'; sec.id='vgDashRedeem';
+      sec.innerHTML=''
+        + '<div class="vg-redeem-summary-final"><div><b>Canjear premios</b><span>Usa tus tokens para solicitar servicios. El pedido queda pendiente para entrega manual.</span></div><div><div class="vg-redeem-token-final" id="vgRedeemBalanceFinal">0</div><span>tokens disponibles</span></div></div>'
+        + '<div class="vg-redeem-grid-final" id="vgRedeemGridFinal"></div>'
+        + '<p class="vg-redeem-help-final">Antes de confirmar se valida que tengas tokens suficientes. Al canjear, el sistema registra la solicitud y descuenta el saldo.</p>';
+      var ref = qs('#vgDashReferral', modal);
+      if(ref && ref.parentNode) ref.parentNode.insertBefore(sec, ref); else qs('.vg-dash-card', modal).appendChild(sec);
+    }
+  }
+  function renderRedeemFinal(){
+    ensureRedeemSection();
+    var s = getSession(); updateTokenUI(s);
+    var grid=qs('#vgRedeemGridFinal'); if(!grid || !s) return;
+    var tokens=Number(s.tokens||0);
+    var bal=qs('#vgRedeemBalanceFinal'); if(bal) bal.textContent=tokens.toFixed(1).replace('.0','');
+    grid.innerHTML=REWARDS.map(function(r){
+      var ok=tokens>=r.cost;
+      return '<button type="button" class="vg-redeem-card-final '+(ok?'':'locked')+'" data-final-redeem="'+esc(r.id)+'" '+(ok?'':'disabled')+'><div class="vg-redeem-icon-final">'+esc(r.icon)+'</div><div class="vg-redeem-name-final">'+esc(r.name)+'</div><div class="vg-redeem-cost-final">'+esc(r.cost)+' tokens</div><small style="color:#8b93b0">'+(ok?'Disponible':'Tokens insuficientes')+'</small></button>';
+    }).join('');
+  }
+  async function refreshTokensFromDb(s){
+    var c=client(); if(!c || !s || !s.id) return s;
+    try{
+      var res=await withTimeout(c.from('vg_users').select('tokens,total_purchases').eq('id',s.id).maybeSingle(),7000,'Saldo');
+      if(res && res.data){s.tokens=Number(res.data.tokens||0);s.total_purchases=Number(res.data.total_purchases||0);saveSession(s);}
+    }catch(e){}
+    return s;
+  }
+  async function redeemReward(id){
+    var s=getSession();
+    if(!s){ if(typeof window.vgOpenAuth==='function') window.vgOpenAuth(); else alert('Inicia sesión para canjear.'); return; }
+    s=await refreshTokensFromDb(s);
+    var reward=REWARDS.find(function(x){return x.id===id;}); if(!reward) return;
+    if(Number(s.tokens||0)<Number(reward.cost||0)){alert('Tokens insuficientes. Tienes '+Number(s.tokens||0).toFixed(1)+' y necesitas '+reward.cost+'.'); renderRedeemFinal(); return;}
+    if(!confirm('¿Confirmar canje de '+reward.name+' por '+reward.cost+' tokens?')) return;
+    var c=client();
+    if(!c || !s.id){ alert('No se pudo conectar a Supabase. Solicitud no procesada.'); return; }
+    try{
+      var redemptionPayload={user_id:s.id, service:reward.name, product:reward.id, tokens_cost:reward.cost, status:'pending', created_at:new Date().toISOString()};
+      var inserted=false;
+      try{
+        var ins=await withTimeout(c.from('vg_redemptions').insert(redemptionPayload).select().single(),9000,'Registro de canje');
+        if(ins && ins.error) throw ins.error;
+        inserted=true;
+      }catch(e1){
+        // Fallback: local request + admin WhatsApp alert; no silent loss.
+        var local=JSON.parse(localStorage.getItem('vg_local_redemptions')||'[]');
+        local.push({id:'local_'+Date.now(), user_id:s.id, name:s.name, phone:s.phone, service:reward.name, tokens_cost:reward.cost, status:'pending_local', created_at:new Date().toISOString()});
+        localStorage.setItem('vg_local_redemptions', JSON.stringify(local));
+        var num=window.WHATSAPP_NUMBER||window.WHATSAPP_FALLBACK||'';
+        if(num){
+          var msg='CANJE PENDIENTE VESSEL GAMES\nUsuario: '+s.name+'\nTel: '+s.phone+'\nPremio: '+reward.name+'\nTokens: '+reward.cost+'\nNota: revisar manualmente.';
+          try{window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');}catch(e){}
+        }
+        alert('No se pudo registrar el canje en Supabase. Se generó aviso local/manual. No se descontaron tokens para evitar errores.');
+        return;
+      }
+      if(inserted){
+        var newBal=Math.max(0,Number(s.tokens||0)-Number(reward.cost||0));
+        var up=await withTimeout(c.from('vg_users').update({tokens:newBal}).eq('id',s.id),9000,'Descuento de tokens');
+        if(up && up.error) throw up.error;
+        try{await c.from('vg_token_wallet').upsert({user_id:s.id,balance:newBal},{onConflict:'user_id'});}catch(e){}
+        try{await c.from('vg_token_log').insert({user_id:s.id, amount:-Number(reward.cost||0), type:'redemption', description:'Canje: '+reward.name, created_at:new Date().toISOString()});}catch(e){}
+        try{await c.from('vg_token_tx').insert({user_id:s.id, amount:-Number(reward.cost||0), type:'redemption', description:'Canje: '+reward.name, created_at:new Date().toISOString()});}catch(e){}
+        s.tokens=newBal; saveSession(s); updateTokenUI(s); renderRedeemFinal();
+        if(typeof window.renderWalletSafe==='function') try{window.renderWalletSafe();}catch(e){}
+        toast('Canje solicitado: '+reward.name+'. Saldo actualizado.');
+      }
+    }catch(err){
+      alert('No se pudo completar el canje: '+(err&&err.message?err.message:err));
+    }
+  }
+  window.vgRedeemRewardFinal = redeemReward;
+  // Sobrescribe el canje antiguo solo para hacer validación/persistencia robusta.
+  window.vgRedeem = redeemReward;
+
+  function activateRedeemTab(){
+    ensureRedeemSection();
+    var modal=qs('#vgUserDashModal'); if(!modal) return;
+    qsa('.vg-dt',modal).forEach(function(b){b.classList.toggle('active',b.getAttribute('data-dt')==='redeem');});
+    qsa('.vg-dash-section',modal).forEach(function(sec){sec.classList.toggle('active',sec.id==='vgDashRedeem');});
+    refreshTokensFromDb(getSession()).then(function(s){updateTokenUI(s);renderRedeemFinal();});
+  }
+  document.addEventListener('click',function(ev){
+    var tab=ev.target&&ev.target.closest&&ev.target.closest('#vgUserDashModal .vg-dt[data-dt="redeem"]');
+    if(tab){ev.preventDefault();ev.stopPropagation();activateRedeemTab();return;}
+    var card=ev.target&&ev.target.closest&&ev.target.closest('[data-final-redeem]');
+    if(card){ev.preventDefault(); if(!card.disabled) redeemReward(card.getAttribute('data-final-redeem'));}
+  },true);
+  document.addEventListener('DOMContentLoaded',function(){ensureRedeemSection();renderRedeemFinal();});
+  window.addEventListener('load',function(){ensureRedeemSection();renderRedeemFinal();});
+  window.vgRenderRedeemFinal = renderRedeemFinal;
+})();
+</script>
+
 </body>
 </html>
