@@ -24268,5 +24268,370 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- VG SAFE PATCH: admin replies delivery + payment modal layout fix -->
+<style id="vg-admin-reply-payment-layout-fix-css">
+  /* Payment modal layout: isolated to #paymentModal only */
+  #paymentModal{
+    align-items:center !important;
+    justify-content:center !important;
+    padding:18px !important;
+    overflow:auto !important;
+  }
+  #paymentModal .vg-pay-modal-new,
+  #paymentModal .cart-panel{
+    width:min(1120px,96vw) !important;
+    max-width:1120px !important;
+    max-height:94dvh !important;
+    overflow:auto !important;
+    box-sizing:border-box !important;
+    border-radius:26px !important;
+  }
+  #paymentModal .vg-pay-header{
+    display:flex !important;
+    align-items:flex-start !important;
+    justify-content:space-between !important;
+    gap:16px !important;
+    flex-wrap:wrap !important;
+  }
+  #paymentModal .vg-pay-methods,
+  #paymentModal .payment-grid{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important;
+    gap:14px !important;
+    align-items:stretch !important;
+    margin:18px 0 !important;
+  }
+  #paymentModal .vg-pay-method,
+  #paymentModal .pay-card{
+    min-width:0 !important;
+    height:auto !important;
+    min-height:190px !important;
+    padding:18px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+  #paymentModal .vg-pay-method-row,
+  #paymentModal .pay-row{
+    display:flex !important;
+    align-items:flex-start !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    min-width:0 !important;
+    height:auto !important;
+    margin:10px 0 !important;
+  }
+  #paymentModal .vg-pay-method-row span,
+  #paymentModal .pay-row span,
+  #paymentModal .pay-row p{
+    flex:0 0 auto !important;
+    white-space:normal !important;
+  }
+  #paymentModal .vg-pay-method-row code,
+  #paymentModal .pay-row code{
+    min-width:0 !important;
+    max-width:100% !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:break-word !important;
+    text-align:right !important;
+    line-height:1.25 !important;
+  }
+  #paymentModal #vgInternalContactFields.vg-payment-contact-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:14px !important;
+    margin:18px 0 !important;
+    padding:18px !important;
+    border:1px dashed rgba(25,230,193,.28) !important;
+    background:rgba(25,230,193,.055) !important;
+    border-radius:20px !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+    height:auto !important;
+    min-height:0 !important;
+  }
+  #paymentModal #vgInternalContactFields::before{
+    content:'Datos para validar y entregar tu pedido';
+    grid-column:1/-1;
+    display:block;
+    color:#cfe7ff;
+    font-weight:950;
+    font-size:.90rem;
+    letter-spacing:.02em;
+    margin-bottom:2px;
+  }
+  #paymentModal #vgInternalContactFields label{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:8px !important;
+    position:static !important;
+    float:none !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    color:#9da6c4 !important;
+    font-size:.74rem !important;
+    line-height:1.2 !important;
+    text-transform:uppercase !important;
+    letter-spacing:.08em !important;
+    font-weight:950 !important;
+    box-sizing:border-box !important;
+    transform:none !important;
+  }
+  #paymentModal #vgInternalContactFields label.wide{grid-column:1/-1 !important;}
+  #paymentModal #vgInternalContactFields input,
+  #paymentModal #vgInternalContactFields textarea{
+    display:block !important;
+    position:static !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    height:auto !important;
+    min-height:48px !important;
+    margin:0 !important;
+    padding:13px 14px !important;
+    box-sizing:border-box !important;
+    border:1px solid rgba(25,230,193,.28) !important;
+    border-radius:14px !important;
+    background:rgba(255,255,255,.065) !important;
+    color:#fff !important;
+    outline:none !important;
+    transform:none !important;
+    z-index:auto !important;
+  }
+  #paymentModal #vgInternalContactFields textarea{
+    min-height:92px !important;
+    resize:vertical !important;
+    line-height:1.35 !important;
+  }
+  #paymentModal .vg-pay-proof,
+  #paymentModal .proof-box{
+    clear:both !important;
+    margin-top:16px !important;
+    padding:18px !important;
+    overflow:visible !important;
+    height:auto !important;
+    box-sizing:border-box !important;
+  }
+  #paymentModal .vg-pay-actions,
+  #paymentModal .modal-actions{
+    display:flex !important;
+    gap:12px !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
+    position:sticky !important;
+    bottom:0 !important;
+    z-index:5 !important;
+    padding-top:14px !important;
+    margin-top:14px !important;
+    background:linear-gradient(180deg,rgba(14,18,32,0),rgba(14,18,32,.96) 28%) !important;
+  }
+  #paymentModal .vg-pay-actions button,
+  #paymentModal .modal-actions button{
+    min-height:48px !important;
+    flex:1 1 220px !important;
+  }
+  @media(max-width:760px){
+    #paymentModal{padding:0 !important;align-items:stretch !important;justify-content:stretch !important;}
+    #paymentModal .vg-pay-modal-new,
+    #paymentModal .cart-panel{
+      width:100vw !important;
+      max-width:100vw !important;
+      min-height:100dvh !important;
+      max-height:100dvh !important;
+      border-radius:0 !important;
+      padding:16px !important;
+    }
+    #paymentModal .vg-pay-methods,
+    #paymentModal .payment-grid,
+    #paymentModal #vgInternalContactFields.vg-payment-contact-grid{
+      grid-template-columns:1fr !important;
+    }
+    #paymentModal .vg-pay-method,
+    #paymentModal .pay-card{min-height:unset !important;}
+    #paymentModal .vg-pay-method-row,
+    #paymentModal .pay-row{display:grid !important;grid-template-columns:92px 1fr !important;}
+    #paymentModal .vg-pay-actions,
+    #paymentModal .modal-actions{display:grid !important;grid-template-columns:1fr !important;}
+  }
+</style>
+
+<script id="vg-admin-reply-payment-layout-fix-js">
+(function(){
+  'use strict';
+  if(window.__vgAdminReplyPaymentFix) return;
+  window.__vgAdminReplyPaymentFix = true;
+
+  var SESSION_KEYS=['vg_auth_session_v1','vg_pro_session_v2','vg_pro_session','vg_user'];
+  var clientChatPoll=null;
+  var lastClientChatId=null;
+
+  function qs(sel,root){return (root||document).querySelector(sel);}
+  function qsa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel));}
+  function parseJSON(x,f){try{return JSON.parse(x)}catch(e){return f}}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function cfg(){var c=parseJSON(localStorage.getItem('vg_supabase_cfg_v1')||'{}',{});return {url:c.url||window.VG_SUPABASE_URL||'',anon:c.anon||c.key||c.anon_key||window.VG_SUPABASE_ANON_KEY||''};}
+  function sb(){var c=cfg(); if(!window.supabase||!c.url||!c.anon)return null; var sig=c.url+'|'+String(c.anon).slice(0,18); if(!window.__vgAdminReplySB||window.__vgAdminReplySB.sig!==sig){window.__vgAdminReplySB={sig:sig,client:window.supabase.createClient(c.url,c.anon)};} return window.__vgAdminReplySB.client;}
+  function session(){for(var i=0;i<SESSION_KEYS.length;i++){var raw=localStorage.getItem(SESSION_KEYS[i])||sessionStorage.getItem(SESSION_KEYS[i]);var s=parseJSON(raw,null);if(s&&typeof s==='object'){var phone=String(s.phone||s.customer_phone||s.client_phone||'').replace(/\D/g,'');var name=s.name||s.customer_name||s.client_name||'';if(phone||name)return {id:s.id||s.user_id||null,name:name||'Cliente',phone:phone};}}return null;}
+  function isUuid(v){return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v||''));}
+  function money(v){var n=Number(String(v||0).replace(/[^0-9.\-]/g,'')); if(!isFinite(n))n=0; return '$'+n.toLocaleString('es-MX',{maximumFractionDigits:2})+' MXN';}
+
+  function activeAdminOrderId(){
+    var active=qs('.vg-inbox-card.active[data-order-id]');
+    if(active) return active.getAttribute('data-order-id');
+    var panel=qs('#vgAdminChatPanel');
+    var txt=panel?(panel.textContent||''):'';
+    var m=txt.match(/Pedido\s*#\s*([0-9a-f-]{20,})/i);
+    if(m) return m[1];
+    var status=qs('#vgAdminChatStatus');
+    if(status){
+      var card=qs('.vg-inbox-card[data-order-id]');
+      if(card) return card.getAttribute('data-order-id');
+    }
+    return '';
+  }
+
+  async function loadMessages(orderId){
+    var client=sb(); if(!client||!orderId)return [];
+    var r=await client.from('order_messages').select('*').eq('order_id',String(orderId)).order('created_at',{ascending:true}).limit(600);
+    if(r.error){console.warn('loadMessages:',r.error);return [];} return r.data||[];
+  }
+
+  function renderMessages(target,msgs){
+    var box=typeof target==='string'?qs(target):target; if(!box)return;
+    if(!msgs||!msgs.length){box.innerHTML='<div class="vg-inbox-empty">Sin mensajes todavía.</div>';return;}
+    var lastDay='';
+    box.innerHTML=msgs.map(function(m){
+      var date=new Date(m.created_at||Date.now());
+      var day=date.toLocaleDateString('es-MX');
+      var sep=day!==lastDay?'<div class="vg-chat-date-separator">'+esc(day)+'</div>':'';
+      lastDay=day;
+      var role=String(m.sender_role||'client').toLowerCase();
+      return sep+'<div class="vg-chat-msg '+esc(role)+'" data-message-id="'+esc(m.id||'')+'"><div class="vg-chat-msg-head"><span>'+esc(m.sender_name||role)+'</span><span>'+esc(date.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}))+'</span></div><div class="vg-chat-msg-body">'+esc(m.message||'')+'</div>'+(m.attachment_url?'<div class="vg-chat-proof"><a href="'+esc(m.attachment_url)+'" target="_blank" rel="noopener">Adjunto</a></div>':'')+'</div>';
+    }).join('');
+    box.scrollTop=box.scrollHeight;
+  }
+
+  async function insertAdminMessage(orderId,msg){
+    var client=sb(); if(!client) throw new Error('Supabase no configurado.');
+    var payload={order_id:String(orderId),user_id:null,sender_role:'admin',sender_name:'Vessel Games',message:String(msg),attachment_url:null,is_read:false};
+    var r=await client.from('order_messages').insert(payload).select('*').single();
+    if(r.error) throw r.error;
+    await client.from('orders').update({unread_client:true,last_message_preview:String(msg).slice(0,160),last_message_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',String(orderId));
+    return r.data;
+  }
+
+  window.vgSendAdminChat=function(){
+    (async function(){
+      var orderId=activeAdminOrderId();
+      var txt=qs('#vgAdminChatText');
+      var btn=qs('#vgAdminChatPanel .vg-chat-send');
+      if(!orderId){alert('Selecciona un pedido antes de responder.');return;}
+      if(!txt||!txt.value.trim())return;
+      var msg=txt.value.trim();
+      if(btn){btn.disabled=true;btn.textContent='Enviando...';}
+      try{
+        await insertAdminMessage(orderId,msg);
+        txt.value='';
+        var msgs=await loadMessages(orderId);
+        renderMessages('#vgAdminChatMessages',msgs);
+        try{if(typeof window.vgLoadInbox==='function')window.vgLoadInbox();}catch(e){}
+      }catch(e){
+        console.error('No se pudo enviar respuesta admin:',e);
+        alert('No se pudo enviar el mensaje al cliente: '+(e&&e.message?e.message:e)+'. Revisa el SQL de order_messages y las policies RLS.');
+      }finally{
+        if(btn){btn.disabled=false;btn.textContent='Enviar';}
+      }
+    })();
+  };
+
+  async function markClientRead(orderId){
+    var client=sb(); if(!client||!orderId)return;
+    try{
+      await client.from('orders').update({unread_client:false,updated_at:new Date().toISOString()}).eq('id',String(orderId));
+      await client.from('order_messages').update({is_read:true,read_at:new Date().toISOString()}).eq('order_id',String(orderId)).in('sender_role',['admin','system']).eq('is_read',false);
+    }catch(e){console.warn('markClientRead:',e);}
+  }
+
+  async function refreshClientChat(orderId){
+    orderId=orderId||lastClientChatId||localStorage.getItem('vg_current_client_chat_order_id');
+    var modal=qs('#vgClientChatModal');
+    if(!orderId||!modal||!modal.classList.contains('active'))return;
+    var box=qs('#vgClientChatMessages',modal); if(!box)return;
+    var msgs=await loadMessages(orderId);
+    renderMessages(box,msgs);
+    markClientRead(orderId);
+  }
+
+  function patchClientChatOpen(){
+    var fn=window.vgOpenClientChat;
+    if(typeof fn==='function'&&!fn.__vgReplyPatch){
+      var wrapped=function(id){
+        lastClientChatId=String(id||'');
+        try{localStorage.setItem('vg_current_client_chat_order_id',lastClientChatId);}catch(e){}
+        var ret=fn.apply(this,arguments);
+        setTimeout(function(){
+          var modal=qs('#vgClientChatModal'); if(modal)modal.dataset.orderId=lastClientChatId;
+          refreshClientChat(lastClientChatId);
+        },500);
+        return ret;
+      };
+      wrapped.__vgReplyPatch=true;
+      window.vgOpenClientChat=wrapped;
+    }
+  }
+
+  function startClientPolling(){
+    if(clientChatPoll)return;
+    clientChatPoll=setInterval(function(){
+      var modal=qs('#vgClientChatModal');
+      if(modal&&modal.classList.contains('active')) refreshClientChat(modal.dataset.orderId||lastClientChatId);
+    },6000);
+  }
+
+  function subscribeClientMessages(){
+    var client=sb(); if(!client||window.__vgClientReplyRealtime)return;
+    window.__vgClientReplyRealtime=true;
+    try{
+      client.channel('vg-client-admin-replies-fix')
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'order_messages'},async function(payload){
+          var m=payload.new||{};
+          if(m.sender_role==='admin'||m.sender_role==='system'){
+            var id=String(m.order_id||'');
+            if(id && (id===lastClientChatId || id===localStorage.getItem('vg_current_client_chat_order_id'))) refreshClientChat(id);
+            try{if(typeof window.vgLoadClientOrders==='function')window.vgLoadClientOrders();}catch(e){}
+          }
+        })
+        .subscribe();
+    }catch(e){console.warn('client reply realtime:',e);}
+  }
+
+  function normalizePaymentFields(){
+    var fields=qs('#paymentModal #vgInternalContactFields'); if(!fields)return;
+    fields.querySelectorAll('input,textarea,label').forEach(function(el){
+      el.style.position='static'; el.style.float='none'; el.style.transform='none';
+    });
+    var name=qs('#vgInternalCustomerName',fields), phone=qs('#vgInternalCustomerPhone',fields), del=qs('#vgInternalDeliveryData',fields);
+    if(name)name.setAttribute('autocomplete','name');
+    if(phone)phone.setAttribute('autocomplete','tel');
+    if(del)del.setAttribute('rows','3');
+  }
+
+  function boot(){
+    patchClientChatOpen(); startClientPolling(); subscribeClientMessages(); normalizePaymentFields();
+    setTimeout(function(){patchClientChatOpen(); normalizePaymentFields();},700);
+  }
+  document.addEventListener('click',function(ev){
+    if(ev.target&&ev.target.closest&&ev.target.closest('#paymentModal')) setTimeout(normalizePaymentFields,80);
+    if(ev.target&&ev.target.closest&&ev.target.closest('[onclick*="vgOpenClientChat"]')) setTimeout(function(){patchClientChatOpen();refreshClientChat();},700);
+  },true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot); else boot();
+  window.addEventListener('load',boot);
+})();
+</script>
+
 </body>
 </html>
