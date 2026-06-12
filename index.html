@@ -23734,5 +23734,147 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+
+<!-- VG PATCH: User logout button only -->
+<style id="vg-user-logout-only-css">
+  #vgUserLogoutBtnFinal{
+    height:38px;
+    padding:0 15px;
+    border:1px solid rgba(255,77,125,.34);
+    background:rgba(255,77,125,.08);
+    color:#ff7a99;
+    border-radius:999px;
+    font-weight:900;
+    font-size:.78rem;
+    letter-spacing:.01em;
+    cursor:pointer;
+    transition:background .18s ease,border-color .18s ease,transform .18s ease;
+    white-space:nowrap;
+  }
+  #vgUserLogoutBtnFinal:hover{
+    background:rgba(255,77,125,.16);
+    border-color:rgba(255,77,125,.62);
+    transform:translateY(-1px);
+  }
+  .vg-user-logout-wrap-final{
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-end;
+    gap:10px;
+  }
+  @media(max-width:760px){
+    #vgUserLogoutBtnFinal{
+      height:34px;
+      padding:0 11px;
+      font-size:.72rem;
+    }
+    .vg-user-logout-wrap-final{
+      position:absolute;
+      right:58px;
+      top:18px;
+    }
+  }
+</style>
+<script id="vg-user-logout-only-js">
+(function(){
+  'use strict';
+  if(window.__vgUserLogoutOnlyPatch) return;
+  window.__vgUserLogoutOnlyPatch = true;
+
+  var SESSION_KEYS = [
+    'vg_auth_session_v1',
+    'vg_pro_session_v2',
+    'vg_pro_session',
+    'vg_user'
+  ];
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+  function clearUserSessions(){
+    SESSION_KEYS.forEach(function(k){
+      try{ localStorage.removeItem(k); }catch(e){}
+      try{ sessionStorage.removeItem(k); }catch(e){}
+    });
+    try{ localStorage.setItem('vg_login_skip', String(Date.now())); }catch(e){}
+  }
+
+  function resetVisibleAccountUI(){
+    var name = qs('#vgUserName'); if(name) name.textContent = '';
+    var avatar = qs('#vgUserAvatar'); if(avatar) avatar.textContent = '?';
+    var greeting = qs('#vgUserGreeting'); if(greeting) greeting.style.display = 'none';
+    var abAvatar = qs('#vgAbAvatar'); if(abAvatar) abAvatar.textContent = '?';
+    var abLabel = qs('#vgAbLabel'); if(abLabel) abLabel.textContent = 'Mi cuenta';
+    var dash = qs('#vgUserDashModal'); if(dash) dash.classList.remove('active');
+    var auth = qs('#vgAuthModal'); if(auth) auth.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  window.vgUserLogoutFinal = function(){
+    if(!confirm('¿Cerrar sesión de tu cuenta?')) return;
+    clearUserSessions();
+    resetVisibleAccountUI();
+    try{ if(typeof window.updateUserUI === 'function') window.updateUserUI(); }catch(e){}
+    try{ if(typeof window.showToast === 'function') window.showToast('Sesión cerrada'); }catch(e){}
+    setTimeout(function(){ location.reload(); }, 180);
+  };
+
+  function ensureLogoutButton(){
+    var modal = qs('#vgUserDashModal');
+    if(!modal || qs('#vgUserLogoutBtnFinal', modal)) return;
+    var header = qs('.vg-dh', modal);
+    if(!header) return;
+    var closeBtn = qs('button.x', header);
+    var wrap = document.createElement('div');
+    wrap.className = 'vg-user-logout-wrap-final';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'vgUserLogoutBtnFinal';
+    btn.textContent = 'Cerrar sesión';
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      window.vgUserLogoutFinal();
+    });
+    wrap.appendChild(btn);
+    if(closeBtn && closeBtn.parentNode){
+      header.insertBefore(wrap, closeBtn);
+    }else{
+      header.appendChild(wrap);
+    }
+  }
+
+  function patchOpenDashboard(){
+    ['openDashboard','vgOpenAccount','vgProOpen'].forEach(function(name){
+      var fn = window[name];
+      if(typeof fn === 'function' && !fn.__vgLogoutWrapped){
+        var wrapped = function(){
+          var r = fn.apply(this, arguments);
+          setTimeout(ensureLogoutButton, 30);
+          return r;
+        };
+        wrapped.__vgLogoutWrapped = true;
+        window[name] = wrapped;
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    ensureLogoutButton();
+    patchOpenDashboard();
+  });
+  window.addEventListener('load', function(){
+    ensureLogoutButton();
+    patchOpenDashboard();
+  });
+  document.addEventListener('click', function(e){
+    if(e.target && (e.target.closest('#vg-account-btn') || e.target.closest('#vgUserGreeting'))){
+      setTimeout(ensureLogoutButton, 80);
+    }
+  }, true);
+})();
+</script>
+
 </body>
 </html>
