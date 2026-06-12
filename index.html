@@ -14025,8 +14025,8 @@ body.vg-light .review-card,.vg-light .home-compact-card,.vg-light .how-step,.vg-
       <div class="vg-pay-method">
         <div class="vg-pay-method-icon">🟡</div>
         <h4>Binance USDT</h4>
-        <div class="vg-pay-method-row"><span>Pay ID</span><code>000000000</code></div>
-        <button class="vg-pay-copy-all" onclick="copyPayData('Binance Pay ID: 000000000')">Copiar ID Binance</button>
+        <div class="vg-pay-method-row"><span>Pay ID</span><code>787332768</code></div>
+        <button class="vg-pay-copy-all" onclick="copyPayData('Binance Pay ID: 787332768')">Copiar ID Binance</button>
       </div>
     </div>
 
@@ -25380,9 +25380,52 @@ window.addEventListener('DOMContentLoaded', function(){
   function updateAdminBadge(data){data=data||{};var n=((data.orders||state.adminOrders||[]).filter(function(o){return o.unread_admin}).length)+((data.tickets||state.adminTickets||[]).filter(function(t){return t.unread_admin}).length);var b=qs('#vgProfAdminBadge');if(b){b.textContent=n;b.style.display=n?'inline-grid':'none'}}
   function startAdminLoop(){if(state.adminTimer)clearInterval(state.adminTimer);state.adminTimer=setInterval(async function(){try{if(!qs('#vgProfAdminSection.active'))return;var data=await adminFetch();state.adminOrders=data.orders;state.adminTickets=data.tickets;if(state.adminActiveRef){state.adminMessages=await fetchMessages(state.adminActiveType,state.adminActiveRef);renderAdminMessages()}updateAdminBadge(data)}catch(e){}},5000)}
 
-  function subscribe(){var client=sb();if(!client||window.__vgProfChatRealtime)return;window.__vgProfChatRealtime=true;try{client.channel('vg-prof-chat-live').on('postgres_changes',{event:'*',schema:'public',table:'vg_chat_messages'},function(){setTimeout(async function(){try{await refreshData();if(state.activeRef){state.messages=await fetchMessages(state.activeType,state.activeRef);renderMessages();await markRead(state.activeType,state.activeRef,'client')}if(qs('#vgProfSupportRoot')){renderList();updateBadge()}if(qs('#vgProfAdminSection.active'))renderAdmin()}catch(e){}},350)}).on('postgres_changes',{event:'*',schema:'public',table:'orders'},function(){setTimeout(function(){refreshData().then(function(){if(qs('#vgProfSupportRoot'))renderSupport();if(qs('#vgProfAdminSection.active'))renderAdmin()})},450)}).on('postgres_changes',{event:'*',schema:'public',table:'vg_support_tickets'},function(){setTimeout(function(){refreshData().then(function(){if(qs('#vgProfSupportRoot'))renderSupport();if(qs('#vgProfAdminSection.active'))renderAdmin()})},450)}).subscribe()}catch(e){}}
+  // FIX (visibilidad en tiempo real): subscribe() solo se llamaba UNA vez en boot().
+  // Si Supabase aun no estaba listo en ese instante, sb() devolvia null y
+  // window.__vgProfChatRealtime nunca se marcaba -> la suscripcion realtime
+  // quedaba deshabilitada para siempre, aunque el polling seguia funcionando.
+  // Ahora reintenta cada 3s hasta conseguir el cliente, y loguea el estado
+  // de la suscripcion para poder diagnosticar en consola.
+  function subscribe(){
+    if(window.__vgProfChatRealtime) return; // ya conectado, no duplicar canal
+    var client=sb();
+    if(!client){
+      setTimeout(subscribe,3000); // reintenta: Supabase puede tardar en configurarse
+      return;
+    }
+    window.__vgProfChatRealtime=true;
+    try{
+      client.channel('vg-prof-chat-live')
+        .on('postgres_changes',{event:'*',schema:'public',table:'vg_chat_messages'},function(){
+          setTimeout(async function(){try{
+            await refreshData();
+            if(state.activeRef){state.messages=await fetchMessages(state.activeType,state.activeRef);renderMessages();await markRead(state.activeType,state.activeRef,'client')}
+            if(qs('#vgProfSupportRoot')){renderList();updateBadge()}
+            if(qs('#vgProfAdminSection.active'))renderAdmin();
+          }catch(e){}},350);
+        })
+        .on('postgres_changes',{event:'*',schema:'public',table:'orders'},function(){
+          setTimeout(function(){refreshData().then(function(){if(qs('#vgProfSupportRoot'))renderSupport();if(qs('#vgProfAdminSection.active'))renderAdmin()})},450);
+        })
+        .on('postgres_changes',{event:'*',schema:'public',table:'vg_support_tickets'},function(){
+          setTimeout(function(){refreshData().then(function(){if(qs('#vgProfSupportRoot'))renderSupport();if(qs('#vgProfAdminSection.active'))renderAdmin()})},450);
+        })
+        .subscribe(function(status){
+          console.log('[VG Chat Realtime] estado de suscripcion:', status);
+          if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'||status==='CLOSED'){
+            // Reintentar conexion si se cae: liberar el flag y reintentar en 4s
+            window.__vgProfChatRealtime=false;
+            setTimeout(subscribe,4000);
+          }
+        });
+    }catch(e){
+      console.warn('[VG Chat Realtime] no se pudo suscribir', e);
+      window.__vgProfChatRealtime=false;
+      setTimeout(subscribe,4000);
+    }
+  }
 
-  function boot(){if(state.booted)return;state.booted=true;patchOpen();bind();ensureTabs();ensureAdmin();subscribe();setTimeout(function(){refreshData().then(updateBadge);ensureAdmin()},800);setInterval(function(){try{ensureTabs();ensureAdmin();if(qs('#vgProModal.active'))refreshData().then(updateBadge)}catch(e){}},10000)}
+  function boot(){if(state.booted)return;state.booted=true;patchOpen();bind();ensureTabs();ensureAdmin();subscribe();setTimeout(function(){refreshData().then(updateBadge);ensureAdmin()},800);setInterval(function(){try{ensureTabs();ensureAdmin();if(!window.__vgProfChatRealtime)subscribe();if(qs('#vgProModal.active'))refreshData().then(updateBadge)}catch(e){}},10000)}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();window.addEventListener('load',boot);
 })();
 </script>
