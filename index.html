@@ -24633,5 +24633,351 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- VG SAFE PATCH: tickets/chat estable + cierre de chat + polling ligero -->
+<style id="vg-ticket-chat-final-css">
+  .vg-ticket-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}
+  .vg-ticket-tools select,.vg-ticket-tools input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#f4f6ff;border-radius:14px;padding:12px 14px;font-weight:800;outline:none}
+  .vg-ticket-tools input{min-width:260px;flex:1}
+  .vg-ticket-card{display:block;width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(16,20,35,.78);border-radius:18px;padding:16px;margin:0 0 12px;cursor:pointer;color:#fff;transition:.18s ease;position:relative}
+  .vg-ticket-card:hover,.vg-ticket-card.active{border-color:rgba(28,239,202,.55);background:rgba(15,55,58,.55);transform:translateY(-1px)}
+  .vg-ticket-card-title{font-weight:950;font-size:16px;margin-bottom:6px;color:#f6f7ff}
+  .vg-ticket-card-meta{color:#9da5c3;line-height:1.45;font-size:13px}
+  .vg-ticket-card-price{position:absolute;right:16px;top:16px;color:#17f2c7;font-weight:950;font-size:16px}
+  .vg-ticket-unread{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:999px;background:#17f2c7;color:#061116;font-size:12px;font-weight:950;margin-left:8px}
+  .vg-ticket-status{display:inline-block;margin-top:10px;border-radius:999px;padding:6px 10px;background:rgba(139,92,246,.16);border:1px solid rgba(139,92,246,.30);color:#dcd7ff;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+  .vg-ticket-status.cerrado,.vg-ticket-status.closed,.vg-ticket-status.entregado{background:rgba(39,203,133,.14);border-color:rgba(39,203,133,.32);color:#8dffcc}
+  .vg-ticket-empty{border:1px dashed rgba(255,255,255,.14);border-radius:18px;padding:28px;text-align:center;color:#9da5c3;background:rgba(255,255,255,.03)}
+  .vg-ticket-chat-wrap{height:100%;display:flex;flex-direction:column;min-height:560px;background:linear-gradient(180deg,rgba(10,14,27,.98),rgba(7,10,20,.98));border-radius:18px;overflow:hidden;border:1px solid rgba(139,92,246,.18)}
+  .vg-ticket-chat-head{padding:18px;border-bottom:1px solid rgba(255,255,255,.10);display:grid;grid-template-columns:1fr auto;gap:16px;background:rgba(255,255,255,.035)}
+  .vg-ticket-chat-title{font-weight:950;font-size:20px;color:#fff;margin-bottom:8px}
+  .vg-ticket-chat-sub{color:#a9b0cc;font-size:14px;line-height:1.45}
+  .vg-ticket-actions{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end}
+  .vg-ticket-actions select,.vg-ticket-actions button{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.06);color:#fff;font-weight:900;cursor:pointer}
+  .vg-ticket-actions .danger{background:rgba(255,82,126,.12);border-color:rgba(255,82,126,.42);color:#ff8daa}
+  .vg-ticket-proof{margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .vg-ticket-proof a{display:inline-flex;padding:10px 14px;border-radius:999px;background:rgba(20,230,193,.12);border:1px solid rgba(20,230,193,.34);color:#21f1ce;text-decoration:none;font-weight:900}
+  .vg-ticket-proof img{width:72px;height:72px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.16)}
+  .vg-ticket-msgs{flex:1;min-height:260px;max-height:52vh;overflow:auto;padding:18px;background:radial-gradient(circle at 15% 0%,rgba(139,92,246,.10),transparent 34%),rgba(4,7,16,.42)}
+  .vg-ticket-msg{max-width:78%;margin:0 0 12px;border-radius:18px;padding:12px 14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.06);box-shadow:0 10px 26px rgba(0,0,0,.18);word-break:break-word}
+  .vg-ticket-msg.admin{margin-left:auto;background:linear-gradient(135deg,rgba(139,92,246,.26),rgba(35,209,188,.16));border-color:rgba(139,92,246,.34)}
+  .vg-ticket-msg.client{margin-right:auto;background:rgba(255,255,255,.07)}
+  .vg-ticket-msg.system{margin-left:auto;margin-right:auto;text-align:center;background:rgba(255,184,48,.10);border-color:rgba(255,184,48,.24);color:#ffd47a;max-width:92%}
+  .vg-ticket-msg-head{font-size:11px;color:#9da5c3;font-weight:900;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+  .vg-ticket-msg-body{font-size:14px;line-height:1.45;color:#f6f7ff;white-space:pre-wrap}
+  .vg-ticket-compose{display:flex;gap:12px;padding:14px;border-top:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035)}
+  .vg-ticket-compose textarea{flex:1;min-height:52px;max-height:130px;resize:vertical;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;color:#fff;padding:14px;font-weight:700;outline:none}
+  .vg-ticket-compose button{min-width:130px;border:0;border-radius:16px;background:linear-gradient(135deg,#8b5cf6,#18e2bd);color:#07101a;font-weight:950;cursor:pointer;padding:0 18px}
+  .vg-ticket-closed-note{padding:14px;margin:14px;border-radius:16px;background:rgba(39,203,133,.12);border:1px solid rgba(39,203,133,.30);color:#9dffd2;text-align:center;font-weight:900}
+  .vg-client-chat-modal.vg-ticket-active{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:18px}
+  .vg-client-chat-modal.vg-ticket-active .vg-client-chat-card{width:min(900px,96vw);max-height:90vh;display:flex;flex-direction:column;border-radius:24px;overflow:hidden;background:#0d1020;border:1px solid rgba(255,255,255,.14)}
+  .vg-ticket-client-card{border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:16px;margin-bottom:12px;background:rgba(255,255,255,.055)}
+  .vg-ticket-client-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .vg-ticket-client-title{font-weight:950;color:#fff;font-size:16px}
+  .vg-ticket-client-meta{color:#9da5c3;font-size:13px;margin-top:5px;line-height:1.45}
+  .vg-ticket-client-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .vg-ticket-client-actions button{border:1px solid rgba(32,230,198,.34);background:rgba(20,230,193,.10);color:#20e6c6;border-radius:14px;padding:10px 14px;font-weight:950;cursor:pointer}
+  .vg-ticket-client-actions button[disabled]{opacity:.52;cursor:not-allowed;border-color:rgba(255,255,255,.14);color:#9da5c3;background:rgba(255,255,255,.04)}
+  .vg-ticket-alert{margin:0 0 14px;border:1px solid rgba(32,230,198,.35);background:rgba(20,230,193,.10);border-radius:16px;padding:14px;color:#dffff9;font-weight:850}
+  @media(max-width:760px){.vg-ticket-chat-head{grid-template-columns:1fr}.vg-ticket-actions{justify-content:flex-start}.vg-ticket-msg{max-width:94%}.vg-ticket-compose{flex-direction:column}.vg-ticket-compose button{height:48px}.vg-ticket-card-price{position:static;margin-top:8px}.vg-ticket-tools input{min-width:100%}}
+</style>
+<script id="vg-ticket-chat-closure-final-js">
+(function(){
+  'use strict';
+  if(window.__vgTicketChatClosureFinal) return;
+  window.__vgTicketChatClosureFinal = true;
+
+  var state = {adminOrder:null, clientOrder:null, adminTimer:null, clientTimer:null, orders:[], messages:[]};
+  var SESSION_KEYS = ['vg_auth_session_v1','vg_pro_session_v2','vg_pro_session','vg_user'];
+  var CLOSED = ['closed','cerrado','archivado','archived'];
+
+  function qs(s,r){return (r||document).querySelector(s);}
+  function qsa(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function money(v){var n=Number(v||0);return n?'$'+n.toLocaleString('es-MX')+' MXN':'—';}
+  function isUuid(v){return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(v||''));}
+  function parse(k){try{var raw=localStorage.getItem(k);return raw&&raw!=='undefined'&&raw!=='null'?JSON.parse(raw):null;}catch(e){return null;}}
+  function session(){
+    for(var i=0;i<SESSION_KEYS.length;i++){
+      var s=parse(SESSION_KEYS[i]);
+      if(s && (s.phone || s.customer_phone || s.client_phone || s.name)){
+        var phone=String(s.phone||s.customer_phone||s.client_phone||'').replace(/\D/g,'');
+        return {id:s.id||s.user_id||null,name:s.name||s.customer_name||s.client_name||'Cliente',phone:phone,tokens:Number(s.tokens||s.balance||0),referral_code:s.referral_code||s.refCode||s.ref||''};
+      }
+    }
+    return null;
+  }
+  function cfg(){try{var c=JSON.parse(localStorage.getItem('vg_supabase_cfg_v1')||'{}');return {url:c.url||window.VG_SUPABASE_URL||'',anon:c.anon||c.key||c.anon_key||window.VG_SUPABASE_ANON_KEY||''};}catch(e){return {url:window.VG_SUPABASE_URL||'',anon:window.VG_SUPABASE_ANON_KEY||''};}}
+  function sb(){if(typeof window.getSB==='function'){try{var a=window.getSB(); if(a) return a;}catch(e){}} var c=cfg(); if(!window.supabase||!c.url||!c.anon) return null; var sig=c.url+'|'+String(c.anon).slice(0,16); if(!window.__vgTicketSB||window.__vgTicketSB.sig!==sig){window.__vgTicketSB={sig:sig,client:window.supabase.createClient(c.url,c.anon)};} return window.__vgTicketSB.client;}
+  function withTimeout(p,ms,label){return new Promise(function(resolve,reject){var done=false;var t=setTimeout(function(){if(!done){done=true;reject(new Error((label||'Operación')+' tardó demasiado'));}},ms||9000);Promise.resolve(p).then(function(v){if(!done){done=true;clearTimeout(t);resolve(v);}},function(e){if(!done){done=true;clearTimeout(t);reject(e);}});});}
+  function getTitle(o){try{var items=typeof o.items==='string'?JSON.parse(o.items||'[]'):(o.items||[]); if(items&&items[0]) return items[0].title||items[0].name||o.product_title||'Pedido';}catch(e){} return o.product_title||o.title||'Pedido';}
+  function getOption(o){try{var items=typeof o.items==='string'?JSON.parse(o.items||'[]'):(o.items||[]); if(items&&items[0]) return items[0].option||items[0].name||o.product_option||'';}catch(e){} return o.product_option||o.option||'';}
+  function proof(o){return o.proof_url||o.comprobante_url||o.receipt_url||o.payment_proof_url||o.proof||'';}
+  function isClosed(o){var cs=String(o.chat_status||'').toLowerCase(); var st=String(o.status||'').toLowerCase(); return CLOSED.indexOf(cs)>-1 || st==='cerrado' || st==='archivado';}
+  function isDeliveredClosed(o){var st=String(o.status||'').toLowerCase(); return isClosed(o) || st==='entregado';}
+  function date(v){try{return new Date(v||Date.now()).toLocaleString('es-MX');}catch(e){return '';}}
+  function notify(msg){try{if(typeof window.showToast==='function')window.showToast(msg);else console.log(msg);}catch(e){}}
+
+  async function selectOrder(id){
+    var client=sb(); if(!client) throw new Error('Supabase no configurado.');
+    var r=await withTimeout(client.from('orders').select('*').eq('id',id).maybeSingle(),9000,'Cargar pedido');
+    if(r.error) throw r.error;
+    if(!r.data){
+      var r2=await withTimeout(client.from('orders').select('*').filter('id','eq',String(id)).maybeSingle(),9000,'Cargar pedido');
+      if(r2.error) throw r2.error;
+      return r2.data;
+    }
+    return r.data;
+  }
+  async function loadMessages(orderId){
+    var client=sb(); if(!client) return [];
+    var r=await withTimeout(client.from('order_messages').select('*').eq('order_id',String(orderId)).order('created_at',{ascending:true}).limit(700),9000,'Cargar mensajes');
+    if(r.error) throw r.error;
+    return r.data||[];
+  }
+  async function insertMsg(orderId,role,name,msg){
+    var client=sb(); if(!client) throw new Error('Supabase no configurado.');
+    var payload={order_id:String(orderId),sender_role:role,sender_name:name||role,message:msg,created_at:new Date().toISOString(),is_read:false};
+    var r=await withTimeout(client.from('order_messages').insert(payload).select('*').single(),10000,'Enviar mensaje');
+    if(r.error) throw r.error;
+    return r.data;
+  }
+  async function markRead(orderId,who){
+    var client=sb(); if(!client||!orderId) return;
+    try{
+      if(who==='admin') await client.from('orders').update({unread_admin:false}).eq('id',orderId);
+      if(who==='client') await client.from('orders').update({unread_client:false}).eq('id',orderId);
+    }catch(e){}
+    try{
+      var roles=who==='admin'?['client']:['admin','system'];
+      await client.from('order_messages').update({is_read:true,read_at:new Date().toISOString()}).eq('order_id',String(orderId)).in('sender_role',roles).eq('is_read',false);
+    }catch(e){}
+  }
+
+  function renderMsgs(boxSel,msgs,viewer){
+    var box=typeof boxSel==='string'?qs(boxSel):boxSel; if(!box) return;
+    if(!msgs||!msgs.length){box.innerHTML='<div class="vg-ticket-empty">Sin mensajes todavía.</div>';return;}
+    var lastDay='';
+    box.innerHTML=msgs.map(function(m){
+      var d=new Date(m.created_at||Date.now()); var day=d.toLocaleDateString('es-MX'); var sep='';
+      if(day!==lastDay){lastDay=day;sep='<div class="vg-ticket-msg system"><div class="vg-ticket-msg-body">'+esc(day)+'</div></div>';}
+      var role=String(m.sender_role||'client').toLowerCase();
+      return sep+'<div class="vg-ticket-msg '+esc(role)+'"><div class="vg-ticket-msg-head">'+esc(m.sender_name||role)+' · '+esc(date(m.created_at))+'</div><div class="vg-ticket-msg-body">'+esc(m.message||'')+'</div>'+(m.attachment_url?'<div class="vg-ticket-proof"><a href="'+esc(m.attachment_url)+'" target="_blank">Ver adjunto</a></div>':'')+'</div>';
+    }).join('');
+    box.scrollTop=box.scrollHeight;
+  }
+
+  function adminPanel(){return qs('#vgAdminChatPanel') || qs('#vgInboxChat') || qs('[data-admin-chat-panel]');}
+  function adminList(){return qs('#vgInboxList') || qs('[data-inbox-list]');}
+  function ensureAdminTools(){
+    var list=adminList(); if(!list||qs('#vgTicketTools')) return;
+    var tools=document.createElement('div'); tools.id='vgTicketTools'; tools.className='vg-ticket-tools';
+    tools.innerHTML='<input id="vgTicketSearch" placeholder="Buscar pedido, cliente o producto..."><select id="vgTicketMode"><option value="active">Chats activos</option><option value="closed">Cerrados / entregados</option><option value="all">Todos</option></select><button type="button" onclick="vgLoadInbox()">Actualizar</button>';
+    list.parentNode.insertBefore(tools,list);
+    qs('#vgTicketSearch',tools).addEventListener('input',function(){renderAdminList();});
+    qs('#vgTicketMode',tools).addEventListener('change',function(){renderAdminList();});
+  }
+  async function loadAdminTickets(){
+    var client=sb(), list=adminList(); ensureAdminTools(); list=adminList();
+    if(list) list.innerHTML='<div class="vg-ticket-empty">Cargando bandeja...</div>';
+    if(!client){if(list)list.innerHTML='<div class="vg-ticket-empty">Configura Supabase primero.</div>';return;}
+    var r=await withTimeout(client.from('orders').select('*').order('updated_at',{ascending:false}).limit(300),10000,'Cargar bandeja');
+    if(r.error){if(list)list.innerHTML='<div class="vg-ticket-empty">'+esc(r.error.message)+'</div>';return;}
+    state.orders=r.data||[];
+    renderAdminList(); updateAdminBadge();
+  }
+  function renderAdminList(){
+    var list=adminList(); if(!list) return; ensureAdminTools();
+    var mode=(qs('#vgTicketMode')&&qs('#vgTicketMode').value)||'active';
+    var q=(qs('#vgTicketSearch')&&qs('#vgTicketSearch').value||'').toLowerCase();
+    var arr=(state.orders||[]).filter(function(o){
+      var closed=isDeliveredClosed(o);
+      var ok=mode==='all'||(mode==='active'&&!closed)||(mode==='closed'&&closed);
+      var txt=JSON.stringify(o).toLowerCase(); return ok&&(!q||txt.indexOf(q)>-1);
+    });
+    if(!arr.length){list.innerHTML='<div class="vg-ticket-empty">Sin chats en esta vista.</div>';return;}
+    list.innerHTML=arr.map(function(o){
+      var st=String(o.chat_status||o.status||'pendiente'); var active=state.adminOrder&&String(state.adminOrder.id)===String(o.id);
+      return '<button type="button" class="vg-ticket-card '+(active?'active':'')+'" onclick="vgTicketOpenAdmin(\''+esc(o.id)+'\')"><div class="vg-ticket-card-title">'+esc(getTitle(o))+(o.unread_admin?'<span class="vg-ticket-unread">!</span>':'')+'</div><div class="vg-ticket-card-meta">Pedido #'+esc(o.id)+'<br>'+esc(o.customer_name||o.client_name||'Cliente')+' · '+esc(o.customer_phone||o.client_phone||'')+'<br>'+esc(date(o.updated_at||o.created_at))+'</div><div class="vg-ticket-card-price">'+money(o.total)+'</div><span class="vg-ticket-status '+esc(st.toLowerCase())+'">'+esc(st)+'</span></button>';
+    }).join('');
+  }
+  function updateAdminBadge(){
+    var n=(state.orders||[]).filter(function(o){return o.unread_admin&&!isDeliveredClosed(o);}).length;
+    qsa('.vg-admin-tab,.vg-tab,.admin-tab,button').forEach(function(b){
+      var t=(b.textContent||'').toLowerCase();
+      if(t.indexOf('bandeja')>-1){
+        var old=b.querySelector('.vg-ticket-unread'); if(old) old.remove();
+        if(n){var s=document.createElement('span');s.className='vg-ticket-unread';s.textContent=n;b.appendChild(s);}
+      }
+    });
+  }
+  function renderAdminChat(){
+    var p=adminPanel(), o=state.adminOrder; if(!p||!o) return;
+    var closed=isDeliveredClosed(o), img=proof(o);
+    p.innerHTML='<div class="vg-ticket-chat-wrap"><div class="vg-ticket-chat-head"><div><div class="vg-ticket-chat-title">'+esc(getTitle(o))+'</div><div class="vg-ticket-chat-sub">Pedido #'+esc(o.id)+'<br>Cliente: '+esc(o.customer_name||o.client_name||'Cliente')+' · '+esc(o.customer_phone||o.client_phone||'')+'<br>Opción: '+esc(getOption(o)||'—')+' · Total: '+money(o.total)+'<br>Entrega: '+esc(o.delivery_data||o.delivery_info||'—')+'</div><div class="vg-ticket-proof">'+(img?'<a href="'+esc(img)+'" target="_blank">Ver comprobante</a><img src="'+esc(img)+'" alt="Comprobante">':'<span class="vg-ticket-chat-sub">Sin comprobante</span>')+'</div></div><div class="vg-ticket-actions"><select id="vgTicketAdminStatus"><option value="pendiente">Pendiente</option><option value="validado">Validado</option><option value="procesando">En proceso</option><option value="entregado">Entregado</option><option value="cancelado">Cancelado</option></select><button type="button" onclick="vgTicketUpdateStatus()">Guardar estado</button><button type="button" class="danger" onclick="vgTicketCloseAdmin()">Cerrar Chat / Entregado</button></div></div><div class="vg-ticket-msgs" id="vgTicketAdminMsgs"></div>'+(closed?'<div class="vg-ticket-closed-note">Chat cerrado. Esta conversación quedó archivada.</div>':'<div class="vg-ticket-compose"><textarea id="vgTicketAdminText" placeholder="Responder al cliente..."></textarea><button type="button" onclick="vgTicketSendAdmin()">Enviar</button></div>')+'</div>';
+    var sel=qs('#vgTicketAdminStatus',p); if(sel) sel.value=o.status||'pendiente';
+    renderMsgs('#vgTicketAdminMsgs',state.messages,'admin');
+  }
+  window.vgTicketOpenAdmin=async function(id){
+    try{
+      state.adminOrder=await selectOrder(id);
+      state.messages=await loadMessages(id);
+      await markRead(id,'admin');
+      renderAdminList(); renderAdminChat(); startAdminPolling();
+    }catch(e){alert('No se pudo abrir el chat: '+(e.message||e));}
+  };
+  window.vgOpenAdminChat=window.vgTicketOpenAdmin;
+  window.vgSendAdminChat=window.vgTicketSendAdmin=function(){
+    (async function(){
+      var o=state.adminOrder, txt=qs('#vgTicketAdminText')||qs('#vgAdminChatText');
+      if(!o||!txt||!txt.value.trim()) return;
+      var msg=txt.value.trim(); txt.value='';
+      try{
+        await insertMsg(o.id,'admin','Vessel Games',msg);
+        var client=sb();
+        try{await client.from('orders').update({unread_client:true,updated_at:new Date().toISOString(),last_message_at:new Date().toISOString()}).eq('id',o.id);}catch(e){}
+        state.adminOrder=await selectOrder(o.id); state.messages=await loadMessages(o.id); renderAdminChat(); loadAdminTickets();
+      }catch(e){alert('No se pudo enviar el mensaje al cliente: '+(e.message||e));}
+    })();
+  };
+  window.vgTicketUpdateStatus=async function(){
+    var o=state.adminOrder, sel=qs('#vgTicketAdminStatus'); if(!o||!sel) return;
+    try{
+      var client=sb(); var payload={status:sel.value,updated_at:new Date().toISOString(),unread_client:true};
+      if(sel.value==='entregado') payload.delivered_at=new Date().toISOString();
+      var r=await withTimeout(client.from('orders').update(payload).eq('id',o.id).select('*').single(),9000,'Actualizar estado');
+      if(r.error) throw r.error;
+      await insertMsg(o.id,'system','Sistema','Estado actualizado a: '+sel.value);
+      state.adminOrder=r.data; state.messages=await loadMessages(o.id); renderAdminChat(); loadAdminTickets();
+    }catch(e){alert('No se pudo actualizar: '+(e.message||e));}
+  };
+  window.vgTicketCloseAdmin=async function(){
+    var o=state.adminOrder; if(!o) return;
+    if(!confirm('¿Cerrar este chat y marcar el pedido como entregado? Desaparecerá de chats activos.')) return;
+    try{
+      var client=sb();
+      var payload={status:'entregado',chat_status:'closed',chat_closed_at:new Date().toISOString(),delivered_at:new Date().toISOString(),unread_admin:false,unread_client:false,updated_at:new Date().toISOString()};
+      var r=await withTimeout(client.from('orders').update(payload).eq('id',o.id).select('*').single(),9000,'Cerrar chat');
+      if(r.error) throw r.error;
+      await insertMsg(o.id,'system','Sistema','Chat cerrado. Pedido marcado como entregado.');
+      state.adminOrder=null; state.messages=[];
+      var p=adminPanel(); if(p) p.innerHTML='<div class="vg-ticket-empty">Chat cerrado y archivado.</div>';
+      await loadAdminTickets(); notify('Chat cerrado.');
+    }catch(e){alert('No se pudo cerrar el chat: '+(e.message||e));}
+  };
+  window.vgLoadInbox=loadAdminTickets;
+
+  async function clientOrders(){
+    var u=session(), client=sb();
+    var box=qs('#vgProOrdersContent')||qs('#vgDashOrders')||qs('[data-ptab="orders"]');
+    if(!box||!client) return;
+    if(!u){box.innerHTML='<div class="vg-ticket-empty">Inicia sesión para ver tus pedidos.</div>';return;}
+    box.innerHTML='<div class="vg-ticket-empty">Cargando pedidos...</div>';
+    var q=client.from('orders').select('*').order('updated_at',{ascending:false}).limit(120);
+    if(u.id&&isUuid(u.id)&&u.phone) q=q.or('user_id.eq.'+u.id+',customer_phone.eq.'+u.phone+',client_phone.eq.'+u.phone);
+    else if(u.phone) q=q.or('customer_phone.eq.'+u.phone+',client_phone.eq.'+u.phone);
+    var r=await withTimeout(q,9000,'Cargar pedidos');
+    if(r.error){box.innerHTML='<div class="vg-ticket-empty">'+esc(r.error.message)+'</div>';return;}
+    var arr=r.data||[];
+    var unread=arr.filter(function(o){return o.unread_client&&!isDeliveredClosed(o);}).length;
+    if(!arr.length){box.innerHTML='<div class="vg-ticket-empty"><button type="button" onclick="vgCreateSupportThread&&vgCreateSupportThread()">Enviar duda al admin</button><br><br>Sin pedidos registrados todavía.</div>';return;}
+    box.innerHTML=(unread?'<div class="vg-ticket-alert">Tienes '+unread+' respuesta(s) nueva(s). Abre el chat del pedido para verlas.</div>':'')+
+      '<div class="vg-client-orders-list">'+arr.map(function(o){
+        var closed=isDeliveredClosed(o); var st=String(o.chat_status||o.status||'pendiente');
+        return '<div class="vg-ticket-client-card"><div class="vg-ticket-client-top"><div><div class="vg-ticket-client-title">'+esc(getTitle(o))+(o.unread_client&&!closed?'<span class="vg-ticket-unread">!</span>':'')+'</div><div class="vg-ticket-client-meta">Pedido #'+esc(o.id)+' · '+esc(date(o.updated_at||o.created_at))+'<br>Estado: <span class="vg-ticket-status '+esc(st.toLowerCase())+'">'+esc(st)+'</span> · Total: '+money(o.total)+'</div></div></div><div class="vg-ticket-client-actions">'+(closed?'<button disabled>Chat cerrado</button>':'<button type="button" onclick="vgOpenClientChat(\''+esc(o.id)+'\')">Abrir chat</button>')+(proof(o)?'<button type="button" onclick="window.open(\''+esc(proof(o))+'\',\'_blank\')">Ver comprobante</button>':'')+'</div></div>';
+      }).join('')+'</div>';
+  }
+  function ensureClientModal(){
+    var m=qs('#vgClientChatModal');
+    if(!m){
+      m=document.createElement('div'); m.id='vgClientChatModal'; m.className='vg-client-chat-modal'; document.body.appendChild(m);
+    }
+    m.classList.add('vg-ticket-active');
+    return m;
+  }
+  function closeClientModal(){var m=qs('#vgClientChatModal'); if(m){m.classList.remove('active','vg-ticket-active');}}
+  function renderClientChat(){
+    var o=state.clientOrder, m=ensureClientModal(); if(!o) return;
+    var closed=isDeliveredClosed(o);
+    m.innerHTML='<div class="vg-client-chat-card"><div class="vg-client-chat-head"><b>Chat · '+esc(getTitle(o))+'</b><button class="vg-client-chat-x" onclick="vgTicketCloseClientModal()">×</button></div><div class="vg-ticket-msgs" id="vgTicketClientMsgs"></div>'+(closed?'<div class="vg-ticket-closed-note">Chat cerrado. El pedido fue archivado/entregado.</div>':'<div class="vg-ticket-compose"><textarea id="vgTicketClientText" placeholder="Escribe tu mensaje..."></textarea><button type="button" onclick="vgTicketSendClient()">Enviar</button></div>')+'</div>';
+    renderMsgs('#vgTicketClientMsgs',state.messages,'client'); m.classList.add('active');
+  }
+  window.vgTicketCloseClientModal=closeClientModal;
+  window.vgOpenClientChat=async function(id){
+    try{
+      state.clientOrder=await selectOrder(id);
+      state.messages=await loadMessages(id);
+      await markRead(id,'client');
+      renderClientChat(); clientOrders(); startClientPolling();
+    }catch(e){alert('No se pudo abrir el chat: '+(e.message||e));}
+  };
+  window.vgSendClientChat=window.vgTicketSendClient=function(){
+    (async function(){
+      var o=state.clientOrder, txt=qs('#vgTicketClientText')||qs('#vgClientChatText'), u=session()||{};
+      if(!o||!txt||!txt.value.trim()) return;
+      var msg=txt.value.trim(); txt.value='';
+      try{
+        await insertMsg(o.id,'client',u.name||'Cliente',msg);
+        var client=sb(); try{await client.from('orders').update({unread_admin:true,updated_at:new Date().toISOString(),last_message_at:new Date().toISOString()}).eq('id',o.id);}catch(e){}
+        state.clientOrder=await selectOrder(o.id); state.messages=await loadMessages(o.id); renderClientChat(); clientOrders();
+      }catch(e){alert('No se pudo enviar el mensaje: '+(e.message||e));}
+    })();
+  };
+  window.vgLoadClientOrders=clientOrders;
+
+  function startAdminPolling(){
+    if(state.adminTimer) return;
+    state.adminTimer=setInterval(async function(){
+      try{
+        if(state.adminOrder&&adminPanel()){
+          var msgs=await loadMessages(state.adminOrder.id);
+          if(msgs.length!==state.messages.length){state.messages=msgs; renderAdminChat();}
+        }
+      }catch(e){}
+    },5000);
+  }
+  function startClientPolling(){
+    if(state.clientTimer) return;
+    state.clientTimer=setInterval(async function(){
+      try{
+        var m=qs('#vgClientChatModal');
+        if(state.clientOrder&&m&&m.classList.contains('active')){
+          var msgs=await loadMessages(state.clientOrder.id);
+          if(msgs.length!==state.messages.length){state.messages=msgs; renderClientChat();}
+        }
+      }catch(e){}
+    },5000);
+  }
+  function subscribeRealtime(){
+    var client=sb(); if(!client||window.__vgTicketRealtimeSub) return;
+    try{
+      window.__vgTicketRealtimeSub=client.channel('vg-ticket-final-live')
+        .on('postgres_changes',{event:'*',schema:'public',table:'orders'},function(){loadAdminTickets(); setTimeout(clientOrders,300);})
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'order_messages'},async function(p){
+          var oid=String((p.new&&p.new.order_id)||'');
+          if(state.adminOrder&&String(state.adminOrder.id)===oid){state.messages=await loadMessages(oid);renderAdminChat();markRead(oid,'admin');}
+          if(state.clientOrder&&String(state.clientOrder.id)===oid){state.messages=await loadMessages(oid);renderClientChat();markRead(oid,'client');}
+          loadAdminTickets(); clientOrders();
+        }).subscribe();
+    }catch(e){}
+  }
+  function bindTabRefresh(){
+    document.addEventListener('click',function(ev){
+      var t=ev.target&&ev.target.closest&&ev.target.closest('button,[role="tab"],.vg-dt,.vg-admin-tab,.tab');
+      if(!t) return;
+      var txt=(t.textContent||'').toLowerCase();
+      if(txt.indexOf('bandeja')>-1) setTimeout(loadAdminTickets,220);
+      if(txt.indexOf('pedido')>-1 || txt.indexOf('mi cuenta')>-1) setTimeout(clientOrders,260);
+    },false);
+  }
+  function boot(){
+    ensureAdminTools(); bindTabRefresh(); subscribeRealtime();
+    setTimeout(function(){loadAdminTickets(); clientOrders();},500);
+    setInterval(function(){ if(document.body){clientOrders(); updateAdminBadge();} },15000);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+</script>
+
 </body>
 </html>
