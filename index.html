@@ -20156,7 +20156,7 @@ window.renderHistory=function(){
     if(!h.length){list.innerHTML='<div class="vg-hist-empty">No hay compras registradas aún.</div>';return;}
     list.innerHTML=h.map(function(i){
       return '<div class="vg-hist-item">'
-        +'<div class="vg-hist-thumb"><img src="'+(i.image||'')+ '" alt="" onerror="this.style.display='none'"></div>'
+        +'<div class="vg-hist-thumb"><img src="'+(i.image||'')+ '" alt="" onerror="this.style.display=&quot;none&quot;"></div>'
         +'<div class="vg-hist-info"><b>'+i.title+'</b><small>'+(i.option||'')+(i.option?' · ':'')+(i.date||'')+'</small></div>'
         +'<span class="vg-hist-price">'+fmt(i.price)+'</span>'
         +'</div>';
@@ -20226,8 +20226,8 @@ function injectViewToggle(){
   if(!tools||qs('.vg-view-toggle'))return;
   var wrap=document.createElement('div');
   wrap.className='vg-view-toggle';
-  wrap.innerHTML='<button class="vg-vt-btn'+(vgViewMode==='grid'?' active':'')+'" data-mode="grid" onclick="setViewMode('grid')" title="Vista cuadrícula">⊞</button>'
-    +'<button class="vg-vt-btn'+(vgViewMode==='list'?' active':'')+'" data-mode="list" onclick="setViewMode('list')" title="Vista lista">☰</button>';
+  wrap.innerHTML='<button class="vg-vt-btn'+(vgViewMode==='grid'?' active':'')+'" data-mode="grid" onclick="setViewMode(&quot;grid&quot;)" title="Vista cuadrícula">⊞</button>'
+    +'<button class="vg-vt-btn'+(vgViewMode==='list'?' active':'')+'" data-mode="list" onclick="setViewMode(&quot;list&quot;)" title="Vista lista">☰</button>';
   tools.appendChild(wrap);
   // Apply saved mode
   var g=qs('#productsGrid');if(g)g.classList.toggle('vg-list-view',vgViewMode==='list');
@@ -20352,14 +20352,7 @@ function vgUpdateWaPreview(){
   var h=(qs('#vg-wa-header')||{}).value||'Hola, envío mi comprobante de pago.';
   var f=(qs('#vg-wa-footer')||{}).value||'Quedo en espera, gracias.';
   var prev=qs('#vg-wa-preview-box');
-  if(prev) prev.textContent=h+'
-
-Pedido #1234
-1. Producto ejemplo - Opción 1 - $150 MXN
-
-Total: $150 MXN
-
-'+f;
+  if(prev) prev.textContent = h + '\n\nPedido #1234\n1. Producto ejemplo - Opción 1 - $150 MXN\n\nTotal: $150 MXN\n\n' + f;
 }
 
 function ensureTopViewedSection(){
@@ -21769,7 +21762,7 @@ async function renderWallet(){
   grid.innerHTML = REDEEM_CATALOG.map(function(r){
     var canAfford = tokens >= r.cost;
     return '<div class="vg-redeem-card'+(canAfford?'':' locked')+'" '
-      + (canAfford?'onclick="vgRedeem(''+r.id+'')"':'')+' title="'+(canAfford?'Canjear':'Necesitas '+r.cost+' tokens')+'"><div class="vg-redeem-icon">'+r.icon+'</div>'
+      + (canAfford ? 'onclick="vgRedeem(\'' + r.id + '\')"' : '') + ' title="' + (canAfford ? 'Canjear' : 'Necesitas ' + r.cost + ' tokens') + '"><div class="vg-redeem-icon">' + r.icon + '</div>'
       + '<div class="vg-redeem-name">'+r.name+'</div>'
       + '<div class="vg-redeem-cost"><span>'+r.cost+'</span> tokens</div>'
       + (canAfford?'<div style="font-size:.7rem;color:#19e6c1;margin-top:6px">Tap para canjear</div>':'')
@@ -21812,10 +21805,7 @@ window.vgRedeem = async function(serviceId){
     // Send WhatsApp notification
     var num = window.WHATSAPP_NUMBER||window.WHATSAPP_FALLBACK||'';
     if(num){
-      var msg = 'CANJE solicitado:
-Usuario: '+SESSION.name+' ('+SESSION.phone+')
-Servicio: '+r.name+'
-Tokens: '+r.cost;
+      var msg = 'CANJE solicitado:\nUsuario: ' + SESSION.name + ' (' + SESSION.phone + ')\nServicio: ' + r.name + '\nTokens: ' + r.cost;
       window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
     }
   }catch(e){toast('Error al canjear: '+e.message);}
@@ -21923,7 +21913,7 @@ window.vgLoadUsers = async function(){
           +'<br><span style="font-size:.74rem;color:#8b93b0">'+(r.vg_users&&r.vg_users.name||'?')+' · '+(r.vg_users&&r.vg_users.phone||'')+'</span></div>'
           +'<div style="display:flex;gap:6px;align-items:center">'
           +'<span class="vg-redemp-status pending">Pendiente</span>'
-          +'<button class="vg-te-save" onclick="vgMarkRedeemed(''+r.id+'')">Entregar</button>'
+          +'<button class="vg-te-save" onclick="vgMarkRedeemed(\''+r.id+'\')">Entregar</button>'
           +'</div></div>';
       }).join('');
     } else if(rWrap){ rWrap.style.display='none'; }
@@ -21957,7 +21947,7 @@ function vgRenderUsersTable(users){
       +'<td><div class="vg-token-edit">'
         +'<input class="vg-te-input" id="vgTkAdj_'+u.id+'" type="number" step="0.5" placeholder="0" value="">'
         +'<input class="vg-te-input" id="vgTkNote_'+u.id+'" placeholder="nota" style="width:70px">'
-        +'<button class="vg-te-save" onclick="vgAdminAdjustTokens(''+u.id+'',''+u.name+'')">Guardar</button>'
+        +'<button class="vg-te-save" data-admin-token-id="'+u.id+'" data-admin-token-name="'+String(u.name||'').replace(/"/g,'&quot;')+'">Guardar</button>'
       +'</div></td>'
       +'</tr>';
   }).join('');
@@ -22012,13 +22002,7 @@ window.vgExportUsersCSV = function(){
     return [u.name,u.phone,u.tokens||0,u.total_purchases||0,u.referral_code||'',u.referred_by||'',fmtDate(u.created_at)]
       .map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
   });
-  var csv='﻿'+h.join(',')+'
-'+rows.join('
-');
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;
-  a.download='vessel-usuarios-'+new Date().toISOString().split('T')[0]+'.csv';
+  var csv='\uFEFF' + h.join(',') + '\n' + rows.join('\n');
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   toast('CSV de usuarios descargado');
 };
@@ -23176,5 +23160,342 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+
+<!-- VG PATCH: Mi Cuenta responsive actions + Admin token save stable -->
+<style id="vg-account-token-fix-css">
+  #vgUserDashModal .vg-dash-section{display:none;}
+  #vgUserDashModal .vg-dash-section.active{display:block;}
+  #vgUserDashModal .vg-dt{cursor:pointer;touch-action:manipulation;}
+  #vgUserDashModal .vg-dt:disabled{opacity:.55;pointer-events:none;}
+  .vg-token-edit-save[disabled]{opacity:.6;cursor:wait;}
+  .vg-token-save-state{font-size:.72rem;margin-left:8px;color:#19e6c1;}
+  .vg-token-save-state.err{color:#ff7090;}
+</style>
+<script id="vg-account-token-fix-js">
+(function(){
+  'use strict';
+  if(window.__vgAccountTokenFixV2) return;
+  window.__vgAccountTokenFixV2 = true;
+
+  var SESSION_KEYS = ['vg_auth_session_v1','vg_pro_session_v2','vg_pro_session','vg_user'];
+  var runningTab = false;
+
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }); }
+  function money(n){ return '$' + Number(n || 0).toLocaleString('es-MX', {maximumFractionDigits:0}) + ' MXN'; }
+  function dateMX(v){ try{return v ? new Date(v).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}) : '—';}catch(e){return '—';} }
+  function parseJSON(k){ try{ var raw=localStorage.getItem(k); return raw && raw !== 'undefined' && raw !== 'null' ? JSON.parse(raw) : null; }catch(e){ return null; } }
+  function normalizeSession(s){
+    if(!s || typeof s !== 'object') return null;
+    var name = String(s.name || s.customer_name || s.client_name || '').trim();
+    var phone = String(s.phone || s.customer_phone || s.client_phone || '').replace(/\D/g,'');
+    if(!name && !phone) return null;
+    return {
+      id: s.id || s.user_id || s.uuid || null,
+      name: name || 'Usuario',
+      phone: phone || '',
+      tokens: Number(s.tokens != null ? s.tokens : (s.balance || 0)),
+      total_purchases: Number(s.total_purchases != null ? s.total_purchases : (s.purchases || 0)),
+      referral_code: s.referral_code || s.refCode || s.ref || '',
+      ts: s.ts || Date.now()
+    };
+  }
+  function getSession(){
+    for(var i=0;i<SESSION_KEYS.length;i++){
+      var s = normalizeSession(parseJSON(SESSION_KEYS[i]));
+      if(s) return s;
+    }
+    return null;
+  }
+  function saveSession(s){
+    s = normalizeSession(s);
+    if(!s) return null;
+    try{
+      localStorage.setItem('vg_auth_session_v1', JSON.stringify(s));
+      localStorage.setItem('vg_pro_session_v2', JSON.stringify(s));
+      localStorage.setItem('vg_pro_session', JSON.stringify(s));
+      localStorage.setItem('vg_user', JSON.stringify({ name:s.name, phone:s.phone, ts:s.ts || Date.now() }));
+    }catch(e){}
+    try{ window.session = s; }catch(e){}
+    return s;
+  }
+  function getClientSafe(){
+    if(typeof window.getSB === 'function') { try{ var c = window.getSB(); if(c) return c; }catch(e){} }
+    if(typeof window.getClient === 'function') { try{ var c2 = window.getClient(); if(c2) return c2; }catch(e){} }
+    try{
+      var cfg = JSON.parse(localStorage.getItem('vg_supabase_cfg_v1') || '{}');
+      var url = cfg.url || window.VG_SUPABASE_URL || '';
+      var anon = cfg.anon || cfg.key || cfg.anon_key || window.VG_SUPABASE_ANON_KEY || '';
+      if(url && anon && window.supabase && window.supabase.createClient) return window.supabase.createClient(url, anon);
+    }catch(e){}
+    return null;
+  }
+  function withTimeout(promise, ms, label){
+    return new Promise(function(resolve, reject){
+      var done = false;
+      var t = setTimeout(function(){ if(!done){ done=true; reject(new Error((label || 'Operación') + ' tardó demasiado.')); } }, ms || 8000);
+      Promise.resolve(promise).then(function(v){ if(!done){done=true;clearTimeout(t);resolve(v);} }, function(err){ if(!done){done=true;clearTimeout(t);reject(err);} });
+    });
+  }
+  function showToast(msg){ if(typeof window.showToast === 'function') window.showToast(msg); else console.log(msg); }
+
+  function syncAccountHeader(session){
+    session = saveSession(session || getSession());
+    if(!session) return null;
+    var set = function(id, val){ var el=qs(id); if(el) el.textContent = val; };
+    set('#vgDashAvatar', (session.name || 'U').charAt(0).toUpperCase());
+    set('#vgDashName', session.name || 'Usuario');
+    set('#vgDashPhone', session.phone ? ('Tel: ' + session.phone) : '');
+    set('#vgDashTokensBadge', Number(session.tokens || 0).toFixed(1).replace('.0',''));
+    set('#vgDashTokensBig', Number(session.tokens || 0).toFixed(1).replace('.0',''));
+    set('#vgWalletTokensBig', Number(session.tokens || 0).toFixed(1));
+    set('#vgDashRefCode', session.referral_code || session.refCode || '—');
+    var av = qs('#vgAbAvatar'); if(av) av.textContent = (session.name || 'U').charAt(0).toUpperCase();
+    var lab = qs('#vgAbLabel'); if(lab) lab.textContent = session.name || 'Mi cuenta';
+    return session;
+  }
+
+  function openAccount(){
+    var s = syncAccountHeader(getSession());
+    if(!s){
+      if(typeof window.vgOpenAuth === 'function') return window.vgOpenAuth();
+      var auth = qs('#vgAuthModal'); if(auth) auth.classList.add('active');
+      return;
+    }
+    var m = qs('#vgUserDashModal');
+    if(m){ m.classList.add('active'); document.body.style.overflow='hidden'; }
+    activateDashTab('orders');
+  }
+  window.openDashboard = openAccount;
+  window.closeDashboard = function(){
+    var m = qs('#vgUserDashModal'); if(m) m.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  function activateDashTab(tab){
+    if(runningTab) return;
+    runningTab = true;
+    try{
+      var map = {orders:'vgDashOrders', wallet:'vgDashWallet', referral:'vgDashReferral', referrals:'vgDashReferral'};
+      tab = map[tab] ? tab : 'orders';
+      qsa('#vgUserDashModal .vg-dt').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-dt') === tab); });
+      qsa('#vgUserDashModal .vg-dash-section').forEach(function(sec){ sec.classList.toggle('active', sec.id === map[tab]); });
+      if(tab === 'orders') setTimeout(renderOrdersSafe, 0);
+      if(tab === 'wallet') setTimeout(renderWalletSafe, 0);
+      if(tab === 'referral' || tab === 'referrals') setTimeout(renderReferralSafe, 0);
+    } finally {
+      setTimeout(function(){ runningTab = false; }, 80);
+    }
+  }
+  window.vgDashTab = function(btn){
+    var tab = (btn && btn.getAttribute) ? btn.getAttribute('data-dt') : btn;
+    activateDashTab(tab || 'orders');
+  };
+
+  async function renderOrdersSafe(){
+    var s = syncAccountHeader(getSession());
+    var list = qs('#vgDashOrdersList'); if(!list || !s) return;
+    list.innerHTML = '<p style="color:#5a6180;text-align:center;padding:24px">Cargando pedidos...</p>';
+    var orders = [];
+    var c = getClientSafe();
+    if(c && s.phone){
+      try{
+        var query = c.from('orders').select('id,created_at,product_name,product_option,total,status,items,client_phone,customer_phone').or('client_phone.eq.' + s.phone + ',customer_phone.eq.' + s.phone).order('created_at',{ascending:false}).limit(20);
+        var res = await withTimeout(query, 8000, 'Pedidos');
+        if(res && res.data) orders = res.data;
+      }catch(e){ console.warn('[VG orders]', e); }
+    }
+    try{
+      var local = JSON.parse(localStorage.getItem('vg_purchase_history') || '[]');
+      if(local && local.length){
+        local.forEach(function(o){ orders.push({id:o.id||o.ts||'local', created_at:o.date||o.created_at, product_name:o.title||o.product_name, product_option:o.option||'', total:o.price||o.total, status:o.status||'local'}); });
+      }
+    }catch(e){}
+    if(!orders.length){
+      list.innerHTML = '<p style="color:#5a6180;text-align:center;padding:24px">Sin pedidos registrados todavía.</p>';
+      return;
+    }
+    list.innerHTML = orders.map(function(o){
+      var title = o.product_name || (o.items && o.items[0] && (o.items[0].title || o.items[0].name)) || 'Pedido';
+      return '<div class="vg-order-row"><div style="flex:1;min-width:0"><b style="font-size:.88rem;display:block">' + esc(title) + '</b><span style="font-size:.74rem;color:#8b93b0">#' + esc(String(o.id||'').slice(0,8)) + ' · ' + esc(dateMX(o.created_at)) + '</span></div><div style="text-align:right"><div style="font-weight:800;color:#19e6c1;font-size:.9rem">' + money(o.total) + '</div><span class="vg-order-status">' + esc(o.status || 'pendiente') + '</span></div></div>';
+    }).join('');
+  }
+
+  async function renderWalletSafe(){
+    var s = syncAccountHeader(getSession());
+    if(!s) return;
+    var c = getClientSafe();
+    if(c && s.id){
+      try{
+        var u = await withTimeout(c.from('vg_users').select('tokens,total_purchases').eq('id', s.id).maybeSingle(), 7000, 'Wallet');
+        if(u && u.data){
+          s.tokens = Number(u.data.tokens || 0);
+          s.total_purchases = Number(u.data.total_purchases || 0);
+          saveSession(s);
+        }
+      }catch(e){
+        try{
+          var w = await withTimeout(c.from('vg_token_wallet').select('balance,total_purchases').eq('user_id', s.id).maybeSingle(), 7000, 'Wallet');
+          if(w && w.data){ s.tokens = Number(w.data.balance || 0); s.total_purchases = Number(w.data.total_purchases || 0); saveSession(s); }
+        }catch(e2){ console.warn('[VG wallet]', e2); }
+      }
+    }
+    syncAccountHeader(s);
+    var tokens = Number(s.tokens || 0);
+    var purchases = Number(s.total_purchases || 0);
+    var tb = qs('#vgWalletTokensBig'); if(tb) tb.textContent = tokens.toFixed(1);
+    var bar = qs('#vgWalletProgressBar'); if(bar) bar.style.width = Math.min(100, ((purchases % 2) / 2) * 100) + '%';
+    var lbl = qs('#vgWalletProgressLabel'); if(lbl) lbl.textContent = (purchases % 2) + ' / 2 compras';
+    var grid = qs('#vgRedeemGrid');
+    var catalog = window.REDEEM_CATALOG || [
+      {id:'vix',name:'VIX',cost:5,icon:'V'}, {id:'paramount',name:'PARAMOUNT',cost:7,icon:'P'}, {id:'max',name:'MAX',cost:9,icon:'M'}, {id:'crunchyroll',name:'CRUNCHYROLL',cost:10,icon:'C'}, {id:'netflix',name:'NETFLIX',cost:20,icon:'N'}
+    ];
+    if(grid){
+      grid.innerHTML = catalog.map(function(r){
+        var ok = tokens >= Number(r.cost || 0);
+        return '<div class="vg-redeem-card' + (ok ? '' : ' locked') + '" data-redeem-id="' + esc(r.id) + '" title="' + esc(ok ? 'Canjear' : ('Necesitas ' + r.cost + ' tokens')) + '"><div class="vg-redeem-icon">' + esc(r.icon || '') + '</div><div class="vg-redeem-name">' + esc(r.name || '') + '</div><div class="vg-redeem-cost"><span>' + esc(r.cost || 0) + '</span> tokens</div>' + (ok ? '<div style="font-size:.7rem;color:#19e6c1;margin-top:6px">Tap para canjear</div>' : '') + '</div>';
+      }).join('');
+      qsa('[data-redeem-id]', grid).forEach(function(card){
+        card.onclick = function(){ if(card.classList.contains('locked')) return; if(typeof window.vgRedeem === 'function') window.vgRedeem(card.getAttribute('data-redeem-id')); };
+      });
+    }
+    await renderTokenLogSafe(s, c);
+  }
+
+  async function renderTokenLogSafe(s, c){
+    var logEl = qs('#vgTokenLog'); if(!logEl) return;
+    var rows = [];
+    if(c && s && s.id){
+      try{
+        var res = await withTimeout(c.from('vg_token_log').select('amount,type,description,created_at').eq('user_id',s.id).order('created_at',{ascending:false}).limit(15), 6000, 'Historial');
+        if(res && res.data) rows = res.data;
+      }catch(e){
+        try{
+          var res2 = await withTimeout(c.from('vg_token_tx').select('amount,type,description,created_at').eq('user_id',s.id).order('created_at',{ascending:false}).limit(15), 6000, 'Historial');
+          if(res2 && res2.data) rows = res2.data;
+        }catch(e2){}
+      }
+    }
+    if(!rows.length){ logEl.innerHTML = '<p style="color:#5a6180;font-size:.82rem;text-align:center;padding:12px">Sin movimientos todavía.</p>'; return; }
+    logEl.innerHTML = rows.map(function(e){
+      var plus = Number(e.amount) >= 0;
+      return '<div class="vg-tlog-row"><span>' + esc(e.description || e.type || 'Movimiento') + '</span><div style="text-align:right"><span class="vg-tlog-amount ' + (plus?'plus':'minus') + '">' + (plus?'+':'') + Number(e.amount||0).toFixed(1) + ' tkn</span><br><span style="font-size:.68rem;color:#5a6180">' + esc(dateMX(e.created_at)) + '</span></div></div>';
+    }).join('');
+  }
+
+  async function renderReferralSafe(){
+    var s = syncAccountHeader(getSession()); if(!s) return;
+    var base = window.location.origin + window.location.pathname;
+    var link = base + '?ref=' + encodeURIComponent(s.referral_code || s.phone || '');
+    var rl = qs('#vgDashRefLink'); if(rl) rl.textContent = link;
+    var c = getClientSafe();
+    if(c && s.id){
+      try{
+        var refs = await withTimeout(c.from('vg_users').select('id',{count:'exact',head:true}).or('referred_by.eq.' + s.id + ',referred_by.eq.' + (s.referral_code || '')), 7000, 'Referidos');
+        var rc = qs('#vgDashRefCount'); if(rc) rc.textContent = refs && typeof refs.count === 'number' ? refs.count : 0;
+      }catch(e){}
+      try{
+        var tx = await withTimeout(c.from('vg_token_log').select('amount').eq('user_id',s.id).eq('type','referral'), 7000, 'Referidos');
+        var total = (tx.data || []).reduce(function(sum,row){ return sum + Number(row.amount || 0); }, 0);
+        var rt = qs('#vgDashRefTokens'); if(rt) rt.textContent = total.toFixed(1);
+      }catch(e){}
+    }
+  }
+
+  window.vgAdminSaveTokens = async function(userId){
+    if(!userId){ alert('Usuario no válido.'); return; }
+    var safe = String(userId).replace(/-/g,'');
+    var input = qs('#te_' + safe) || qs('[data-uid="' + String(userId).replace(/"/g,'\\"') + '"]');
+    if(!input){ alert('No encontré el campo de tokens.'); return; }
+    var newBal = Number(input.value);
+    if(!isFinite(newBal) || newBal < 0){ alert('Valor de tokens inválido.'); return; }
+    var row = input.closest('td') || input.parentNode;
+    var btn = row && row.querySelector ? row.querySelector('.vg-token-edit-save') : null;
+    var state = row && row.querySelector ? row.querySelector('.vg-token-save-state') : null;
+    if(!state && row){ state = document.createElement('span'); state.className='vg-token-save-state'; row.appendChild(state); }
+    if(btn){ btn.disabled = true; btn.textContent = 'Guardando...'; }
+    if(state){ state.className='vg-token-save-state'; state.textContent='Guardando'; }
+    var c = getClientSafe();
+    if(!c){ if(btn){btn.disabled=false;btn.textContent='Guardar';} alert('Supabase no configurado.'); return; }
+    try{
+      var oldBal = 0;
+      try{
+        var current = await withTimeout(c.from('vg_users').select('tokens').eq('id', userId).maybeSingle(), 7000, 'Lectura de usuario');
+        if(current && current.data) oldBal = Number(current.data.tokens || 0);
+      }catch(e){}
+
+      var errors = [];
+      var ures = await withTimeout(c.from('vg_users').update({tokens:newBal}).eq('id', userId), 9000, 'Actualización de usuario');
+      if(ures && ures.error) errors.push(ures.error.message || String(ures.error));
+
+      try{
+        var wcur = await withTimeout(c.from('vg_token_wallet').select('user_id,balance').eq('user_id', userId).maybeSingle(), 7000, 'Lectura wallet');
+        var wres;
+        if(wcur && wcur.data){ wres = await withTimeout(c.from('vg_token_wallet').update({balance:newBal}).eq('user_id', userId), 9000, 'Actualización wallet'); }
+        else { wres = await withTimeout(c.from('vg_token_wallet').insert({user_id:userId,balance:newBal,total_purchases:0,total_earned:0}), 9000, 'Creación wallet'); }
+        if(wres && wres.error) errors.push(wres.error.message || String(wres.error));
+      }catch(walletErr){ console.warn('[VG token wallet]', walletErr); }
+
+      var delta = newBal - oldBal;
+      try{ await c.from('vg_token_log').insert({user_id:userId, amount:delta, type:delta>=0?'manual_add':'manual_sub', description:'Ajuste manual por admin'}); }catch(e){}
+      try{ await c.from('vg_token_tx').insert({user_id:userId, amount:delta, type:delta>=0?'manual_add':'manual_sub', description:'Ajuste manual por admin'}); }catch(e){}
+
+      var s = getSession();
+      if(s && String(s.id) === String(userId)){
+        s.tokens = newBal; saveSession(s); syncAccountHeader(s);
+      }
+      if(Array.isArray(window._allUsers)){
+        window._allUsers.forEach(function(u){
+          if(String(u.id) === String(userId)){
+            u.tokens = newBal;
+            if(u.vg_token_wallet){ u.vg_token_wallet.balance = newBal; }
+          }
+        });
+      }
+      if(input) input.value = newBal.toFixed(1);
+      if(state){ state.className='vg-token-save-state'; state.textContent='Guardado'; }
+      showToast('Tokens actualizados: ' + newBal.toFixed(1));
+      if(typeof window.vgAdminLoadUsers === 'function') setTimeout(function(){ try{ window.vgAdminLoadUsers(); }catch(e){} }, 650);
+      if(errors.length) console.warn('[VG token save partial]', errors);
+    }catch(err){
+      if(state){ state.className='vg-token-save-state err'; state.textContent='Error'; }
+      alert('No se pudieron guardar tokens: ' + (err && err.message ? err.message : err));
+    }finally{
+      if(btn){ btn.disabled = false; btn.textContent = 'Guardar'; }
+    }
+  };
+
+  document.addEventListener('click', function(ev){
+    var tab = ev.target && ev.target.closest && ev.target.closest('#vgUserDashModal .vg-dt');
+    if(tab){ ev.preventDefault(); ev.stopPropagation(); activateDashTab(tab.getAttribute('data-dt') || 'orders'); }
+    var bg = ev.target === qs('#vgUserDashModal');
+    if(bg) window.closeDashboard();
+  }, true);
+
+  document.addEventListener('DOMContentLoaded', function(){ syncAccountHeader(getSession()); });
+  window.addEventListener('load', function(){ syncAccountHeader(getSession()); });
+})();
+</script>
+
+
+<!-- VG BRIDGE: admin token data-buttons -->
+<script id="vg-token-data-button-bridge-js">
+(function(){
+  if(window.__vgTokenDataButtonBridge) return;
+  window.__vgTokenDataButtonBridge = true;
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest && ev.target.closest('[data-admin-token-id]');
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    var id = btn.getAttribute('data-admin-token-id');
+    var name = btn.getAttribute('data-admin-token-name') || '';
+    if(typeof window.vgAdminAdjustTokens === 'function') window.vgAdminAdjustTokens(id, name);
+    else if(typeof window.vgAdminSaveTokens === 'function') window.vgAdminSaveTokens(id);
+  }, true);
+})();
+</script>
 </body>
 </html>
