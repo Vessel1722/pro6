@@ -25174,5 +25174,218 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- VG PROFESSIONAL ACCOUNT CHAT · Clean client/admin support layer -->
+<style id="vg-prof-chat-css">
+  #vgProModal.vg-prof-active{background:rgba(2,5,15,.78)!important;backdrop-filter:blur(14px)!important;padding:22px!important;align-items:center!important;justify-content:center!important;}
+  #vgProModal.vg-prof-active #vgProCard{width:min(1160px,96vw)!important;height:min(860px,92vh)!important;max-width:none!important;max-height:none!important;border-radius:30px!important;border:1px solid rgba(255,255,255,.12)!important;background:linear-gradient(180deg,#111626 0%,#0b0f1d 100%)!important;box-shadow:0 34px 110px rgba(0,0,0,.58)!important;overflow:hidden!important;}
+  #vgProModal.vg-prof-active .vg-pro-header{padding:24px 28px!important;background:linear-gradient(135deg,rgba(126,87,255,.18),rgba(20,226,189,.10))!important;border-bottom:1px solid rgba(255,255,255,.08)!important;}
+  #vgProModal.vg-prof-active .vg-pro-body{padding:0!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;min-height:0!important;}
+  #vgProModal.vg-prof-active .vg-pro-tabs{background:rgba(255,255,255,.025)!important;border-bottom:1px solid rgba(255,255,255,.08)!important;padding:0 22px!important;gap:0!important;justify-content:space-between!important;}
+  #vgProModal.vg-prof-active .vg-pro-tab{border:0!important;background:transparent!important;border-radius:0!important;min-height:64px!important;padding:0 14px!important;font-weight:900!important;color:#99a2bc!important;position:relative!important;}
+  #vgProModal.vg-prof-active .vg-pro-tab.active{color:#fff!important;}
+  #vgProModal.vg-prof-active .vg-pro-tab.active:after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:999px;background:linear-gradient(90deg,#8b5cf6,#18e2bd);}
+  #vgProModal.vg-prof-active .vg-pro-section{height:100%!important;min-height:0!important;overflow:auto!important;padding:24px!important;}
+  .vg-prof-shell{height:100%;display:grid;grid-template-columns:300px 1fr;gap:18px;min-height:0;}
+  .vg-prof-sidebar,.vg-prof-main{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:24px;overflow:hidden;min-height:0;}
+  .vg-prof-sidebar{display:flex;flex-direction:column;}
+  .vg-prof-side-head{padding:18px;border-bottom:1px solid rgba(255,255,255,.08);}
+  .vg-prof-side-title{font-size:18px;font-weight:950;color:#fff;margin-bottom:5px}.vg-prof-side-sub{font-size:13px;color:#8f98b4;line-height:1.4}
+  .vg-prof-statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding:14px 16px;border:1px solid rgba(20,226,189,.22);background:linear-gradient(135deg,rgba(20,226,189,.10),rgba(126,87,255,.06));border-radius:18px;color:#e9fffb;}
+  .vg-prof-dot{width:10px;height:10px;border-radius:999px;background:#17e8c4;box-shadow:0 0 0 6px rgba(23,232,196,.12);display:inline-block;margin-right:8px;}
+  .vg-prof-statusbar b{font-size:14px}.vg-prof-statusbar span{color:#9ea8c7;font-size:13px}
+  .vg-prof-tabbar{display:flex;gap:8px;padding:10px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);}
+  .vg-prof-tabbar button{flex:1;border:0;border-radius:14px;background:transparent;color:#9aa4c0;padding:11px 10px;font-weight:900;cursor:pointer}.vg-prof-tabbar button.active{background:rgba(126,87,255,.18);color:#fff;}
+  .vg-prof-list{padding:12px;overflow:auto;min-height:0;}
+  .vg-prof-order{width:100%;display:block;text-align:left;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:18px;padding:14px;margin-bottom:10px;color:#fff;cursor:pointer;transition:.16s ease;}
+  .vg-prof-order:hover,.vg-prof-order.active{border-color:rgba(20,226,189,.42);background:rgba(20,226,189,.08);transform:translateY(-1px)}
+  .vg-prof-order-title{font-size:14px;font-weight:950;margin-bottom:6px}.vg-prof-order-meta{font-size:12px;color:#929bb8;line-height:1.4}.vg-prof-order-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}.vg-prof-price{color:#19e8c6;font-weight:950}.vg-prof-badge{border-radius:999px;padding:5px 8px;background:rgba(126,87,255,.14);border:1px solid rgba(126,87,255,.24);font-size:10px;color:#dcd7ff;font-weight:950;text-transform:uppercase}.vg-prof-badge.locked{background:rgba(255,95,130,.12);border-color:rgba(255,95,130,.28);color:#ffa2b8}.vg-prof-unread{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:999px;background:#19e8c6;color:#05120f;font-size:12px;font-weight:950;margin-left:8px}
+  .vg-prof-main{display:flex;flex-direction:column;}
+  .vg-prof-chat-head{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:14px;align-items:flex-start;background:rgba(255,255,255,.025);}
+  .vg-prof-chat-title{font-size:20px;font-weight:950;color:#fff;margin-bottom:4px}.vg-prof-chat-sub{font-size:13px;color:#9ba5c1;line-height:1.35}.vg-prof-chat-tag{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 12px;background:rgba(20,226,189,.10);border:1px solid rgba(20,226,189,.25);color:#cffff8;font-weight:950;font-size:12px;white-space:nowrap}
+  .vg-prof-msgs{flex:1;min-height:0;overflow:auto;padding:22px;background:radial-gradient(circle at 20% 0%,rgba(126,87,255,.10),transparent 34%),rgba(4,8,18,.55);}
+  .vg-prof-msg{max-width:72%;margin:0 0 14px;padding:13px 15px;border-radius:20px;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.18);}
+  .vg-prof-msg.client{margin-right:auto;background:#182033;border-bottom-left-radius:7px;color:#f8fbff;}
+  .vg-prof-msg.admin{margin-left:auto;background:linear-gradient(135deg,#7c5cff,#17dcb9);border-color:rgba(255,255,255,.16);border-bottom-right-radius:7px;color:#061116;}
+  .vg-prof-msg.system{margin-left:auto;margin-right:auto;text-align:center;max-width:86%;background:rgba(255,191,64,.12);border-color:rgba(255,191,64,.24);color:#ffd98a;}
+  .vg-prof-msg-meta{display:flex;justify-content:space-between;gap:10px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;font-weight:950;margin-bottom:6px;color:rgba(255,255,255,.62)}
+  .vg-prof-msg.admin .vg-prof-msg-meta{color:rgba(6,17,22,.68)}.vg-prof-msg-body{white-space:pre-wrap;line-height:1.45;font-size:14px;font-weight:650;}
+  .vg-prof-compose{display:flex;gap:12px;padding:16px;border-top:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);}
+  .vg-prof-compose textarea{flex:1;min-height:54px;max-height:130px;resize:vertical;border:1px solid rgba(255,255,255,.11);background:#171c2b;color:#fff;border-radius:18px;padding:14px 15px;outline:none;font-weight:650;}
+  .vg-prof-compose textarea:focus{border-color:rgba(20,226,189,.45);box-shadow:0 0 0 4px rgba(20,226,189,.08);}
+  .vg-prof-compose button,.vg-prof-primary{border:0;border-radius:18px;background:linear-gradient(135deg,#7c5cff,#18e2bd);color:#061116;font-weight:950;padding:0 22px;min-width:132px;cursor:pointer}.vg-prof-compose button:disabled{opacity:.55;cursor:not-allowed}.vg-prof-secondary{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);color:#e6e9ff;border-radius:16px;padding:12px 15px;font-weight:900;cursor:pointer}.vg-prof-form{padding:20px;max-width:660px}.vg-prof-field{margin-bottom:14px}.vg-prof-field label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#9ba5c1;font-weight:950;margin-bottom:7px}.vg-prof-field input,.vg-prof-field select,.vg-prof-field textarea{width:100%;border:1px solid rgba(255,255,255,.11);background:#171c2b;color:#fff;border-radius:16px;padding:13px 14px;font-weight:700;outline:none}.vg-prof-field textarea{min-height:120px;resize:vertical}.vg-prof-empty{border:1px dashed rgba(255,255,255,.13);border-radius:22px;padding:34px;text-align:center;color:#9ba5c1;background:rgba(255,255,255,.025);}.vg-prof-empty h3{color:#fff;margin:0 0 8px;font-size:22px}.vg-prof-locked-icon{font-size:38px;margin-bottom:12px}.vg-prof-ticket-row{border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.04);padding:14px;margin-bottom:10px;cursor:pointer}.vg-prof-ticket-row:hover{border-color:rgba(126,87,255,.32)}
+  .vg-prof-notice{margin-bottom:14px;border:1px solid rgba(20,226,189,.25);background:rgba(20,226,189,.08);border-radius:16px;padding:13px;color:#dffff9;font-size:13px;font-weight:800}.vg-prof-error{border-color:rgba(255,95,130,.30);background:rgba(255,95,130,.10);color:#ffd1dc}.vg-prof-mini-loader{color:#9ba5c1;text-align:center;padding:30px}.vg-prof-admin-grid{display:grid;grid-template-columns:340px 1fr;gap:18px;min-height:640px}.vg-prof-admin-list{overflow:auto}.vg-prof-admin-card{width:100%;display:block;text-align:left;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);border-radius:18px;padding:14px;margin-bottom:10px;color:#fff;cursor:pointer}.vg-prof-admin-card.active,.vg-prof-admin-card:hover{border-color:rgba(20,226,189,.42);background:rgba(20,226,189,.08)}
+  @media(max-width:860px){#vgProModal.vg-prof-active{padding:8px!important}#vgProModal.vg-prof-active #vgProCard{width:100vw!important;height:100dvh!important;border-radius:0!important}.vg-prof-shell{grid-template-columns:1fr}.vg-prof-sidebar{min-height:260px}.vg-prof-msg{max-width:90%}.vg-prof-compose{flex-direction:column}.vg-prof-compose button{height:50px}.vg-prof-admin-grid{grid-template-columns:1fr}.vg-prof-chat-head{flex-direction:column}.vg-prof-tabbar{overflow-x:auto}.vg-prof-tabbar button{min-width:130px}.vg-prof-statusbar{align-items:flex-start}}
+</style>
+<script id="vg-prof-chat-js">
+(function(){
+  'use strict';
+  if(window.__vgProfessionalChatLayer) return;
+  window.__vgProfessionalChatLayer = true;
+
+  var SESSION_KEYS=['vg_auth_session_v1','vg_pro_session_v2','vg_pro_session','vg_user'];
+  var state={mode:'delivery',orders:[],tickets:[],activeType:null,activeRef:null,activeObj:null,messages:[],timer:null,adminTimer:null,adminActiveType:null,adminActiveRef:null,adminActiveObj:null,adminMessages:[],booted:false};
+
+  function qs(s,r){return (r||document).querySelector(s)}
+  function qsa(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function parse(raw,f){try{return JSON.parse(raw)}catch(e){return f}}
+  function cleanPhone(v){return String(v||'').replace(/\D/g,'')}
+  function notify(msg,type){try{if(typeof window.showToast==='function')window.showToast(msg);else console.log(msg)}catch(e){} if(type==='error')console.warn(msg)}
+  function cfg(){var c=parse(localStorage.getItem('vg_supabase_cfg_v1')||'{}',{});return {url:c.url||window.VG_SUPABASE_URL||'',anon:c.anon||c.key||c.anon_key||window.VG_SUPABASE_ANON_KEY||''}}
+  function sb(){if(typeof window.getSB==='function'){try{var x=window.getSB();if(x)return x}catch(e){}}var c=cfg();if(!window.supabase||!c.url||!c.anon)return null;var sig=c.url+'|'+String(c.anon).slice(0,18);if(!window.__vgProfChatSB||window.__vgProfChatSB.sig!==sig){window.__vgProfChatSB={sig:sig,client:window.supabase.createClient(c.url,c.anon)}}return window.__vgProfChatSB.client}
+  function session(){for(var i=0;i<SESSION_KEYS.length;i++){var raw=localStorage.getItem(SESSION_KEYS[i])||sessionStorage.getItem(SESSION_KEYS[i]);var s=parse(raw,null);if(s&&typeof s==='object'&&(s.phone||s.customer_phone||s.client_phone||s.name)){return {id:s.id||s.user_id||'',name:s.name||s.customer_name||s.client_name||'Cliente',phone:cleanPhone(s.phone||s.customer_phone||s.client_phone),tokens:Number(s.tokens||s.balance||0),referral_code:s.referral_code||s.refCode||s.ref||''}}}return null}
+  function money(v){var n=Number(String(v||0).replace(/[^0-9.-]/g,''));return isFinite(n)&&n?'$'+n.toLocaleString('es-MX')+' MXN':'—'}
+  function dt(v){var d=new Date(v||Date.now());return isNaN(d)?'':d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'})}
+  function tm(v){var d=new Date(v||Date.now());return isNaN(d)?'':d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}
+  function low(v){return String(v||'').toLowerCase()}
+  function title(o){try{var it=typeof o.items==='string'?JSON.parse(o.items||'[]'):(o.items||[]);if(it&&it[0])return it[0].title||it[0].name||o.product_title||o.title||'Pedido'}catch(e){}return o.product_title||o.title||'Pedido'}
+  function orderStatus(o){return low(o.chat_status)==='closed'||low(o.status)==='entregado'||low(o.status)==='delivered'?'entregado':(o.status||'pendiente')}
+  function activeOrder(o){var s=low(o.status||'');var c=low(o.chat_status||'open');if(c==='closed'||c==='archived'||s==='cancelado'||s==='cancelled')return false;return true}
+  function eligibleOrders(){return state.orders.filter(activeOrder)}
+  function unreadClientCount(){return state.orders.filter(function(o){return !!o.unread_client}).length+state.tickets.filter(function(t){return !!t.unread_client}).length}
+
+  async function fetchOrders(){
+    var client=sb(),u=session(); if(!client||!u)return [];
+    var q=client.from('orders').select('*').order('created_at',{ascending:false}).limit(80);
+    var phone=u.phone;
+    try{
+      if(phone&&u.id) q=q.or('user_id.eq.'+u.id+',customer_phone.eq.'+phone+',client_phone.eq.'+phone);
+      else if(phone) q=q.or('customer_phone.eq.'+phone+',client_phone.eq.'+phone);
+      var r=await q;
+      if(r.error){console.warn('orders fetch',r.error.message);return []}
+      return r.data||[];
+    }catch(e){console.warn('orders fetch error',e);return []}
+  }
+  async function fetchTickets(){
+    var client=sb(),u=session(); if(!client||!u||!u.phone)return [];
+    try{var r=await client.from('vg_support_tickets').select('*').eq('customer_phone',u.phone).order('updated_at',{ascending:false}).limit(50);if(r.error){console.warn('tickets fetch',r.error.message);return []}return r.data||[]}catch(e){console.warn('tickets fetch error',e);return []}
+  }
+  async function fetchMessages(type,ref){
+    var client=sb(); if(!client||!ref)return [];
+    try{var r=await client.rpc('vg_pro_fetch_messages',{p_message_type:type,p_ref:String(ref)});if(!r.error)return r.data||[];console.warn('rpc fetch failed',r.error.message)}catch(e){console.warn('rpc fetch exception',e)}
+    try{var q=client.from('vg_chat_messages').select('*').eq('message_type',type).order('created_at',{ascending:true}).limit(600);q=type==='order'?q.eq('order_ref',String(ref)):q.eq('ticket_id',String(ref));var r2=await q;if(r2.error){console.warn('table fetch failed',r2.error.message);return []}return r2.data||[]}catch(e2){console.warn('table fetch exception',e2);return []}
+  }
+  async function markRead(type,ref,reader){
+    var client=sb(); if(!client||!ref)return;
+    try{await client.rpc('vg_pro_mark_messages_read',{p_message_type:type,p_ref:String(ref),p_reader_role:reader})}catch(e){}
+  }
+  async function sendMessage(type,ref,role,msg){
+    var client=sb(),u=session(); if(!client)throw new Error('Supabase no configurado');
+    msg=String(msg||'').trim(); if(!msg)throw new Error('Mensaje vacío');
+    var senderName=role==='admin'?'Vessel Games':(u&&u.name)||'Cliente';
+    var senderPhone=role==='admin'?'':(u&&u.phone)||'';
+    var senderId=role==='admin'?'admin':String((u&&u.id)||'');
+    try{
+      var r=await client.rpc('vg_pro_send_message',{p_message_type:type,p_ref:String(ref),p_sender_role:role,p_sender_id:senderId,p_sender_name:senderName,p_sender_phone:senderPhone,p_message:msg,p_attachment_url:null});
+      if(!r.error)return r.data;
+      console.warn('rpc send failed',r.error.message);
+    }catch(e){console.warn('rpc send exception',e)}
+    var payload={message_type:type,sender_role:role,sender_id:senderId,sender_name:senderName,sender_phone:senderPhone,message:msg,is_read_admin:role==='admin',is_read_client:role==='client'};
+    if(type==='order')payload.order_ref=String(ref); else payload.ticket_id=String(ref);
+    var r2=await client.from('vg_chat_messages').insert(payload).select().single();
+    if(r2.error)throw new Error(r2.error.message||'No se guardó el mensaje');
+    return r2.data;
+  }
+  async function createTicket(title,category,msg){
+    var client=sb(),u=session(); if(!client)throw new Error('Supabase no configurado'); if(!u)throw new Error('Inicia sesión');
+    try{
+      var r=await client.rpc('vg_pro_create_ticket',{p_user_id:String(u.id||''),p_customer_name:u.name,p_customer_phone:u.phone,p_title:title,p_category:category,p_message:msg});
+      if(!r.error)return r.data;
+      console.warn('rpc ticket failed',r.error.message);
+    }catch(e){console.warn('rpc ticket exception',e)}
+    var ins=await client.from('vg_support_tickets').insert({user_id:String(u.id||''),customer_name:u.name,customer_phone:u.phone,title:title||'Ticket de soporte',category:category||'duda',status:'abierto',unread_admin:true,last_message_preview:String(msg||'').slice(0,160),last_message_at:new Date().toISOString(),updated_at:new Date().toISOString()}).select().single();
+    if(ins.error)throw new Error(ins.error.message);
+    await sendMessage('ticket',ins.data.id,'client',msg);
+    return ins.data;
+  }
+
+  function ensureTabs(){
+    var m=qs('#vgProModal'),tabs=qs('#vgProModal .vg-pro-tabs'); if(m)m.classList.add('vg-prof-active'); if(!tabs)return;
+    if(!qs('.vg-pro-tab[data-ptab="support"]',tabs)){
+      var b=document.createElement('button'); b.type='button'; b.className='vg-pro-tab'; b.dataset.ptab='support'; b.innerHTML='Soporte <span id="vgProfUnreadBadge" class="vg-prof-unread" style="display:none">0</span>'; tabs.insertBefore(b,tabs.children[1]||null);
+    }
+    qsa('.vg-pro-tab',tabs).forEach(function(b){if(b.__vgProfBound)return;b.__vgProfBound=true;b.addEventListener('click',function(){setTimeout(function(){if(b.dataset.ptab==='support')renderSupport()},30)})});
+    if(!qs('.vg-pro-section[data-ptab="support"]')){
+      var body=qs('#vgProModal .vg-pro-body'); if(body){var sec=document.createElement('div');sec.className='vg-pro-section';sec.dataset.ptab='support';sec.innerHTML='<div id="vgProfSupportRoot" class="vg-prof-mini-loader">Cargando soporte...</div>';body.appendChild(sec)}
+    }
+  }
+  function activateSupport(){
+    ensureTabs(); qsa('#vgProModal .vg-pro-tab').forEach(function(b){b.classList.toggle('active',b.dataset.ptab==='support')}); qsa('#vgProModal .vg-pro-section').forEach(function(s){s.classList.toggle('active',s.dataset.ptab==='support')}); renderSupport();
+  }
+  async function refreshData(){state.orders=await fetchOrders(); state.tickets=await fetchTickets(); updateBadge()}
+  function updateBadge(){var n=unreadClientCount(),b=qs('#vgProfUnreadBadge'); if(b){b.textContent=n;b.style.display=n?'inline-grid':'none'}}
+  function renderStatus(){var active=eligibleOrders().length;return '<div class="vg-prof-statusbar"><div><b><span class="vg-prof-dot"></span>Conectado</b><br><span>'+(active?'Soporte activo · '+active+' pedido(s) disponible(s)':'Chat de entrega bloqueado hasta tener una compra o pedido activo')+'</span></div><div class="vg-prof-chat-tag">'+(active?'Pedido activo':'Solo tickets')+'</div></div>'}
+  function renderSupport(){
+    var root=qs('#vgProfSupportRoot'); if(!root)return;
+    var active=eligibleOrders();
+    root.innerHTML=renderStatus()+'<div class="vg-prof-shell"><aside class="vg-prof-sidebar"><div class="vg-prof-side-head"><div class="vg-prof-side-title">Centro de soporte</div><div class="vg-prof-side-sub">Chat de entregas y tickets independientes.</div></div><div class="vg-prof-tabbar"><button type="button" class="'+(state.mode==='delivery'?'active':'')+'" onclick="vgProfSetMode(\'delivery\')">Entregas</button><button type="button" class="'+(state.mode==='tickets'?'active':'')+'" onclick="vgProfSetMode(\'tickets\')">Tickets</button></div><div class="vg-prof-list" id="vgProfList"></div></aside><main class="vg-prof-main" id="vgProfMain"></main></div>';
+    renderList(); renderMain(); startClientLoop();
+  }
+  function renderList(){
+    var box=qs('#vgProfList'); if(!box)return;
+    if(state.mode==='delivery'){
+      var arr=state.orders;
+      if(!arr.length){box.innerHTML='<div class="vg-prof-empty"><div class="vg-prof-locked-icon">🔒</div><h3>Sin pedidos</h3><p>Cuando realices una compra, aquí se desbloqueará el chat directo.</p></div>';return}
+      box.innerHTML=arr.map(function(o){var ok=activeOrder(o);return '<button type="button" class="vg-prof-order '+(String(state.activeRef)===String(o.id)&&state.activeType==='order'?'active':'')+'" '+(ok?'onclick="vgProfOpenOrder(\''+esc(o.id)+'\')"':'disabled')+'><div class="vg-prof-order-title">'+esc(title(o))+(o.unread_client?'<span class="vg-prof-unread">!</span>':'')+'</div><div class="vg-prof-order-meta">Pedido #'+esc(String(o.id).slice(0,12))+' · '+esc(dt(o.created_at))+'</div><div class="vg-prof-order-foot"><span class="vg-prof-price">'+esc(money(o.total))+'</span><span class="vg-prof-badge '+(ok?'':'locked')+'">'+esc(orderStatus(o))+'</span></div></button>'}).join('');
+    }else{
+      var top='<button type="button" class="vg-prof-primary" style="width:100%;min-height:46px;margin-bottom:12px" onclick="vgProfNewTicket()">Crear Ticket</button>';
+      if(!state.tickets.length){box.innerHTML=top+'<div class="vg-prof-empty"><h3>Sin tickets</h3><p>Reporta dudas, fallas o solicitudes que no dependan de una entrega.</p></div>';return}
+      box.innerHTML=top+state.tickets.map(function(t){return '<div class="vg-prof-ticket-row '+(String(state.activeRef)===String(t.id)&&state.activeType==='ticket'?'active':'')+'" onclick="vgProfOpenTicket(\''+esc(t.id)+'\')"><div class="vg-prof-order-title">'+esc(t.title||'Ticket')+(t.unread_client?'<span class="vg-prof-unread">!</span>':'')+'</div><div class="vg-prof-order-meta">'+esc(String(t.status||'abierto').replace('_',' '))+' · '+esc(dt(t.updated_at||t.created_at))+'</div></div>'}).join('');
+    }
+  }
+  function renderMain(){
+    var box=qs('#vgProfMain'); if(!box)return;
+    if(!state.activeRef){
+      if(state.mode==='delivery'&&!eligibleOrders().length){box.innerHTML='<div class="vg-prof-empty" style="margin:24px"><div class="vg-prof-locked-icon">🔐</div><h3>Chat bloqueado</h3><p>El chat directo se habilita automáticamente cuando tengas una compra exitosa o un pedido activo.</p><button class="vg-prof-secondary" onclick="vgProfSetMode(\'tickets\')">Crear ticket de soporte</button></div>';return}
+      box.innerHTML='<div class="vg-prof-empty" style="margin:24px"><h3>Selecciona una conversación</h3><p>El historial se cargará automáticamente y permanecerá guardado.</p></div>';return;
+    }
+    var label=state.activeType==='order'?'Chat de entrega':'Ticket de soporte';
+    var obj=state.activeObj||{}; var sub=state.activeType==='order'?(title(obj)+' · '+money(obj.total)):(obj.title||'Ticket');
+    box.innerHTML='<div class="vg-prof-chat-head"><div><div class="vg-prof-chat-title">'+esc(label)+'</div><div class="vg-prof-chat-sub">'+esc(sub)+'</div></div><div class="vg-prof-chat-tag"><span class="vg-prof-dot"></span>Soporte Activo</div></div><div class="vg-prof-msgs" id="vgProfMsgs"></div><div class="vg-prof-compose"><textarea id="vgProfText" placeholder="Escribe tu mensaje..."></textarea><button type="button" id="vgProfSendBtn" onclick="vgProfSendClient()">Enviar</button></div>';
+    renderMessages();
+  }
+  function renderMessages(){
+    var box=qs('#vgProfMsgs'); if(!box)return;
+    if(!state.messages.length){box.innerHTML='<div class="vg-prof-empty"><h3>Sin mensajes todavía</h3><p>Escribe para iniciar la conversación.</p></div>';return}
+    box.innerHTML=state.messages.map(function(m){var role=low(m.sender_role||'client');var cls=role==='admin'?'admin':(role==='system'?'system':'client');var name=role==='admin'?'Vessel Games':(m.sender_name||'Cliente');return '<div class="vg-prof-msg '+cls+'"><div class="vg-prof-msg-meta"><span>'+esc(name)+'</span><span>'+esc(tm(m.created_at))+'</span></div><div class="vg-prof-msg-body">'+esc(m.message)+'</div></div>'}).join('');
+    box.scrollTop=box.scrollHeight;
+  }
+  async function openThread(type,ref,obj){
+    state.activeType=type; state.activeRef=String(ref); state.activeObj=obj||{}; state.messages=[]; renderMain();
+    var msgs=await fetchMessages(type,ref); state.messages=msgs; await markRead(type,ref,'client'); renderMessages(); refreshData().then(function(){renderList(); updateBadge()}); startClientLoop();
+  }
+  window.vgProfSetMode=function(m){state.mode=m; state.activeType=null; state.activeRef=null; state.activeObj=null; renderSupport()};
+  window.vgProfOpenOrder=function(id){var o=state.orders.find(function(x){return String(x.id)===String(id)}); if(!o||!activeOrder(o))return; openThread('order',id,o)};
+  window.vgProfOpenTicket=function(id){var t=state.tickets.find(function(x){return String(x.id)===String(id)}); if(!t)return; openThread('ticket',id,t)};
+  window.vgProfSendClient=async function(){var ta=qs('#vgProfText'),btn=qs('#vgProfSendBtn'); if(!ta||!state.activeRef)return; var msg=ta.value.trim(); if(!msg)return; btn.disabled=true; btn.textContent='Enviando...'; try{await sendMessage(state.activeType,state.activeRef,'client',msg); ta.value=''; state.messages=await fetchMessages(state.activeType,state.activeRef); renderMessages(); notify('Mensaje enviado')}catch(e){alert('No se pudo enviar: '+(e.message||e))}finally{btn.disabled=false;btn.textContent='Enviar'}};
+  window.vgProfNewTicket=function(){state.activeType='newticket';state.activeRef=null;state.activeObj=null;var box=qs('#vgProfMain');if(!box)return;box.innerHTML='<div class="vg-prof-chat-head"><div><div class="vg-prof-chat-title">Crear ticket</div><div class="vg-prof-chat-sub">Para dudas, fallas, reportes o solicitudes generales.</div></div><div class="vg-prof-chat-tag">Ticket independiente</div></div><div class="vg-prof-form"><div class="vg-prof-field"><label>Título</label><input id="vgProfTicketTitle" placeholder="Ej: No recibí mi acceso"></div><div class="vg-prof-field"><label>Categoría</label><select id="vgProfTicketCat"><option value="duda">Duda</option><option value="falla">Falla</option><option value="reporte">Reporte</option><option value="otro">Otro</option></select></div><div class="vg-prof-field"><label>Mensaje</label><textarea id="vgProfTicketMsg" placeholder="Describe tu caso..."></textarea></div><button class="vg-prof-primary" style="height:48px" onclick="vgProfCreateTicketNow()">Enviar ticket</button></div>'};
+  window.vgProfCreateTicketNow=async function(){var t=(qs('#vgProfTicketTitle')||{}).value||'Ticket de soporte';var c=(qs('#vgProfTicketCat')||{}).value||'duda';var m=(qs('#vgProfTicketMsg')||{}).value||'';if(!m.trim()){alert('Escribe el mensaje del ticket.');return}try{var ticket=await createTicket(t,c,m);notify('Ticket creado');await refreshData();state.mode='tickets';openThread('ticket',ticket.id,ticket);renderList()}catch(e){alert('No se pudo crear ticket: '+(e.message||e))}};
+
+  function startClientLoop(){if(state.timer)clearInterval(state.timer);state.timer=setInterval(async function(){try{var modal=qs('#vgProModal');if(!modal||!modal.classList.contains('active'))return;await refreshData();if(state.activeRef&&state.activeType){state.messages=await fetchMessages(state.activeType,state.activeRef);renderMessages();await markRead(state.activeType,state.activeRef,'client')}if(qs('#vgProfSupportRoot')){renderList();updateBadge()}}catch(e){}},4500)}
+
+  function patchOpen(){var old=window.vgProOpen;window.vgProOpen=function(){if(typeof old==='function')old.apply(this,arguments);setTimeout(function(){ensureTabs();refreshData().then(updateBadge)},180)}}
+  function bind(){document.addEventListener('click',function(ev){var t=ev.target&&ev.target.closest&&ev.target.closest('#vgProModal .vg-pro-tab[data-ptab="support"]');if(t)setTimeout(renderSupport,60)},true)}
+
+  /* Admin: lightweight professional support panel using same RPC/table */
+  function ensureAdmin(){var modal=qs('#vgAdminModal'),tabs=qs('.vg-admin-tabs',modal),content=qs('.vg-admin-content',modal);if(!tabs||!content)return;var tab=qs('.vg-admin-tab[data-tab="support_clean"]',tabs);if(!tab){tab=document.createElement('button');tab.className='vg-admin-tab';tab.dataset.tab='support_clean';tab.innerHTML='💬 Soporte Pro <span id="vgProfAdminBadge" class="vg-prof-unread" style="display:none">0</span>';tabs.appendChild(tab)}tab.onclick=function(){qsa('#vgAdminModal .vg-admin-tab').forEach(function(b){b.classList.toggle('active',b===tab)});qsa('#vgAdminModal .vg-admin-section').forEach(function(s){s.classList.remove('active')});var sec=qs('#vgProfAdminSection');if(sec)sec.classList.add('active');renderAdmin()};var sec=qs('#vgProfAdminSection');if(!sec){sec=document.createElement('section');sec.id='vgProfAdminSection';sec.className='vg-admin-section';content.appendChild(sec)}}
+  async function adminFetch(){var client=sb();if(!client)return {orders:[],tickets:[]};var ro=await client.from('orders').select('*').neq('chat_status','closed').order('updated_at',{ascending:false}).limit(150);var rt=await client.from('vg_support_tickets').select('*').neq('status','resuelto').order('updated_at',{ascending:false}).limit(150);return {orders:ro.error?[]:(ro.data||[]),tickets:rt.error?[]:(rt.data||[])} }
+  async function renderAdmin(){ensureAdmin();var sec=qs('#vgProfAdminSection');if(!sec)return;var data=await adminFetch();state.adminOrders=data.orders;state.adminTickets=data.tickets;var list=data.orders.map(function(o){return adminCard('order',o)}).concat(data.tickets.map(function(t){return adminCard('ticket',t)})).join('')||'<div class="vg-prof-empty">Sin conversaciones activas.</div>';sec.innerHTML='<div class="vg-prof-admin-grid"><div class="vg-prof-admin-list">'+list+'</div><div class="vg-prof-main" id="vgProfAdminMain">'+(state.adminActiveRef?adminChatHtml():'<div class="vg-prof-empty" style="margin:20px"><h3>Selecciona una conversación</h3><p>Los mensajes enviados aquí se muestran al cliente en Mi Cuenta.</p></div>')+'</div></div>';if(state.adminActiveRef)renderAdminMessages();updateAdminBadge(data)}
+  function adminCard(type,o){var unread=!!o.unread_admin;var label=type==='order'?'Pedido':'Ticket';var name=o.customer_name||o.client_name||'Cliente';var phone=o.customer_phone||o.client_phone||'';var t=type==='order'?title(o):(o.title||'Ticket');var active=state.adminActiveType===type&&String(state.adminActiveRef)===String(o.id);return '<button type="button" class="vg-prof-admin-card '+(active?'active':'')+'" onclick="vgProfAdminOpen(\''+type+'\',\''+esc(o.id)+'\')"><div class="vg-prof-order-title">'+esc(t)+(unread?'<span class="vg-prof-unread">!</span>':'')+'</div><div class="vg-prof-order-meta">'+label+' #'+esc(String(o.id).slice(0,12))+'<br>'+esc(name)+' · '+esc(phone)+'</div><div class="vg-prof-order-foot"><span class="vg-prof-badge">'+esc(o.status||o.chat_status||'abierto')+'</span><span class="vg-prof-price">'+(type==='order'?esc(money(o.total)):'')+'</span></div></button>'}
+  function adminChatHtml(){var obj=state.adminActiveObj||{};var t=state.adminActiveType==='order'?title(obj):(obj.title||'Ticket');return '<div class="vg-prof-chat-head"><div><div class="vg-prof-chat-title">'+esc(t)+'</div><div class="vg-prof-chat-sub">'+esc(state.adminActiveType==='order'?'Chat de entrega':'Ticket de soporte')+' #'+esc(state.adminActiveRef)+'</div></div><button type="button" class="vg-prof-secondary" onclick="vgProfAdminCloseThread()">Cerrar / Resuelto</button></div><div class="vg-prof-msgs" id="vgProfAdminMsgs"></div><div class="vg-prof-compose"><textarea id="vgProfAdminText" placeholder="Responder al cliente..."></textarea><button type="button" id="vgProfAdminSendBtn" onclick="vgProfAdminSend()">Enviar</button></div>'}
+  window.vgProfAdminOpen=async function(type,id){var arr=type==='order'?(state.adminOrders||[]):(state.adminTickets||[]);var obj=arr.find(function(x){return String(x.id)===String(id)})||{id:id};state.adminActiveType=type;state.adminActiveRef=String(id);state.adminActiveObj=obj;state.adminMessages=await fetchMessages(type,id);await markRead(type,id,'admin');renderAdmin();startAdminLoop()};
+  function renderAdminMessages(){var box=qs('#vgProfAdminMsgs');if(!box)return;if(!state.adminMessages.length){box.innerHTML='<div class="vg-prof-empty">Sin mensajes todavía.</div>';return}box.innerHTML=state.adminMessages.map(function(m){var role=low(m.sender_role||'client');var cls=role==='admin'?'admin':(role==='system'?'system':'client');var name=role==='admin'?'Vessel Games':(m.sender_name||'Cliente');return '<div class="vg-prof-msg '+cls+'"><div class="vg-prof-msg-meta"><span>'+esc(name)+'</span><span>'+esc(tm(m.created_at))+'</span></div><div class="vg-prof-msg-body">'+esc(m.message)+'</div></div>'}).join('');box.scrollTop=box.scrollHeight}
+  window.vgProfAdminSend=async function(){var ta=qs('#vgProfAdminText'),btn=qs('#vgProfAdminSendBtn');if(!ta||!state.adminActiveRef)return;var msg=ta.value.trim();if(!msg)return;btn.disabled=true;btn.textContent='Enviando...';try{await sendMessage(state.adminActiveType,state.adminActiveRef,'admin',msg);ta.value='';state.adminMessages=await fetchMessages(state.adminActiveType,state.adminActiveRef);renderAdminMessages();notify('Respuesta enviada')}catch(e){alert('No se pudo enviar al cliente: '+(e.message||e))}finally{btn.disabled=false;btn.textContent='Enviar'}};
+  window.vgProfAdminCloseThread=async function(){if(!state.adminActiveRef||!confirm('¿Cerrar esta conversación?'))return;var client=sb();try{if(state.adminActiveType==='order'){await client.from('orders').update({status:'entregado',chat_status:'closed',unread_admin:false,unread_client:true,updated_at:new Date().toISOString(),delivered_at:new Date().toISOString(),chat_closed_at:new Date().toISOString()}).eq('id',state.adminActiveRef);await sendMessage('order',state.adminActiveRef,'system','Chat cerrado. Pedido marcado como entregado.')}else{await client.from('vg_support_tickets').update({status:'resuelto',unread_admin:false,unread_client:true,updated_at:new Date().toISOString(),resolved_at:new Date().toISOString()}).eq('id',state.adminActiveRef);await sendMessage('ticket',state.adminActiveRef,'system','Ticket resuelto.')}state.adminActiveRef=null;state.adminActiveType=null;state.adminActiveObj=null;state.adminMessages=[];renderAdmin()}catch(e){alert('No se pudo cerrar: '+(e.message||e))}};
+  function updateAdminBadge(data){data=data||{};var n=((data.orders||state.adminOrders||[]).filter(function(o){return o.unread_admin}).length)+((data.tickets||state.adminTickets||[]).filter(function(t){return t.unread_admin}).length);var b=qs('#vgProfAdminBadge');if(b){b.textContent=n;b.style.display=n?'inline-grid':'none'}}
+  function startAdminLoop(){if(state.adminTimer)clearInterval(state.adminTimer);state.adminTimer=setInterval(async function(){try{if(!qs('#vgProfAdminSection.active'))return;var data=await adminFetch();state.adminOrders=data.orders;state.adminTickets=data.tickets;if(state.adminActiveRef){state.adminMessages=await fetchMessages(state.adminActiveType,state.adminActiveRef);renderAdminMessages()}updateAdminBadge(data)}catch(e){}},5000)}
+
+  function subscribe(){var client=sb();if(!client||window.__vgProfChatRealtime)return;window.__vgProfChatRealtime=true;try{client.channel('vg-prof-chat-live').on('postgres_changes',{event:'*',schema:'public',table:'vg_chat_messages'},function(){setTimeout(async function(){try{await refreshData();if(state.activeRef){state.messages=await fetchMessages(state.activeType,state.activeRef);renderMessages();await markRead(state.activeType,state.activeRef,'client')}if(qs('#vgProfSupportRoot')){renderList();updateBadge()}if(qs('#vgProfAdminSection.active'))renderAdmin()}catch(e){}},350)}).on('postgres_changes',{event:'*',schema:'public',table:'orders'},function(){setTimeout(function(){refreshData().then(function(){if(qs('#vgProfSupportRoot'))renderSupport();if(qs('#vgProfAdminSection.active'))renderAdmin()})},450)}).on('postgres_changes',{event:'*',schema:'public',table:'vg_support_tickets'},function(){setTimeout(function(){refreshData().then(function(){if(qs('#vgProfSupportRoot'))renderSupport();if(qs('#vgProfAdminSection.active'))renderAdmin()})},450)}).subscribe()}catch(e){}}
+
+  function boot(){if(state.booted)return;state.booted=true;patchOpen();bind();ensureTabs();ensureAdmin();subscribe();setTimeout(function(){refreshData().then(updateBadge);ensureAdmin()},800);setInterval(function(){try{ensureTabs();ensureAdmin();if(qs('#vgProModal.active'))refreshData().then(updateBadge)}catch(e){}},10000)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();window.addEventListener('load',boot);
+})();
+</script>
+
 </body>
 </html>
